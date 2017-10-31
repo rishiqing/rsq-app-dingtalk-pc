@@ -29,16 +29,30 @@ module.exports = {
     bundleAnalyzerReport: process.env.npm_config_report,
     // 日事清api的后台地址
     apiServer: 'https://ding.rishiqing.com/',
+    // apiServer: 'http://dd.rsq.etoutiao.cn/',
+    // 日事清-portlet的权限认证后台地址
+    authServer: 'https://ding.rishiqing.com/',
+    // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com'
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
+    // 阿里云OSS STS认证的server地址，临时！！！！注意更新
+    stsServer: 'https://stsserver.hz.taeapp.com/sts/',
+    // stsServer: 'http://182.92.222.40:8300/sts/',
+    aliOSS: {
+      region: 'oss-cn-beijing',
+      bucket: 'rishiqing-file',
+      root: 'dingtalk/'
+    },
+    version: 2000000
   },
   dev: {
     env: require('./dev.env'),
     port: process.env.PORT || devPort,
-    autoOpenBrowser: true,
+    autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
+    hotPath: '/__wallace_hmr',
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
@@ -46,7 +60,16 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
     apiServer: 'http://dd.rsq.etoutiao.cn/',
+    // 日事清-portlet的权限认证后台地址
+    authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
     // 日事清前端文件地址
     frontServer: 'http://' + ip.address('WLAN', 'ipv4') + ':' + (process.env.PORT || devPort) + '/',
+    stsServer: 'http://182.92.222.40:8300/sts/',
+    aliOSS: {
+      region: 'oss-cn-beijing',
+      bucket: 'rishiqing-file',
+      root: 'dingtalk/'
+    },
+    version: 2000000
   }
 }

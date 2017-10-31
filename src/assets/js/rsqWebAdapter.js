@@ -170,5 +170,7 @@ rsqAdapterManager.register({
         // var time = res.time; //控件选中的时间的时间戳,当日+选择的时分秒的时间戳
       }
     });
+  },
+  disableBounce: function(){
   }
 });
