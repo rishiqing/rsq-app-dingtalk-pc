@@ -116,17 +116,17 @@ export default {
         commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
       })
     } else {
-      // return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
-      //   .then(todos => {
-      //     let reverseTodo = todos.reverse()
-      //     //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
-      //     var compareDate = moment(strDate).format('YYYYMMDD')
-      //     reverseTodo = reverseTodo.filter(t => {
-      //       return t.deletedDate !== compareDate
-      //     })
-      //     commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
-      //     commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
-      //   })
+      return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
+        .then(todos => {
+          let reverseTodo = todos.reverse()
+          //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
+          var compareDate = moment(strDate).format('YYYYMMDD')
+          reverseTodo = reverseTodo.filter(t => {
+            return t.deletedDate !== compareDate
+          })
+          commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
+          commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
+        })
     }
   },
   /**
@@ -195,22 +195,22 @@ export default {
    */
   createSingleScheduleItem ({commit, state, dispatch}, newItem) {
     // var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
-    commit('SCH_TODO_CREATED', {item: newItem})
-    // var itemCache = state.dateTodosCache
-    // //  读取顺序号
-    // var strDate = newItem.createTaskDate
-    // console.log('传过来的strdate是' + strDate)
-    // return dispatch('fetchScheduleItems', {strDate})
-    //   .then(() => {
-    //     newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
-    //     // return api.todo.postNewTodo(newItem)
-    //     //   .then(item => {
-    //     commit('SCH_TODO_CREATED', {item: newItem, list: itemCache[strDate]})
-    //     // return item
-    //       // })
-    //   }).catch(err => {
-    //     alert(JSON.stringify(err))
-    //   })
+    // commit('SCH_TODO_CREATED', {item: newItem})
+    var itemCache = state.dateTodosCache
+    //  读取顺序号
+    var strDate = newItem.createTaskDate
+    console.log('传过来的strdate是' + strDate)
+    return dispatch('fetchScheduleItems', {strDate})
+      .then(() => {
+        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
+        // return api.todo.postNewTodo(newItem)
+        //   .then(item => {
+        commit('SCH_TODO_CREATED', {item: newItem, list: itemCache[strDate]})
+        // return item
+          // })
+      }).catch(err => {
+        alert(JSON.stringify(err))
+      })
   },
   createSubTodo ({commit, state, dispatch}, p) {
     commit('CHILDTASK_TODO_CREATED', {item: p})

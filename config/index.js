@@ -45,7 +45,7 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
-    apiServer: 'http://dd.rsq.etoutiao.cn/',
+    apiServer: 'http://beta.rishiqing.com/',
     // 日事清前端文件地址
     frontServer: 'http://' + ip.address('WLAN', 'ipv4') + ':' + (process.env.PORT || devPort) + '/',
   }
