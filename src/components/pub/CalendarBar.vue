@@ -7,7 +7,7 @@
             :key="day.date.getTime()"
             >
           <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
-          <div class="cal-day" @tap="calDayClick(day.date)"
+          <div class="cal-day" @click="calDayClick(day.date)" @mouseover="showWeekday" @mouseout="hideWeekday"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
             {{dateText(day)}}
           </div>
@@ -20,7 +20,9 @@
 <script>
   export default {
     data () {
-      return {}
+      return {
+        showWeek: false
+      }
     }, // 为社么只显示一周的数据  不是三周的数据吗
     props: {
       days: Array,
@@ -35,9 +37,19 @@
     },
     components: {},
     methods: {
+      hideWeekday () {
+        this.showWeek = false
+      },
+      showWeekday () {
+        this.showWeek = true
+      },
       dateText (day) {
+        if (this.showWeek) {
+          return day.date.getDay()
+        } else {
+          return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
+        }
         //  如果是当天，则显示“今”这个字
-        return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
       },
       isHighLight (date) {
         return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
@@ -81,13 +93,17 @@
   .cal-day-tag {position:absolute;top:5px;right: 0.66rem;border-radius:50%;}
   .tag-active {width:4px;height:4px;background:#30FFA8;}
   .cal-day {
-    margin:0 auto;
-    width:30px;
-    height:30px;
-    line-height:30px;
-    font-family: PingFangSC-Medium;
-    font-size: 15px;
-    color: #FFFFFF;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #3D3D3D;
+    letter-spacing: -0.29px;
+    /*margin:0 auto;*/
+    /*width:30px;*/
+    /*height:30px;*/
+    /*line-height:30px;*/
+    /*font-family: PingFangSC-Medium;*/
+    /*font-size: 15px;*/
+    /*color: #FFFFFF;*/
   }
   .cal-day--focus {
     background:white;

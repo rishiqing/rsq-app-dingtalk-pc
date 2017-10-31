@@ -106,28 +106,28 @@ export default {
    * @param strDate
    */
   fetchScheduleItems ({commit, state}, {strDate}) {
-    // if (strDate instanceof Date) {
-    //   strDate = moment(strDate).format('YYYY-MM-DD')
-    // }
-    // let strCurrentDate = strDate || moment().format('YYYY-MM-DD')
-    // let dateItems = state.dateTodosCache
-    // if (dateItems[strCurrentDate]) {
-    //   return Promise.resolve().then(() => {
-    //     commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
-    //   })
-    // } else {
-    //   return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
-    //     .then(todos => {
-    //       let reverseTodo = todos.reverse()
-    //       //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
-    //       var compareDate = moment(strDate).format('YYYYMMDD')
-    //       reverseTodo = reverseTodo.filter(t => {
-    //         return t.deletedDate !== compareDate
-    //       })
-    //       commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
-    //       commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
-    //     })
-    // }
+    if (strDate instanceof Date) {
+      strDate = moment(strDate).format('YYYY-MM-DD')
+    }
+    let strCurrentDate = strDate || moment().format('YYYY-MM-DD')
+    let dateItems = state.dateTodosCache
+    if (dateItems[strCurrentDate]) {
+      return Promise.resolve().then(() => {
+        commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
+      })
+    } else {
+      // return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
+      //   .then(todos => {
+      //     let reverseTodo = todos.reverse()
+      //     //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
+      //     var compareDate = moment(strDate).format('YYYYMMDD')
+      //     reverseTodo = reverseTodo.filter(t => {
+      //       return t.deletedDate !== compareDate
+      //     })
+      //     commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
+      //     commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
+      //   })
+    }
   },
   /**
    * 提交新建的todo item

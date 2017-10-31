@@ -12,6 +12,7 @@
       </r-selectDate>
       <r-calendar
         :default-select-date="dateSelect"
+        @click-cal-day="fetchItems"
       ></r-calendar>
       <span class="inbox" @click="showInbox">收纳箱</span>
       <r-inbox
@@ -81,6 +82,13 @@
       }
     },
     methods: {
+      fetchItems (strDate) {
+//        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(strDate)})
+        this.$store.dispatch('fetchScheduleItems', { strDate })
+          .then(() => {
+//            this.updateScroll()
+          })
+      },
       showInbox () {
         this.showInbox = !this.showInbox
       },
