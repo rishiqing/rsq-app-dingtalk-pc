@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path')
 const utils = require('./utils')
+const url = require('url')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
@@ -16,8 +17,8 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+      ? url.resolve(config.build.frontServer, config.build.assetsPublicPath)
+      : url.resolve(config.dev.frontServer, config.dev.assetsPublicPath)
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],

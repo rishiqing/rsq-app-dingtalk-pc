@@ -28,6 +28,7 @@ module.exports = merge(baseWebpackConfig, {
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       apiServer: config.dev.apiServer,
+      frontServer: config.dev.frontServer,
       filename: 'index.html',
       template: 'index.html',
       inject: true
