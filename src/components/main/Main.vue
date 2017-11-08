@@ -13,20 +13,22 @@
       <r-calendar
         :default-select-date="dateSelect"
         @click-cal-day="fetchItems"
+        @after-cal-swipe="fetchDatesHasTodo"
       ></r-calendar>
-      <span class="inbox" @click="showInbox">收纳箱</span>
+      <span class="inbox" @click="showInboxState">收纳箱</span>
       <r-inbox
         v-show="this.showInbox"
       ></r-inbox>
     </div>
     <div id="sche-wrap">
-      <r-section v-for="item in this.section"
-        :sectionName="item"
+      <r-section v-for="item in this.titleArray"
+        :itemTitle="item"
         :key="item.id"
         @todo-item-click="showDetail"
       ></r-section>
       <r-detail
-        :item=this.item
+        :item="this.item"
+        :itemTitle="this.itemTitle"
         v-if="this.IsShow"
         @close-detail="closeDetail"
       ></r-detail>
@@ -52,17 +54,21 @@
     },
     data () {
       return {
-        section: [ '重要紧急', '重要不紧急', '不重要紧急', '不重要不紧急' ],
+//        section: [ '重要紧急', '重要不紧急', '不重要紧急', '不重要不紧急' ],
         currentDate: new Date(),
-        item: null,
+        item: '',
         IsShow: false,
         selectDate: false,
-        showInbox: false
+        showInbox: false,
+        itemTitle: ''
 //        selectMonth: '',
 //        selectYear: ''
       }
     },
     computed: {
+      titleArray () {
+        return this.$store.state.schedule.titleArray
+      },
 //      showDate () {
 //        if (this.selectMonth) {
 //          return this.selectMonth
@@ -82,6 +88,23 @@
       }
     },
     methods: {
+      fetchDatesHasTodo (p) {
+        var weekArray = p.daysArray[1]
+        var firstDate = weekArray[0].date
+        var lastDate = weekArray[weekArray.length - 1].date
+//        var titleDate = weekArray[3].date
+//        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(titleDate)})
+        this.$store.dispatch('getDatesHasTodo', {
+          startDate: firstDate,
+          endDate: lastDate
+        }).then(res => {
+          weekArray.forEach(day => {
+            if (res.indexOf(String(day.date.getTime())) !== -1) {
+              this.$set(day, 'showTag', true)
+            }
+          })
+        })
+      },
       fetchItems (strDate) {
 //        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(strDate)})
         this.$store.dispatch('fetchScheduleItems', { strDate })
@@ -89,7 +112,7 @@
 //            this.updateScroll()
           })
       },
-      showInbox () {
+      showInboxState () {
         this.showInbox = !this.showInbox
       },
       changeMonth (month, year) {
@@ -103,14 +126,25 @@
       showSelectDate () {
         this.selectDate = !this.selectDate
       },
-      showDetail (item) {
+      showDetail (item, itemTitle) {
         this.item = item
+        this.itemTitle = itemTitle
         this.$store.dispatch('setCurrentTodo', item)
         this.IsShow = true
       },
       closeDetail () {
         this.IsShow = false
+      },
+      getAllTodoTitleList () {
+        this.$store.dispatch('getAllTodoTitleList')
+      },
+      getInboxTodos () {
+        this.$store.dispatch('fetchInboxItems')
       }
+    },
+    mounted () {
+      this.getAllTodoTitleList()
+      this.getInboxTodos()
     }
   }
 </script>

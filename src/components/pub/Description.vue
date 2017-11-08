@@ -1,14 +1,23 @@
 <template>
-  <div id="noteEditable" contenteditable="true" class="desp editor-style"
-       name="note" rows="5"
-       placeholder="添加任务描述..."
-       @focus="inputFocus"
-       @input="inputChange"
-      >
-    添加任务描述...
+  <div>
+    <div id="noteEditable" contenteditable="true" class="desp editor-style"
+         name="note" rows="5"
+         placeholder="添加任务描述..."
+         @focus="inputFocus"
+         @input="inputChange"
+        >
+      添加任务描述...
+    </div>
+    <div v-show="this.despState">
+      <button @click="postDesp">确定</button>
+      <button @click="hideButton">取消</button>
+    </div>
   </div>
 </template>
 <style>
+  button{
+    font-size: 15px;
+  }
   .desp{
     font-size: 15px;
   }
@@ -21,7 +30,8 @@
       return {
         noteChangeTimes: 0,  // 用来标记note变化的次数，只有第一次改变的时候才被watch监控
         DEFAULT_NOTE: this.pNote,
-        isBlank: true    // 标记是否为空
+        isBlank: true,    // 标记是否为空
+        despState: false
       }
     },
     computed: {
@@ -30,12 +40,22 @@
       }
     }, // 定义事件
     methods: {
+      hideButton () {
+        this.despState = false
+      },
+      postDesp () {
+        var noteElement = document.getElementById('noteEditable').innerHTML
+        var params = {pNote: noteElement}
+        this.$store.dispatch('postdesp', params).then(() => {
+          this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
+        })
+      },
       inputFocus () {
         if (this.isBlank) {
-          console.log('进来了')
+          this.despState = true
           var noteElement = document.getElementById('noteEditable')
-          console.log(noteElement.innerText)
-          console.log(noteElement.innerText === '添加任务描述...')
+//          console.log(noteElement.innerText)
+//          console.log(noteElement.innerText === '添加任务描述...')
           if (noteElement.innerText === '添加任务描述...') {
             noteElement.innerHTML = ''
           }

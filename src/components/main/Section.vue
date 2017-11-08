@@ -1,7 +1,7 @@
 <template>
   <div class="section-wrap">
     <div class="section-head">
-      <input type="text" class="sche-name" :value=this.title @blur="changeTitle($event.target.value)">
+      <input type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)">
       <i class="icon2-add-circle create-icon" @click="changeInputState"></i>
     </div>
     <div class="wrap-input">
@@ -12,8 +12,9 @@
       <div class="rotate-square" v-show="this.remindState"></div>
     </div>
     <r-todo-item-list
+      :id="this.itemTitle.id"
       :items="items"
-      :sectionName="sectionName"
+      :itemTitle="itemTitle"
       :is-checkable="true"
       v-if="items.length!==0"
       @todo-item-click="showModel"
@@ -36,7 +37,8 @@
     },
     props: {
       name: String,
-      sectionName: String
+      itemTitle: Object
+//      sectionName: String
     },
     computed: {
       items () {
@@ -57,25 +59,31 @@
         } else {
           return []
         }
-      },
-      title () {
-        var titleArray = this.$store.state.schedule.titleArray
-        for (var i = 0; i < titleArray.length; i++) {
-          if (titleArray[i][this.sectionName]) {
-            return titleArray[i][this.sectionName]
-          }
-        }
       }
+//      title () {
+//        var titleArray = this.$store.state.schedule.titleArray
+//        for (var i = 0; i < titleArray.length; i++) {
+//          if (titleArray[i][this.sectionName]) {
+//            return titleArray[i][this.sectionName]
+//          }
+//        }
+//      }
     },
     components: {
       'r-todo-item-list': TodoItemList
     },
     methods: {
-      changeTitle (value) {
-        this.$store.dispatch('changeScheTitle', {title: value, sectionname: this.sectionName})
+      changeTitle (value, e) {
+        if (e.keyCode === 13) {
+          this.$store.dispatch('changeScheTitle', {title: value, id: this.itemTitle.id}).then(
+            () => {
+              e.target.blur()
+            }
+          )
+        }
       },
       showModel (item) {
-        this.$emit('todo-item-click', item)
+        this.$emit('todo-item-click', item, this.itemTitle)
       },
       changeInputState () {
         this.InputState = true
@@ -88,23 +96,11 @@
           this.remindState = true
           return
         }
-//          return window.rsqadmg.execute('alert', {message: '请填写任务名称'})}
-//        if (!this.isInbox) {
-//         var createTaskDate = dateUtil.dateNum2Text(planTime)
-//        }
-        if (this.sectionName === '重要紧急') {
-          var sectionname = 'IE'
-        } else if (this.sectionName === '重要不紧急') {
-          sectionname = 'IU'
-        } else if (this.sectionName === '不重要紧急') {
-          sectionname = 'UE'
-        } else if (this.sectionName === '不重要不紧急') {
-          sectionname = 'UU'
-        }
         if (event.keyCode === 13) {
           console.log('进来了')
-          var todoType = this.isInbox ? 'inbox' : 'schedule'
-          this.$store.dispatch('submitCreateTodoItem', {createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, todoType: todoType, pContainer: sectionname})
+//          var todoType = this.isInbox ? 'inbox' : 'schedule'
+          console.log(dateUtil.getStandardTime(this.currentDate))
+          this.$store.dispatch('submitCreateTodoItem', {createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
             .then(item => {
               this.InputState = false
               this.remindState = false

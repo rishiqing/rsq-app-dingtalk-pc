@@ -3,8 +3,12 @@
     <div class="wrap-time" @click="changeEditTime">
       <i class="icon2-alarm time-icon"></i>
       <span class="time">时间</span>
+      <span class="showTime">{{timeValue}}</span>
     </div>
-    <r-todo-edit-time v-show="this.editTime">
+    <r-todo-edit-time
+      v-show="this.editTime"
+      @close-time="changeEditTime"
+    >
     </r-todo-edit-time>
   </div>
 </template>
@@ -15,8 +19,11 @@
   .time-icon{
     font-size: 14px;
   }
-  .time{
+  .time, .showTime{
     font-size: 12px;
+  }
+  .showTime {
+    margin-left: 10px;
   }
   .wrap-time{
     position: relative;
@@ -37,21 +44,21 @@
       }
     },
     computed: {
-//      itemClock () {
-//        return this.item.clock || {}
-//      },
-//      isAllDay () {
-//        return !this.itemClock.startTime
-//      },
-//      timeValue () {
-//        return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
-//      }
+      itemClock () {
+        return this.currentTodo.clock || {}
+      },
+      isAllDay () {
+        return !this.itemClock.startTime
+      },
+      timeValue () {
+        return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
+      }
     },
     components: {
       'r-todo-edit-time': TodoEditTime
     },
     props: {
-//      item: Object,
+      currentTodo: Object
 //      editTime: Boolean,
 //      disabled: Boolean,
 //      newItem: Boolean

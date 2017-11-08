@@ -33,7 +33,8 @@ const devMiddleware = require('webpack-dev-middleware')(compiler, {
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: false,
-  heartbeat: 2000
+  heartbeat: 2000,
+  path: config.dev.hotPath
 })
 // force page reload when html-webpack-plugin template changes
 // currently disabled until this is resolved:
@@ -44,6 +45,13 @@ const hotMiddleware = require('webpack-hot-middleware')(compiler, {
 //     cb()
 //   })
 // })
+
+//  跨域访问
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
 // enable hot-reload and state-preserving
 // compilation error display

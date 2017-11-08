@@ -1,47 +1,47 @@
 <template>
   <ul class="sche-list">
-  <template v-if="this.sectionname==='重要紧急'">
+  <template v-if="this.id===244">
     <r-todo-item
         v-for="item in items"
         v-if="item.pContainer==='IE'"
         :item="item"
-        :sectionName="sectionname"
+        :id="id"
         :is-checkable="isCheckable"
         @todo-item-click="showEdit"
         @todo-item-check="checkTodo"
         :key="item.id"
     ></r-todo-item>
   </template>
-   <template v-else-if="this.sectionname==='重要不紧急'">
+   <template v-else-if="this.id===252">
      <r-todo-item
          v-for="item in items"
          v-if="item.pContainer==='IU'"
          :item="item"
-         :sectionName="sectionName"
+         :id="id"
          :is-checkable="isCheckable"
          @todo-item-click="showEdit"
          @todo-item-check="checkTodo"
          :key="item.id"
      ></r-todo-item>
    </template>
-  <template v-else-if="this.sectionname==='不重要紧急'">
+  <template v-else-if="this.id===253">
     <r-todo-item
         v-for="item in items"
         v-if="item.pContainer==='UE'"
         :item="item"
-        :sectionName="sectionName"
+        :id="id"
         :is-checkable="isCheckable"
         @todo-item-click="showEdit"
         @todo-item-check="checkTodo"
         :key="item.id"
     ></r-todo-item>
   </template>
-  <template v-else-if="this.sectionname==='不重要不紧急'">
+  <template v-else-if="this.id===254">
     <r-todo-item
         v-for="item in items"
         v-if="item.pContainer==='UU'"
         :item="item"
-        :sectionName="sectionName"
+        :id="id"
         :is-checkable="isCheckable"
         @todo-item-click="showEdit"
         @todo-item-check="checkTodo"
@@ -74,14 +74,15 @@
   export default {
     data () {
       return {
-        sectionname: this.sectionName
+//        sectionname: this.sectionName
       }
     },
     name: 'TodoItemList',
     props: {
+      id: Number,
       items: Array,
       isCheckable: Boolean,    //  是否显示完成复选框
-      sectionName: String
+      itemTitle: Object
     },
     computed: {
       itemcount () {
@@ -93,8 +94,15 @@
     },
     methods: {
       showEdit (item) {
+//        console.log('穿够来的item是' + JSON.stringify(item))
         this.$emit('todo-item-click', item)
-        this.$store.dispatch('setCurrentTodo', item)// 设置当前todo不管是inbox的todo还是ssche的todo
+        this.$store.dispatch('getItem', item).then(
+          (item) => {
+//            console.log('返回来的item是' + JSON.stringify(item))
+//            this.$store.dispatch('setCurrentTodo', item)
+          }
+        )
+//        this.$store.dispatch('setCurrentTodo', item)// 设置当前todo不管是inbox的todo还是ssche的todo
 //        this.$router.push('/todo/' + item.id)
       },
       checkTodo (item, status) {

@@ -7,7 +7,7 @@
             :key="day.date.getTime()"
             >
           <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
-          <div class="cal-day" @click="calDayClick(day.date)" @mouseover="showWeekday" @mouseout="hideWeekday"
+          <div class="cal-day" @click="calDayClick(day.date)" @mouseover="showWeekday(day)" @mouseout="hideWeekday"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
             {{dateText(day)}}
           </div>
@@ -21,7 +21,9 @@
   export default {
     data () {
       return {
-        showWeek: false
+        showWeek: false,
+        weekday: '',
+        week: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
       }
     }, // 为社么只显示一周的数据  不是三周的数据吗
     props: {
@@ -40,12 +42,14 @@
       hideWeekday () {
         this.showWeek = false
       },
-      showWeekday () {
+      showWeekday (day) {
+//        return day.date.getDay()
         this.showWeek = true
+//        console.log('进来一次')
       },
       dateText (day) {
         if (this.showWeek) {
-          return day.date.getDay()
+          return this.week[day.date.getDay() - 1]
         } else {
           return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
         }

@@ -1,16 +1,42 @@
 <template>
   <div class="edit-time">
-    <input type="text" @focus="setStartTime($event)" placeholder="开始时间">
-    <input type="text" @focus="setEndTime($event)" placeholder="结束时间">
+    <input type="text" @focus="setStartTime($event)" placeholder="开始时间" value="16:00">
+    <input type="text" @focus="setEndTime($event)" placeholder="结束时间" value="18:00">
     <ul class="alert-list">
-      <div tag="li" @click="selectAlert(alert)" v-for="(alert, index) in displayedRuleList" :key="index">
-        <span>{{parseCode(alert.schedule)}}</span>
-        <i class="icon2-selected finish" v-show="alert.selected"></i>
+      <div tag="li" @click="selectAlert(alertContent)" v-for="(alertContent, index) in displayedRuleList" :key="index">
+        <span>{{parseCode(alertContent.schedule)}}</span>
+        <i class="icon2-selected finish" v-show="alertContent.selected"></i>
+      </div>
+      <!--<li v-for="userDefine in userDefineList">-->
+        <!--<span class="userDefineStr">{{userDefine}}</span>-->
+      <!--</li>-->
+      <li @click="showUserDefine()" class="user-define">自定义</li>
+      <button style="font-size: 14px" @click="sendTime">确定</button>
+      <div v-show="this.userDefine">
+        <p class="remind">自定义提醒</p>
+        <div>
+          <select name="" id="selectTask">
+            <option value="任务开始前">任务开始前</option>
+            <option value="任务开始后">任务开始后</option>
+            <option value="任务结束前">任务结束前</option>
+            <option value="任务结束后">任务结束后</option>
+          </select>
+          <select name="" id="selectTime" @focus="mySelect">
+          </select>
+          <select name="" id="selectKind">
+            <option value="">分钟</option>
+            <option value="">小时</option>
+          </select>
+        </div>
+        <button @click="saveUserDefine">确定</button>
       </div>
     </ul>
   </div>
 </template>
 <style lang="scss">
+  .user-define,.remind,.userDefineStr{
+    font-size: 14px;
+  }
   .finish{
     font-size: 12px;
   }
@@ -128,21 +154,26 @@
   export default {
     data () {
       return {
+        userDefine: false,
         autoStart: true,
         autoEnd: true,
         isChecked: true,
         isAllDay: true,
         clock: {
-          startTime: '',
-          endTime: ''
+          alert: [],
+          startTime: '16:00',
+          endTime: '18:00',
+          alwaysAlert: true
         },
         displayedRuleList: [
           {schedule: 'begin_0_hour', selected: false},
           {schedule: 'begin_-5_min', selected: false},
           {schedule: 'begin_-15_min', selected: false},
           {schedule: 'begin_-30_min', selected: false},
-          {schedule: 'begin_-1_hour', selected: false},
-          {schedule: 'end_-1_hour', selected: false}
+          {schedule: 'begin_-1_hour', selected: false}
+//          {schedule: 'end_-1_hour', selected: false}
+        ],
+        userDefineList: [
         ]
       }
     },
@@ -178,21 +209,87 @@
       }
     },
     methods: {
+      sendTime () {
+        return this.$store.dispatch('updateTodoTime', {clock: this.clock})
+          .then(item => {
+            this.$emit('close-time')
+//            jsUtil.extendObject(item.clock, clockObject)
+//            return this.$store.dispatch('handleRemind', {item})
+          })
+      },
+      saveUserDefine () {
+        var selectTask = document.getElementById('selectTask')
+        var selectTaskIndex = selectTask.selectedIndex
+//        var selectTaskLongStr = selectTask.value
+        if ((selectTaskIndex === 0) || (selectTaskIndex === 1)) {
+          var selectTaskStr = 'begin'
+        } else {
+          selectTaskStr = 'end'
+        }
+        var selectTime = document.getElementById('selectTime')
+        selectTime = selectTime.options[selectTime.selectedIndex].value
+//        console.log('时间是' + selectTime)
+        if ((selectTaskIndex === 0) || (selectTaskIndex === 2)) {
+          var selectTimeStr = '-' + selectTime
+        } else {
+          selectTimeStr = selectTime
+        }
+        var selectKind = document.getElementById('selectKind')
+        selectKind = selectKind.options[selectKind.selectedIndex].innerText
+        if (selectKind === '分钟') {
+          var selectKindStr = 'min'
+        } else {
+          selectKindStr = 'hour'
+        }
+        this.clock.alert.push({
+          id: null,
+          schedule: selectTaskStr + '_' + selectTimeStr + '_' + selectKindStr,
+          isUserDefined: true
+        })
+        this.userDefine = false
+//        this.userDefineList.push(selectTaskLongStr + selectTime + selectKind)
+        this.displayedRuleList.push({
+          schedule: selectTaskStr + '_' + selectTimeStr + '_' + selectKindStr,
+          selected: true
+        })
+      },
+      mySelect () {
+        for (var i = 0; i < 100; i++) {
+          document.getElementById('selectTime').options[i] = new Option(i)
+        }
+      },
+      showUserDefine () {
+        this.userDefine = true
+      },
       selectAlert (a) {
         a.selected = !a.selected
         if (a.selected) {
+          this.clock.alert.push(
+            {
+              id: null,
+              schedule: a.schedule,
+              isUserDefined: false
+            }
+          )
           this.noAlert = false
+        } else {
+          for (var k = 0; k < this.clock.alert.length; k++) {
+            if (a.schedule === this.clock.alert[k].schedule) {
+              this.clock.alert.splice(k, 1)
+            }
+          }
         }
       },
       /**
        * 初始化数据
        */
       parseCode (schedule) {
+//        console.log('进来的schedule是' + schedule)
+//        console.log('出去的schedule是' + jsUtil.alertCode2Text(schedule.split('_')))
         return jsUtil.alertCode2Text(schedule.split('_'))
       },
       initData () {
         //  检查pub区是否有缓存，有缓存则读缓存，否则从currentTodo上读取
-        console.log('进来一次')
         jsUtil.extendObject(this.clock, this.todoTime.clock)
         this.isAllDay = !this.clock.startTime
         this.isChecked = this.isAllDay
@@ -228,11 +325,11 @@
             this.clock.endTime = base.add(1, 'h').format('HH:mm')
           }
         }
-        console.log('autoChangeTime的clock是' + JSON.stringify(this.clock))
+//        console.log('autoChangeTime的clock是' + JSON.stringify(this.clock))
       },
       empty () {},
       toggleAllDay (e) {
-        console.log('toggleAllDay是' + JSON.stringify(this.clock))
+//        console.log('toggleAllDay是' + JSON.stringify(this.clock))
         this.isAllDay = !this.isAllDay
         this.isChecked = this.isAllDay
       },
@@ -242,39 +339,44 @@
       setStartTime (e) {
         e.preventDefault()
         e.stopPropagation()
+        this.clock.startTime = '12:00'
+        if (this.clock.endTime === '') {
+          this.clock.endTime = this.clock.startTime + 5 // (延后5分钟)
+        }
 //        if (this.isAllDay) return
-        var that = this
-        window.rsqadmg.exec('timePicker', {
-          strInit: that.clock.startTime,
-          success (result) {
-            if (result.value > that.clock.endTime) {
-              alert('开始时间不能晚于结束时间')
-            } else {
-              that.clock.startTime = result.value
-              that.autoStart = false
-              that.autoChangeTime()
-            }
-          }
-        })
+//        var that = this
+//        window.rsqadmg.exec('timePicker', {
+//          strInit: that.clock.startTime,
+//          success (result) {
+//            if (result.value > that.clock.endTime) {
+//              alert('开始时间不能晚于结束时间')
+//            } else {
+//              that.clock.startTime = result.value
+//              that.autoStart = false
+//              that.autoChangeTime()
+//            }
+//          }
+//        })
       },
       /**
        * 设置结束时间
        */
       setEndTime () {
+        this.clock.endTime = '12:45'
 //        if (this.isAllDay) return
-        var that = this
-        window.rsqadmg.exec('timePicker', {
-          strInit: that.clock.endTime,
-          success (result) {
-            if (result.value < that.clock.startTime) {
-              alert('结束时间不能早于开始时间')
-            } else {
-              that.clock.endTime = result.value
-              that.autoEnd = false
-              that.autoChangeTime()
-            }
-          }
-        })
+//        var that = this
+//        window.rsqadmg.exec('timePicker', {
+//          strInit: that.clock.endTime,
+//          success (result) {
+//            if (result.value < that.clock.startTime) {
+//              alert('结束时间不能早于开始时间')
+//            } else {
+//              that.clock.endTime = result.value
+//              that.autoEnd = false
+//              that.autoChangeTime()
+//            }
+//          }
+//        })
       },
       /**
        * 保存当前todoTime的数据并跳转到提醒页面
@@ -360,11 +462,29 @@
     },
     created () {
       this.initData()
-      window.rsqadmg.exec('setTitle', {title: '设置时间'})
-      window.rsqadmg.exec('setOptionButtons', {hide: true})
-      this.$store.dispatch('setNav', {isShow: false})
+//      window.rsqadmg.exec('setTitle', {title: '设置时间'})
+//      window.rsqadmg.exec('setOptionButtons', {hide: true})
+//      this.$store.dispatch('setNav', {isShow: false})
     },
-    mounted () {},
+    mounted () {
+//      console.log('拿到的currentTodo是' + JSON.stringify(this.currentTodo))
+      if (this.currentTodo.clock != null && this.currentTodo.clock.alert != null) {
+        var alert = this.currentTodo.clock.alert
+        for (var i = 0; i < alert.length; i++) {
+          if (alert[i].isUserDefined) {
+            this.displayedRuleList.push({schedule: alert[i].schedule, selected: true})
+            this.clock.alert.push(alert[i])
+          } else {
+            for (var j = 0; j < this.displayedRuleList.length; j++) {
+              if (alert[i].schedule === this.displayedRuleList[j].schedule) {
+                this.displayedRuleList[j].selected = true
+              }
+            }
+            this.clock.alert.push(alert[i])
+          }
+        }
+      }
+    },
     /**
      * vue-router hook
      * @param to

@@ -63,9 +63,11 @@ export default {
     })
   },
   postNewTodo (props) {
+    console.log('props是' + JSON.stringify(props))
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_NEW_TODO, props)
         .then(res => {
+          console.log('返回来的resshi ' + (res))
           resolve(res.json())
         }, err => {
           window.rsqadmg.log(JSON.stringify(err))
@@ -207,6 +209,57 @@ export default {
   putRecordProps (props) {
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_RECORD_COMMENT, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  changeScheTitle (props) {
+    var path = util.replaceUrlParams(mapping.CHANGE_SCHE_TITLE, props)
+    // console.log('prps是' + JSON.stringify(props))
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  changePriority (props) {
+    var path = util.replaceUrlParams(mapping.POST_DESP, props)
+    // console.log('prps是' + JSON.stringify(props))
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getAllTodoTitleList () {
+    return new Promise((resolve, reject) => {
+      Vue.http.get(mapping.GET_TODO_TITLE)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getItem (item) {
+    console.log('id是' + item.id)
+    var path = util.replaceUrlParams(mapping.POST_DESP, item)
+    console.log('path是' + path)
+    return new Promise((resolve, reject) => {
+      Vue.http.get(path, item)
         .then(res => {
           resolve(res.json())
         }, err => {

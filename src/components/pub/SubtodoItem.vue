@@ -6,7 +6,9 @@
       <div class="hide" :class="{'square-icon':item.pIsDone}"></div>
       <i class="icon2-selected finish-icon" :class="{'isdisplay':item.pIsDone}"></i>
     </div>
-    <span class="subtodo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}">{{ item.name }}</span>
+    <input  @keypress="changeSubItemTitle($event.target.value,$event)" class="subtodo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}" :value=item.name>
+    <i class="icon2-arrow-down2 arrow-down" @click="showOption"></i>
+    <div class="delete-subtodo" @click="deleteTask(item)" v-show="this.deleteState">删除子任务</div>
   </li>
 </template>
 <script>
@@ -14,7 +16,9 @@
   export default {
     name: 'TodoItem',
     data () {
-      return {}
+      return {
+        deleteState: false
+      }
     },
     props: {
       item: Object,
@@ -29,6 +33,30 @@
         this.$store.dispatch('submitSubTodoFinish', {item: item, status: item.pIsDone})
           .then(function () {
           })
+      },
+      changeSubItemTitle (newTitle, e) {
+        if (event.keyCode === 13) {
+          if (!newTitle) {
+            alert('子任务标题不能为空')//          return Promise.reject()
+            return
+          }
+          var params = {name: newTitle, id: this.item.id}
+          return this.$store.dispatch('updateSubTodo', {editItem: params})
+            .then(() => {
+              e.target.blur()
+              this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
+            })
+        }
+      },
+      showOption () {
+        this.deleteState = !this.deleteState
+      },
+      deleteTask (item) {
+        this.$store.dispatch('deleteSubTodo', {item: item}).then(
+          () => {
+            this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
+          }
+        )
       }
     },
     mounted () {
@@ -36,12 +64,25 @@
   }
 </script>
 <style scoped>
+  .delete-subtodo{
+    font-size: 14px;
+    position: absolute;
+    top: 30px;
+    right:5px;
+    cursor: pointer;
+  }
+  .arrow-down{
+    position: absolute;
+    right:5px;
+    font-size: 14px;
+  }
   .todo-checkbox{
     display: flex;
     align-items: center;
     height: 35px;
   }
   .SubtodoItem{
+    position: relative;
     display: flex;
     align-items: center;
     height: 35px;

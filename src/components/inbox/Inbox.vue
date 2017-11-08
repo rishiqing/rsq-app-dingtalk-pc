@@ -1,32 +1,44 @@
 <template>
   <div class="wrap-inbox">
-    <input type="text" class="inbox-input" placeholder="添加任务，按Enter保存">
+    <input type="text" class="inbox-input" placeholder="添加任务，按Enter保存"  @keypress="createInboxItem($event.target.value,$event)">
     <ul>
-      <li v-for="item in items" v-if="item.pContainer === inbox" class="inbox-list">
+      <li v-for="item in items" class="inbox-list">
         <span>{{item.pTitle}}</span>
-        <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
-          <i class="icon2-plan plan"></i>
-          <div class="displayName" v-show="this.IsNameShow">李永州</div>
-        </div>
+        <!--<div class="wrap-icon" @mouseover="showName" @mouseout="hideName">-->
+          <!--<i class="icon2-plan plan"></i>-->
+          <!--<div class="displayName" v-show="this.IsNameShow">李永州</div>-->
+        <!--</div>-->
       </li>
     </ul>
   </div>
 </template>
 <script>
+  import dateUtil from 'ut/dateUtil'
   export default {
     name: '',
     components: {
     },
     data () {
       return {
+        currentDate: new Date()
       }
     },
     computed: {
       items () {
-        return this.$store.state.schedule.items
+        return this.$store.state.inbox.items
       }
     },
     methods: {
+      formatTitleDate (date) {
+        return dateUtil.getStandardTime(date)
+      },
+      createInboxItem (title, e) {
+        if (e.keyCode === 13) {
+          this.$store.dispatch('submitCreateTodoItem', {createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: 'inbox', todoType: 'inbox'})
+            .then(item => {
+            })
+        }
+      }
     }
   }
 </script>
@@ -56,7 +68,8 @@
   }
   .wrap-inbox{
     position: absolute;
-    top:30px;
+    top:60px;
+    right: 10px;
     height: 600px;
     z-index: 5;
     background: #F9F9F9;

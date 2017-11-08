@@ -181,7 +181,7 @@ export default {
    * @constructor
    */
   SCH_TODO_CREATED (state, p) {
-    // console.log('进来mutation了' + JSON.stringify(p.item))
+    console.log('进来mutation了' + JSON.stringify(p.item))
     state.schedule.items.unshift(p.item)
     // if (p.list instanceof Array) {
     //   p.list.unshift(p.item)
@@ -271,10 +271,10 @@ export default {
    * @constructor
    */
   TD_TODO_UPDATED (state, p) {
-    console.log('state.todo.currentTodo是' + JSON.stringify(state.todo.currentTodo))
+    // console.log('state.todo.currentTodo是' + JSON.stringify(state.todo.currentTodo))
     // console.log('p.todo是' + JSON.stringify(p.todo))
-    util.extendObject(state.todo.currentTodo, p.todo) // 直接改标题不行吗
-    console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
+    util.extendObject(state.todo.currentTodo, p.todo)
+    // console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
   },
   TD_SUBTODO_UPDATED (state, p) {
     let items = state.todo.currentTodo.subTodos
@@ -358,6 +358,8 @@ export default {
    * @constructor
    */
   TD_COMMENT_CREATED (state, p) {
+    // 为什么state.todo.currentTodo也就是当前item没有comments这个选项呢
+    // console.log(JSON.stringify(state.todo.currentTodo.comments) + '---' + JSON.stringify(p.comment))
     state.todo.currentTodo.comments.push(p.comment)
   },
   /**
@@ -388,6 +390,9 @@ export default {
     }
     util.extendObject(state.pub.currentTodoDate, p.data)
   },
+  PUB_WEEK_DATE_UPDATE (state, p) {
+    state.weekDate = p.data
+  },
   PUB_TODO_DATE_DELETE (state, p) {
     state.pub.currentTodoDate = null
   },
@@ -407,13 +412,25 @@ export default {
         titleArray[i][p.name] = p.title
       }
     }
-    // console.log('改变之后的ｔｉｔｌｅａｒｒａｙ' + JSON.stringify(titleArray))
   },
   CHANGE_PRIORITY (state, p) {
     state.todo.currentTodo.pContainer = p.pContainer
+    // var items = state.schedule.items
+    // for (var i = 0; i < items.length; i++) {
+    //   if (items[i].id === p.id) {
+    //     items[i].pContainer = p.pContainer
+    //   }
+    // }
   },
   PUB_SCHE_DATE_UPDATE (state, p) {
     state.pub.year = p.year
     state.pub.month = p.month
+  },
+  GET_TODO_TITLE (state, p) {
+    // console.log('进来mutationle ' + JSON.stringify(p.items))
+    var items = p.items
+    for (var i = 0; i < items.length; i++) {
+      state.schedule.titleArray.push(items[i])
+    }
   }
 }

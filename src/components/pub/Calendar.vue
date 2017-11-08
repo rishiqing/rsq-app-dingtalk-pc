@@ -153,7 +153,7 @@
 //        console.log('改变后的daysArray是' + JSON.stringify(this.daysArray)) // 正好是三周的数据
         this.easeTrans = false
         this.translateX = 'translateX(-800px)' // 这个是控制左右滑动的位移吗
-//        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
+        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
       }
     },
     mounted () {
@@ -161,7 +161,7 @@
       Bus.$on('changeCalendar', (month, year) => {
 //        console.log(month + year)
         var newDate = new Date(year, month, 1)
-        console.log(newDate)
+//        console.log(newDate)
         this.focusDate = newDate
         this.resetBar()
       })
@@ -171,7 +171,7 @@
 //      }
       this.focusDate = this.defaultSelectDate
       this.resetBar()
-      console.log('resetBar走完了')
+//      console.log('resetBar走完了')
       this.triggerSelectDate(this.defaultSelectDate) // 去拿后台数据去了
 //      var ele = document.getElementById('hMoveBar')
 //      ele.addEventListener('transitionend', this.resetBar)

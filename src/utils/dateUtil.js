@@ -147,7 +147,7 @@ export default {
     var year = parseInt(text.substr(0, 4))
     var month = parseInt(text.substr(4, 2)) - 1
     var day = parseInt(text.substr(6, 2))
-
+    // return '' + year + month + day
     var date = new Date(year, month, day)
     return date.getTime()
   },
@@ -231,10 +231,18 @@ export default {
     sep = sep || '/'
     var result
     switch (dateType) {
-      case 'repeat':  //  repeat类型，默认startDate和endDate与single相同
-      case 'single':
-        var dateText = this.dateNum2Text(dateResult[0], sep)
+      case 'repeat'://  repeat类型，默认startDate和endDate与single相同
+        // console.log(dateResult.length)
+        if (dateResult.length === 0) {
+          var dateText = this.dateNum2Text(new Date().getTime(), sep)
+        } else {
+          dateText = this.dateNum2Text(dateResult[0], sep)
+        }
         result = {dates: null, startDate: dateText, endDate: dateText}
+        break
+      case 'single':
+        var singleText = this.dateNum2Text(dateResult[0], sep)
+        result = {dates: null, startDate: singleText, endDate: singleText}
         break
       case 'discrete':
         var that = this
@@ -256,14 +264,14 @@ export default {
     var array = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
     return array[date.getMonth()]
   },
-  // dayName (date) {
-  //   var index = date
-  //   if (date instanceof Date) {
-  //     index = date.getDay()
-  //   }
-  //   var array = ['日', '一', '二', '三', '四', '五', '六']
-  //   return array[index]
-  // },
+  dayName (date) {
+    var index = date
+    if (date instanceof Date) {
+      index = date.getDay()
+    }
+    var array = ['日', '一', '二', '三', '四', '五', '六']
+    return array[index]
+  },
   repeatCycleName (code) {
     var map = {
       noRepeat: '不重复',
@@ -327,6 +335,7 @@ export default {
       repeatBaseTime: t.repeatBaseTime
     })
     var result
+    // console.log('parsed是' + JSON.stringify(parsed))
     if (parsed.dateType === 'repeat') {
       result = this.repeatDayText(t.repeatType, t.repeatBaseTime.split(','))
       if (t.isLastDate) {
@@ -387,6 +396,8 @@ export default {
     }
   },
   getStandardTime (date) {
+    // console.log('进来DATe是' + date)
+    var str = ''
     var year = date.getFullYear()
     if (date.getMonth() + 1 >= 10) {
       var month = date.getMonth() + 1
@@ -397,6 +408,7 @@ export default {
     if (day < 10) {
       day = '0' + day
     }
-    return year + month + day
+    // console.log('出来DATe是' + year + month + day)
+    return str + year + month + day
   }
 }

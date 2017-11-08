@@ -11,9 +11,12 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "ali-upload": "node build/ali-oss-uploader.js ./dist",
+    "ali-sts-server": "node private/ali-sts-server.js"
   },
   "dependencies": {
+    "ali-oss": "^4.11.0",
     "es6-promise": "^4.1.1",
     "moment": "^2.19.1",
     "raven-js": "^3.19.1",

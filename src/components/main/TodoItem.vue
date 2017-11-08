@@ -128,7 +128,7 @@
     props: {
       item: Object,
       isCheckable: Boolean,
-      sectionName: String
+      itemTitle: Object
     },
     computed: {
       currentDate () { return this.$store.getters.defaultTaskDate },
