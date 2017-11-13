@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap-inbox">
+  <div class="wrap-inbox" :class="{'slide':showInbox}">
     <input type="text" class="inbox-input" placeholder="添加任务，按Enter保存"  @keypress="createInboxItem($event.target.value,$event)">
     <ul>
       <li v-for="item in items" class="inbox-list">
@@ -23,6 +23,9 @@
         currentDate: new Date()
       }
     },
+    props: {
+      showInbox: Boolean
+    },
     computed: {
       items () {
         return this.$store.state.inbox.items
@@ -43,6 +46,9 @@
   }
 </script>
 <style scoped>
+  .slide{
+    transform: translate(-250px);
+  }
   .inbox-list{
     width: 264px;
     height: 42px;
@@ -68,8 +74,9 @@
   }
   .wrap-inbox{
     position: absolute;
-    top:60px;
-    right: 10px;
+    top:100px;
+    right: -300px;
+    transition: 1s;
     height: 600px;
     z-index: 5;
     background: #F9F9F9;

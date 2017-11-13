@@ -20,7 +20,7 @@
              @click="tapChangeType($event, 'repeat')"
              :class="{'is-active': dateType=='repeat'}">重复</div>
       </div>
-      <div class="repeat-wrap" v-show="!selectDateState">
+      <div class="repeat-wrap" v-show="this.repeatState">
         <div>
           <span class="repeat-style" @click="changeRepeatOption">重复方式</span>
           <span class="repeat-style">{{repeatKind}}</span>
@@ -49,16 +49,22 @@
           </tr>
         </table>
       </div>
-      <div v-show="!selectDateState">
+      <div v-show="this.repeatState">
         <span class="repeat-deadline">截止重复直到</span>
-        <i class=""></i>
-        <select name="" id="repeatDeadline" @change="changeDeadline()">
-          <option value="">永久</option>
-          <option value="">按日期结束</option>
-        </select>
+        <span class="repeat-deadline" @click="selectDeadLine">{{deadLineKind}}</span>
+        <i class="icon2-arrow-down2 arrow"></i>
+        <ul style="margin: 0" v-show="this.deadLine" class="repeat-style-wrap">
+          <li class="repeat-style-wrap">永久</li>
+          <li class="repeat-style-wrap" @click="showDeadLine">按日期截止</li>
+        </ul>
       </div>
-
-      <div class="select-date" v-show="selectDateState">
+      <r-deadline
+       :days="days"
+       v-show="this.deadLineDate"
+       @selectedDate="getDeadLine"
+      >
+      </r-deadline>
+      <div class="select-date" v-show="this.selectDateState">
         <div class="dp-title">
           <!--<div class="dp-title-tag u-pull-left" @click="tapEmpty($event)">空</div>-->
           <!--<div class="dp-title-tag u-pull-right" @click="tapBackToday($event)">今</div>-->
@@ -254,6 +260,7 @@
 <script>
   import dateUtil from 'ut/dateUtil'
   import repeatWeek from 'com/pub/repeatWeek'
+  import DeadLine from 'com/pub/DeadLine'
   /**
    * 主model：state.pub.currentTodoDate，带下划线的是用于不同页面数据共享的属性，不会存储在后台
    * {
@@ -288,18 +295,28 @@
         everyYear: true,
         selectRepeatDate: [],
         repeatWeek: [],
+        repeatWeekState: [],
         repeatStyle: [
           {title: '每天', selected: false},
           {title: '每周', selected: false},
           {title: '每月', selected: false},
           {title: '每年', selected: false}
-        ]
+        ],
+        repeatOverDate: '',
+        deadLineRepeat: '',
+        repeatState: false,
+        deadLine: false,
+        deadLineDate: false
       }
     },
     components: {
-      'r-repeat-week': repeatWeek
+      'r-repeat-week': repeatWeek,
+      'r-deadline': DeadLine
     },
     computed: {
+      deadLineKind () {
+        return this.deadLineRepeat || '永久'
+      },
       repeatKind () {
         for (var i = 0; i < this.repeatStyle.length; i++) {
           if (this.repeatStyle[i].selected) {
@@ -336,6 +353,23 @@
       }
     },
     methods: {
+      getDeadLine (obj) {
+        var year = obj.date.getFullYear()
+        var month = obj.date.getMonth() + 1
+        var date = obj.date.getDate()
+        this.deadLineRepeat = month + '月' + date + '日'
+        month = month < 10 ? ('0' + month) : month
+        date = date < 10 ? ('0' + date) : date
+        this.repeatOverDate = year + '-' + month + '-' + date + ' ' + '00:00:00'
+        this.deadLineDate = false
+      },
+      selectDeadLine () {
+        this.deadLine = true
+      },
+      showDeadLine () {
+        this.deadLine = false
+        this.deadLineDate = true
+      },
       changeRepeatOption () {
         this.repeatOption = !this.repeatOption
       },
@@ -409,8 +443,12 @@
         this.resetType()
         if (this.dateType === 'repeat') {
           this.selectDateState = false
+          this.repeatState = true
           if (dateStruct.repeatType === 'everyDay') {
             this.everyDay = true
+            this.everyMonth = false
+            this.everyWeek = false
+            this.everyYear = false
             for (var i = 0; i < this.repeatStyle.length; i++) {
               if (this.repeatStyle[i].title !== '每天') {
                 this.repeatStyle[i].selected = false
@@ -427,9 +465,21 @@
                 this.repeatStyle[i].selected = true
               }
             }
+            this.everyDay = false
+            this.everyMonth = false
             this.everyWeek = true
+            this.everyYear = false
           } else if (dateStruct.repeatType === 'everyMonth') {
-            this.selectRepeatDate = [this.selectNumDate]
+            this.everyDay = false
+            this.everyMonth = true
+            this.everyWeek = false
+            this.everyYear = false
+            for (var j = 0; j < this.selectNumDate.length; j++) {
+              var obj = new Date(this.selectNumDate[j])
+              var day = obj.getDate() < 10 ? '0' + obj.getDate() : obj.getDate()
+              var date = '' + obj.getFullYear() + (obj.getMonth() + 1) + day
+              this.selectRepeatDate.push(date)
+            }
             for (i = 0; i < this.repeatStyle.length; i++) {
               if (this.repeatStyle[i].title !== '每月') {
                 this.repeatStyle[i].selected = false
@@ -437,7 +487,6 @@
                 this.repeatStyle[i].selected = true
               }
             }
-            this.everyMonth = true
           } else {
             for (i = 0; i < this.repeatStyle.length; i++) {
               if (this.repeatStyle[i].title !== '每年') {
@@ -447,6 +496,9 @@
               }
             }
             this.everyYear = true
+            this.everyDay = false
+            this.everyMonth = false
+            this.everyWeek = false
           }
         }
       },
@@ -475,6 +527,7 @@
         if (type === 'repeat') {
           this.dateType = type
           this.selectDateState = false
+          this.repeatState = true
           this.resetType()
           if (e) e.preventDefault()
         } else {
@@ -497,17 +550,17 @@
             var date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
             this.selectRepeatDate.push(date)
           } else {
+            day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
+            date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
             var index = this.selectRepeatDate.indexOf(date)
             if (index > -1) {
               this.selectRepeatDate.splice(index, 1)
             }
           }
-//          this.dateType = 'single'
-//          this.tapDay(e, day)
-//          this.selectDiscrete(day)
+        } else {
+          this.toggleSelect(obj)
+          e.preventDefault()
         }
-        this.toggleSelect(obj)
-        e.preventDefault()
       },
       resetType () {
         this.resetMonth() // 这是干吗用的
@@ -653,7 +706,9 @@
           if (this.everyDay) {
             resObj['repeatType'] = 'everyDay'
             resObj['repeatBaseTime'] = this.selectNumDate.toString().split('/').join('')
+            resObj['repeatOverDate'] = this.repeatOverDate
           } else if (this.everyWeek) {
+            console.log('每周进来了')
             resObj['repeatType'] = 'everyWeek'
             // 首先拿到开始日期，因为根据开始日期计算星期数组中每个星期对应的日期
             if (this.selectNumDate.length > 0) {
@@ -662,44 +717,50 @@
               var year = new Date(this.selectNumDate[0]).getFullYear()
               var month = new Date(this.selectNumDate[0]).getMonth() + 1
               var weekArray = this.weekDate
+              console.log('拿到this.weekdsatele ' + JSON.stringify(weekArray))
               for (var i = 0; i < weekArray.length; i++) {
                 if (weekArray[i] > startWeek) {
                   var day = startDate + weekArray[i] - startWeek
                   day = day < 10 ? ('0' + day) : day
-                  this.repeatWeek.push('' + year + month + day)
+                  this.repeatWeekState.push('' + year + month + day)
+                  console.log('this.repeatWeek是' + JSON.stringify(this.repeatWeekState))
                 } else {
                   var bigday = startDate + weekArray[i] + 7 - startWeek
                   bigday = bigday < 10 ? ('0' + bigday) : bigday
-                  this.repeatWeek.push('' + year + month + bigday)
+                  this.repeatWeekState.push('' + year + month + bigday)
                 }
               }
             } else {
-              startWeek = new Date().getDay()
-              startDate = new Date().getDate()
-              year = new Date().getFullYear()
-              month = new Date().getMonth() + 1
+//              startWeek = new Date().getDay()
+//              startDate = new Date().getDate()
+//              year = new Date().getFullYear()
+//              month = new Date().getMonth() + 1
               weekArray = this.weekDate
-              for (i = 0; i < weekArray.length; i++) {
-                if (weekArray[i] > startWeek) {
-                  day = startDate + weekArray[i] - startWeek
-                  day = day < 10 ? ('0' + day) : day
-                  this.repeatWeek.push('' + year + month + day)
-                } else {
-                  bigday = startDate + weekArray[i] + 7 - startWeek
-                  bigday = bigday < 10 ? ('0' + bigday) : bigday
-                  this.repeatWeek.push('' + year + month + bigday)
-                }
-              }
+//              for (i = 0; i < weekArray.length; i++) {
+//                if (weekArray[i] > startWeek) {
+//                  day = startDate + weekArray[i] - startWeek
+//                  day = day < 10 ? ('0' + day) : day
+//                  this.repeatWeek.push('' + year + month + day)
+//                } else {
+//                  bigday = startDate + weekArray[i] + 7 - startWeek
+//                  bigday = bigday < 10 ? ('0' + bigday) : bigday
+//                  this.repeatWeek.push('' + year + month + bigday)
+//                }
+//              }
             }
-            resObj['repeatBaseTime'] = this.repeatWeek.toString()
+            console.log('每周内容是' + JSON.stringify(this.repeatWeekState))
+            resObj['repeatBaseTime'] = this.repeatWeekState.toString()
+            resObj['repeatOverDate'] = this.repeatOverDate
           } else if (this.everyMonth) {
             resObj['repeatType'] = 'everyMonth'
 //            console.log('this.selectRepeatDate 是' + JSON.stringify(this.selectRepeatDate))
             resObj['repeatBaseTime'] = this.selectRepeatDate.toString()
+            resObj['repeatOverDate'] = this.repeatOverDate
           } else {
             resObj['repeatType'] = 'everyYear'
 //            console.log('this.selectRepeatDate 是' + JSON.stringify(this.selectRepeatDate))
             resObj['repeatBaseTime'] = this.selectNumDate.toString().split('/').join('')
+            resObj['repeatOverDate'] = this.repeatOverDate
           }
           resObj['isCloseRepeat'] = false
         }
@@ -744,6 +805,8 @@
           .then(() => {
             this.$store.commit('PUB_TODO_DATE_DELETE') // 提交之后就删除了？？？
             this.selectRepeatDate = []
+            this.repeatWeekState = []
+            this.$store.commit('PUB_WEEK_DATE_DELETE')
           })
       },
       changeDate () {

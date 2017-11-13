@@ -74,10 +74,11 @@
     font-size: 12px;
   }
   .cal-bar {
-    position: absolute;
+    /*position: absolute;*/
     width: 100%;
     height: 100%;
-    top: 0;display: inline-block;
+    /*top: 0;*/
+    display: inline-block;
   }
   .cal-table {
     border-collapse: collapse;
@@ -94,7 +95,7 @@
     color: #FFFFFF;
     line-height: 12px;
   }
-  .cal-day-tag {position:absolute;top:5px;right: 0.66rem;border-radius:50%;}
+  .cal-day-tag {position:absolute;top:5px;right: 15px;border-radius:50%;}
   .tag-active {width:4px;height:4px;background:#30FFA8;}
   .cal-day {
     font-family: PingFangSC-Regular;

@@ -2,8 +2,11 @@
   <div>
     <div class="calendar">
       <div  class="wrap-date" @click="showSelectDate">
-        <span class="year">{{selectYear||dateSelect.getFullYear()}}</span>
-        <span class="month">{{selectMonth||dateSelect.getMonth()+1}}</span>
+        <div class="wrap-month">
+          <div class="month">{{selectMonth||dateSelect.getMonth()+1}}</div>
+          <div class="year">{{selectYear||dateSelect.getFullYear()}}</div>
+        </div>
+        <i></i>
       </div>
       <r-selectDate
         v-show="selectDate"
@@ -15,9 +18,10 @@
         @click-cal-day="fetchItems"
         @after-cal-swipe="fetchDatesHasTodo"
       ></r-calendar>
+      <span class="return-to-today" @click="returnToday">返回今天</span>
       <span class="inbox" @click="showInboxState">收纳箱</span>
       <r-inbox
-        v-show="this.showInbox"
+        :showInbox="showInbox"
       ></r-inbox>
     </div>
     <div id="sche-wrap">
@@ -43,6 +47,7 @@
   import selectDate from 'com/main/selectDate'
   import moment from 'moment'
   import Inbox from 'com/inbox/Inbox'
+  import Bus from 'com/bus'
   export default {
     name: 'app',
     components: {
@@ -88,6 +93,10 @@
       }
     },
     methods: {
+      returnToday () {
+        Bus.$emit('returnToday', new Date())
+        this.$store.commit('PUB_SCHE_DATE_UPDATE', {month: new Date().getMonth() + 1, year: new Date().getFullYear()})
+      },
       fetchDatesHasTodo (p) {
         var weekArray = p.daysArray[1]
         var firstDate = weekArray[0].date
@@ -127,9 +136,10 @@
         this.selectDate = !this.selectDate
       },
       showDetail (item, itemTitle) {
+//        console.log('进来了')
         this.item = item
         this.itemTitle = itemTitle
-        this.$store.dispatch('setCurrentTodo', item)
+//        this.$store.dispatch('setCurrentTodo', item)
         this.IsShow = true
       },
       closeDetail () {
@@ -150,6 +160,13 @@
 </script>
 
 <style>
+  .return-to-today{
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .wrap-month{
+
+  }
   .calendar{
     position: relative;
     display: flex;
@@ -157,6 +174,7 @@
   }
   .inbox{
     font-size: 14px;
+    margin-left: 70px;
   }
   .year{
     font-size: 18px;

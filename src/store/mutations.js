@@ -393,6 +393,9 @@ export default {
   PUB_WEEK_DATE_UPDATE (state, p) {
     state.weekDate = p.data
   },
+  PUB_WEEK_DATE_DELETE (state, p) {
+    state.weekDate = null
+  },
   PUB_TODO_DATE_DELETE (state, p) {
     state.pub.currentTodoDate = null
   },

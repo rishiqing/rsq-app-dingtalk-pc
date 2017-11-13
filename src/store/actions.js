@@ -758,28 +758,28 @@ export default {
     props['todoId'] = currentItem.id
     props['type'] = 0
     // commit('TD_COMMENT_CREATED', {comment: props})
-    if (props.commentContent) {
-      currentItem = state.todo.currentTodo
-      var replyId = state.replyId
-      var replyName = state.replyName
-      props['todoId'] = currentItem.id
-      props['type'] = 0
-      if (replyId !== null) {
-        props['atIds'] = replyId
-        props.commentContent = '@' + replyName + '&' + props.commentContent // 这里可能要去掉前面的@
-      }
-
-      return api.todo.postComment(props)
-        .then((com) => {
-          // console.log('api走完了')
-          com.type = 0
-          commit('TD_COMMENT_CREATED', {comment: com})
-          // console.log('commit走完了')
-        })
-    } else {
-      return Promise.resolve()
+    // if (props.commentContent) {
+    currentItem = state.todo.currentTodo
+    var replyId = state.replyId
+    var replyName = state.replyName
+    props['todoId'] = currentItem.id
+    props['type'] = 0
+    if (replyId !== null) {
+      props['atIds'] = replyId
+      props.commentContent = '@' + replyName + '&' + props.commentContent // 这里可能要去掉前面的@
     }
+
+    return api.todo.postComment(props)
+      .then((com) => {
+        // console.log('api走完了')
+        com.type = 0
+        commit('TD_COMMENT_CREATED', {comment: com})
+        // console.log('commit走完了')
+      })
   },
+    // } else {
+    //   return Promise.resolve()
+    // }
   ReplyCommentItem ({commit, state}, props) {
     commit('REPLY_COMMENT_CREATED', {item: props.item})
   },

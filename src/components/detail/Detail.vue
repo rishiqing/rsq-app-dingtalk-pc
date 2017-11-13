@@ -14,7 +14,7 @@
           </li>
         </ul>
       </div>
-      <div class="detail-content">
+      <div class="detail-content" :class="{'fileCountZero':EditComment,'fileCountOne':fileCountOne,'fileCountTwo':fileCountTwo,'fileCountThree':fileCountThree, 'noComment': this.commentState}">
         <r-input-title
           :item-title="item.pTitle"
           @changeTitle="changeTitle"
@@ -47,21 +47,23 @@
         </r-comment-list>
       </div>
       <div class="detail-bottom">
-        <div v-show="this.commentState" class="bottom-comment" @click="changeCommentState()">
+        <div v-show="this.commentState" class="bottom-comment" @click="changeCommentState">
           输入的讨论内容或发送文件
         </div>
         <textarea  v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
-        <div class="wrap-button" v-show="!this.commentState">
-          <button @click="postComment(commentContent)" class="send">发送</button>
-          <button @click="hideButton">取消</button>
-        </div>
         <r-upload
+          :commentState="this.commentState"
           @get-file-id="setFileId"
           @remove-file-id="removeFileId"
           @ready-to-upload="isUploading"
           @finish-upload="finishUpload"
+          @showEditComment="showEditComment"
         >
         </r-upload>
+        <div class="wrap-button" v-show="!this.commentState">
+          <button @click="postComment(commentContent)" class="send">发送</button>
+          <button @click="hideButton">取消</button>
+        </div>
       </div>
     </div>
   </div>
@@ -82,6 +84,7 @@
 //  import util from 'ut/jsUtil'
 //  import dateUtil from 'ut/dateUtil'
   import ComentList from 'com/pub/ComentList'
+  import Bus from 'com/bus'
   export default {
     name: 'app',
     components: {
@@ -105,10 +108,26 @@
         repeatState: false,
         repeatOption: [
           '仅更改此任务', '更改此任务及之后所有任务', '更改所有重复的任务'
-        ]
+        ],
+        content: '',
+        fileId: [],
+        fileName: [],
+        uploadingFile: []
       }
     },
     computed: {
+      fileCountOne () {
+        return this.fileId.length === 1
+      },
+      fileCountTwo () {
+        return this.fileId.length === 2
+      },
+      fileCountThree () {
+        return this.fileId.length >= 3
+      },
+      EditComment () {
+        return this.fileId.length === 0 && !this.commentState
+      },
       currentTodo () {
         return this.$store.state.todo.currentTodo || {}
       },
@@ -117,24 +136,30 @@
       },
       commentList () {
         return this.$store.state.todo.currentTodo.comments
+      },
+      defaultTaskDate () {
+        return this.$store.getters.defaultTaskDate
       }
-//      subtodos () {
-//        return this.$store.state.todo.subTodos
-//      }
     },
     props: {
       item: Object,
       itemTitle: Object
     },
     methods: {
+      showEditComment () {
+        this.commentState = false
+      },
       setFileId (p) {
         this.fileId.push(p.id)
         this.fileName.push(p.name)
       },
       removeFileId (name) {
         for (var i = 0; i < this.fileName.length; i++) {
-          if (this.fileName[i] === name) {
+          console.log('name是' + name + '' + 'this.fileName[i]是' + this.fileName[i])
+          if (this.fileName[i].substr(5) === name) {
+            console.log('想等了')
             this.fileId.splice(i, 1)
+            console.log(this.fileId.length)
             this.fileName.splice(i, 1)
           }
         }
@@ -154,10 +179,12 @@
       postComment (value) {
 //        console.log('传进来value是' + value)
         console.log('进来评论了')
-        this.$store.dispatch('postTodoComment', {commentContent: value})
+        this.$store.dispatch('postTodoComment', {commentContent: value, fileIds: this.fileId, createTaskDate: this.defaultTaskDate})
           .then(() => {
-//            this.commentState = !this.commentState
+            Bus.$emit('clearTask')
             this.commentContent = ''
+            this.fileId = []
+            this.fileName = []
           })
       },
       changeCommentState () {
@@ -214,26 +241,53 @@
 </script>
 
 <style>
+  .fileCountZero{
+    max-height: 70%;
+  }
+  .fileCountOne{
+    max-height: 60%;
+  }
+  .fileCountTwo{
+    max-height: 50%;
+  }
+  .fileCountThree {
+    max-height: 40%;
+  }
+  .hasComment{
+    max-height: 80%;
+  }
+  .noComment{
+    max-height: 80%;
+  }
   .send{
     cursor: pointer;
   }
   .detail-bottom{
-    position: relative;
+    /*position: relative;*/
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
   .wrap-button{
     position: absolute;
-    right: 10px;
+    right: 0px;
     display: flex;
     align-items: center;
-    top:64px;
+    top:67px;
     width:100px;
-    height: 50px;
+    height: 26px;
   }
   .comment-text{
     width: 98%;
+    height: 90px;
   }
   .bottom-comment{
-    background-color: white;
+    position: fixed;
+    left:0;
+    right:0;
+    bottom: 0;
+    /*background-color: white;*/
     /*margin-top: 20px;*/
     font-size: 15px;
     display: flex;
@@ -249,8 +303,10 @@
   ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
   ::-webkit-scrollbar-thumb:active {background-color:#00aff0}
   .detail-content{
-    height:75%;
+    /*max-height:60%;*/
+    /*height: calc(100% - 45px);*/
     overflow-y: auto;
+    /*margin-bottom: 50px;*/
   }
   .modal{
     position: fixed;

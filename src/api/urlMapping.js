@@ -13,7 +13,7 @@ export default {
   'GET_LOGOUT': 'task/j_spring_security_logout',
   'GET_INBOX_TODOS': 'task/mainTodoList/getInboxTodos',
   'POST_SUB_TODO': 'task/v2/subTodo',
-  'POST_SUBTODO_PROP': 'task/v2/subTodo',
+  'POST_SUBTODO_PROP': 'task/v2/subTodo/:id',
   'POST_NEW_TODO': 'task/v2/todo',
   'PUT_TODO_PROP': 'task/v2/todo/:id',
   'DELETE_TODO': 'task/v2/todo/:id',

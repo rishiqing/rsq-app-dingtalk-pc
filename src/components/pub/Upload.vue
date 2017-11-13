@@ -1,27 +1,38 @@
 <template>
   <div class="wrap-upload">
-      <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
-      <ul class="ul-list">
-        <r-upload-item
-          v-for="(task, index) in taskList"
-          :key="index"
-          :task="task"
-          @upload-item-delete="deleteTask"
-        ></r-upload-item>
-      </ul>
+    <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
+    <i class="icon-attachment upload-icon"></i>
+    <ul class="ul-list" v-show="!this.commentState">
+      <r-upload-item
+        v-for="(task, index) in taskList"
+        :key="index"
+        :task="task"
+        @upload-item-delete="deleteTask"
+      ></r-upload-item>
+    </ul>
     <!--<div @click="cancelUpload">测试</div>-->
   </div>
 </template>
 <style lang="scss">
+  .upload-icon{
+    font-size: 20px;
+    margin-left: -32px;
+  }
   .wrap-upload {
-    position: absolute;
-    top: 10px;
+    /*position: absolute;*/
+    /*top: 10px;*/
+    margin-top: -30px;
+    width: 100%;
   }
   .ul-list{
-    margin-top: -15px;
+    margin: 0;
+    max-height: 150px;
+    overflow-y: auto;
   }
   .file-input {
     cursor: pointer;
+    width: 30px;
+    opacity: 0;
     /*position:absolute;*/
     /*top: 4.75rem;*/
     /*font-size:30px;*/
@@ -36,12 +47,15 @@
 </style>
 <script>
   import UploadItem from 'com/pub/UploadItem'
-
+  import Bus from 'com/bus'
   export default {
     data () {
       return {
         taskList: []  //  上传任务的taskList，每个task，包括image和file两个对象
       }
+    },
+    props: {
+      commentState: Boolean
     },
     computed: {
       currentTodo () {
@@ -79,7 +93,9 @@
       },
       //  显示图片的第一种方式
       addToTask (e) {
+        this.$emit('showEditComment')
         var files = e.target.files
+//        console.log('files是' + (files))
         if (files.length < 1) return
         if (this.unfinishedTask.length + files.length > 5) {
           window.rsqadmg.exec('alert', {message: '一次最多上传5张图片！'})
@@ -112,7 +128,7 @@
         }
         //  同时上传需要做数量控制，因此不做同时上传，只做顺序上传
         //  由于一个公司之间的文件需要共享预览，所以以corpId作为pathId
-        return this.$store.dispatch('uploadToOSS', {
+        return this.$store.dispatch('uploadToOSS', { // 这个方法有点复杂。。。看不太懂，只需要知道返回值就行了
           pathId: this.corpId,
           list: this.unfinishedTask
         }).then(res => {
@@ -121,7 +137,7 @@
           for (var i = 0; i < res.length; i++) {
             var name = res[i].name
             this.$store.dispatch('toRsqServer', {name: name}).then(res => {
-              this.$emit('get-file-id', {id: res.id, name: res.name.substr(14)})
+              this.$emit('get-file-id', {id: res.id, name: res.name})
               this.$emit('finish-upload')
             })
           }
@@ -135,7 +151,11 @@
         })
       }
     },
-    mounted () {},
+    mounted () {
+      Bus.$on('clearTask', () => {
+        this.taskList.splice(0, this.taskList.length)
+      })
+    },
     beforeDestroy () {}
   }
 </script>

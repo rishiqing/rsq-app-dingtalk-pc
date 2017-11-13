@@ -30,7 +30,7 @@
         selectDate: null,  //  当前选中（高亮显示）的日期
         easeTrans: false,
         count: 0,
-        translateX: 'translateX(-800px)',
+        translateX: 'translateX(-700px)',
         weeks: ['日', '一', '二', '三', '四', '五', '六'],
         months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
       }
@@ -125,7 +125,7 @@
 //        console.log('onPanMove的delta是' + delta)
 //        this.translateX = 'translateX(' + (this.count) + 'px)'
         this.focusDate = this.firstDayOfWeek(this.focusDate, 1)
-        console.log('this.focusDate是' + this.focusDate)
+//        console.log('this.focusDate是' + this.focusDate)
         this.resetBar()
       },
       onPanEnd (ev) {
@@ -159,10 +159,14 @@
     mounted () {
       //  初始化工作
       Bus.$on('changeCalendar', (month, year) => {
-//        console.log(month + year)
+        console.log(month + year)
         var newDate = new Date(year, month, 1)
-//        console.log(newDate)
+        console.log(newDate)
         this.focusDate = newDate
+        this.resetBar()
+      })
+      Bus.$on('returnToday', (date) => {
+        this.focusDate = date
         this.resetBar()
       })
 //      console.log('calendar界面传进来的' + this.selectYear + this.selectMonth)
@@ -193,7 +197,7 @@
     font-size: 14px;
   }
   .c-cal-main {
-    position: fixed;color:white;font-size: 1.4rem;
+    position: fixed;color:white;font-size: 15px;
     top:0;left:0;right:0;height: 81px;background: #458CDA;
     border-bottom: 0.5px solid #E4E4E4;z-index:99;
     -webkit-transform: translate3d(0px,0px,0px);
@@ -204,11 +208,11 @@
     margin-bottom: -1px;
   }
   .cal-title-today {position:absolute;top:0;height:100%;left:50%;margin-left:65px;
-    font-size: 1.8rem;font-weight: bold;}
+    font-size: 15px;font-weight: bold;}
   .cal-week-title {
     position: fixed;top: 0px;left: 0;right: 0;width: 100%;
     padding: 0;height: 31px;line-height: 30px;
-    margin-bottom: -1px;color:white;background: #458CDA;font-size:1.2rem;
+    margin-bottom: -1px;color:white;background: #458CDA;font-size:15px;
     -webkit-transform: translate3d(0px,0px,0px);
   }
   .c-cal-main table {
@@ -217,7 +221,7 @@
   }
   .c-cal-main td {}
   .cal-weekday {
-    font-size: 0.293rem;
+    font-size: 15px;
     font-family: PingFangSC-Medium;
   }
   .cal-content {

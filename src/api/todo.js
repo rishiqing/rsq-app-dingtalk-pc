@@ -255,9 +255,9 @@ export default {
     })
   },
   getItem (item) {
-    console.log('id是' + item.id)
+    // console.log('id是' + item.id)
     var path = util.replaceUrlParams(mapping.POST_DESP, item)
-    console.log('path是' + path)
+    // console.log('path是' + path)
     return new Promise((resolve, reject) => {
       Vue.http.get(path, item)
         .then(res => {

@@ -18,10 +18,12 @@
     height: 27px;
   }
   .icon-wrap {
-    position:absolute;top:0;right:0.5rem;bottom:0;overflow:hidden;
+    position:absolute;
+    right:0.5rem;
   }
   .icon-wrap > * {
-    float: right;line-height:1.2rem;
+    float: right;
+    line-height:15px;
   }
   .delete-comment {
     color: #DEDEDE;
@@ -29,7 +31,9 @@
     z-index:9;
   }
   .done-text {
-    color: #9B9B9B;font-size: 12px;padding-right:0.3rem;
+    color: #9B9B9B;
+    font-size: 12px;
+    padding-right:15px;
   }
   .file-name {
     font-family:AppleSystemUIFont;
@@ -50,7 +54,7 @@
     border-bottom: none;
     background-color: white;
     padding-left: 13px;
-    height: 1.2rem;
+    height: 40px;
   }
   .task-list:last-child{
     border-bottom: 1px solid #E0E0E0;

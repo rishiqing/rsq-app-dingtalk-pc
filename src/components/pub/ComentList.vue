@@ -19,6 +19,8 @@
       :item="item"
       :key="item.id"
       @reply="reply"
+      @filePreview="filePreview"
+      @fileDownload="fileDownload"
     ></r-todo-coment>
     <div v-if="comentCount" class="noComent">
       <!--<img src="../../assets/img/nocoment.png" alt="">-->
@@ -75,7 +77,7 @@
   }
 </style>
 <script>
-//  import Previewer from 'com/pub/Previewer'
+  import Previewer from 'com/pub/Previewer'
   import ComentItem from 'com/pub/ComentItem'
   import comentRecord from 'com/pub/comentRecord'
   export default {
@@ -125,24 +127,34 @@
       reply (item) {
         this.$emit('reply', item)
       },
-//      getFileName (file) {
-//        if (!file.name) return ''
-//        var arr = file.name.split('/')
-//        return arr[arr.length - 1].substr(14)
-//      },
+      getFileName (file) {
+        if (!file.name) return ''
+        var arr = file.name.split('/')
+        return arr[arr.length - 1].substr(14)
+      },
       changeState () {
         this.more = !this.more
-      }
+      },
+      fileDownload (f) {
+        var link = document.createElement('a')
+        link.download = this.getFileName(f)
+        link.href = f.realPath
+        link.click()
+      },
+      filePreview (file) {
+        Previewer.show({
+          file: file
+        })
+      },
 //      showAction (f) {
 //        var that = this
+//        console.log('进来了')
 //        window.rsqadmg.exec('actionsheet', {
 //          buttonArray: ['预览文件', '下载文件'],
 //          success: function (res) {
 //            switch (res.buttonIndex) {
 //              case 0:
-//                Previewer.show({
-//                  file: f
-//                })
+//
 //                break
 //              case 1:
 //                that.downloadFile(f)
@@ -153,12 +165,12 @@
 //          }
 //        })
 //      },
-//      downloadFile (f) {
-//        var link = document.createElement('a')
-//        link.download = this.getFileName(f)
-//        link.href = f.realPath
-//        link.click()
-//      }
+      downloadFile (f) {
+        var link = document.createElement('a')
+        link.download = this.getFileName(f)
+        link.href = f.realPath
+        link.click()
+      }
     },
     mounted () {
 //      console.log('拿到的items是' + JSON.stringify(this.items))

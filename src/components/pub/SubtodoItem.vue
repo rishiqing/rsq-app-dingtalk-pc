@@ -30,7 +30,7 @@
     methods: {
       clickCheckOut (item) {
         console.log(JSON.stringify(item))
-        this.$store.dispatch('submitSubTodoFinish', {item: item, status: item.pIsDone})
+        this.$store.dispatch('submitSubTodoFinish', {item: item, status: !item.isDone})
           .then(function () {
           })
       },

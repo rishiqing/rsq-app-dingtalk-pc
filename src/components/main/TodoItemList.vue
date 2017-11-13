@@ -95,11 +95,14 @@
     methods: {
       showEdit (item) {
 //        console.log('穿够来的item是' + JSON.stringify(item))
-        this.$emit('todo-item-click', item)
         this.$store.dispatch('getItem', item).then(
           (item) => {
 //            console.log('返回来的item是' + JSON.stringify(item))
-//            this.$store.dispatch('setCurrentTodo', item)
+            this.$store.dispatch('setCurrentTodo', item).then(
+              () => {
+                this.$emit('todo-item-click', item)
+              }
+            )
           }
         )
 //        this.$store.dispatch('setCurrentTodo', item)// 设置当前todo不管是inbox的todo还是ssche的todo

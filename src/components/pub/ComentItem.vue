@@ -26,31 +26,43 @@
               <img class="comment-photo file-touch" :src="file.realPath"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
+              <span class="file-size" @click="filePreview(file)">预览</span>
+              <span class="file-size" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() == 'PDF'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
+              <span class="file-size" @click="filePreview(file)">预览</span>
+              <span class="file-size" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'ZIP'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
+              <span class="file-size" @click="filePreview(file)">预览</span>
+              <span class="file-size" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'DOC' || file.contentType.toUpperCase() === 'DOC'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
+              <span class="file-size" @click="filePreview(file)">预览</span>
+              <span class="file-size" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'PPT' || file.contentType.toUpperCase() === 'PPTX'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
+              <span class="file-size" @click="filePreview(file)">预览</span>
+              <span class="file-size" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else>
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
+              <span class="file-size" @click="filePreview(file)">预览</span>
+              <span class="file-size" @click="fileDownload(file)">下载</span>
             </template>
           </div>
         </div>
@@ -62,6 +74,7 @@
   .delete-comment,.reply-comment{
     font-size: 14px;
     color: red;
+    cursor: pointer;
   }
   .replyComment{
     background: rgba(0,0,0,.1);
@@ -87,7 +100,7 @@
     font-size: 13px;
     color: #BFBFBF;
     /*display: block;*/
-    margin-left:0.4rem;
+    margin-left:20px;
     /*float: right;*/
   }
   .comment-photo{
@@ -202,9 +215,10 @@
         this.reply = false
       },
       getFileName (orgName) {
-        if (!orgName) return ''
-        var arr = orgName.split('/')
-        return arr[arr.length - 1].substr(14, 25)
+        return orgName.substr(5)
+//        if (!orgName) return ''
+//        var arr = orgName.split('/')
+//        return arr[arr.length - 1].substr(14, 25)
       },
       getFileSize (fileSize) {
         if (fileSize > 1024) {
@@ -226,8 +240,11 @@
           .then(() => {
           })
       },
-      fileTouch (file) {
-        this.$emit('comment-file-touch', file)
+      filePreview (file) {
+        this.$emit('filePreview', file)
+      },
+      fileDownload (file) {
+        this.$emit('fileDownload', file)
       },
       triggerAndroid (e) {
         if (this.disabled) return
