@@ -1,5 +1,5 @@
 <template>
-  <div class="select-date">
+  <div class="select-date-deadline">
     <div class="dp-title">
       <!--<div class="dp-title-tag u-pull-left" @click="tapEmpty($event)">空</div>-->
       <!--<div class="dp-title-tag u-pull-right" @click="tapBackToday($event)">今</div>-->
@@ -40,6 +40,13 @@
   </div>
 </template>
 <style lang="scss">
+  .select-date-deadline{
+    position: absolute;
+    top: 5px;
+    background-color: white;
+    z-index: 103;
+    height: 290px;
+  }
   .repeat-style-wrap-show{
     width: 20px;
     font-size: 14px;

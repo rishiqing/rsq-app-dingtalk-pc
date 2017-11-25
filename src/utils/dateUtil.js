@@ -102,7 +102,8 @@ export default {
           date: thisDate,
           isFocused: this.isSameDate(focusDate, thisDate),
           isSelected: false,
-          isInMonth: thisDate.getMonth() === focusDate.getMonth()
+          isInMonth: thisDate.getMonth() === focusDate.getMonth(),
+          showWeek: false
         }
 
         weekArr.push(obj)
@@ -410,5 +411,11 @@ export default {
     }
     // console.log('出来DATe是' + year + month + day)
     return str + year + month + day
+  },
+  getZeroTime (initDate) {
+    var year = initDate.getFullYear()
+    var month = initDate.getMonth()
+    var date = initDate.getDate()
+    return new Date(year, month, date)
   }
 }

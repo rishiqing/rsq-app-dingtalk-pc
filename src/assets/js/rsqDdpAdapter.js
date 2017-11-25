@@ -61,10 +61,8 @@ rsqadmg.store = {
 rsqAdapterManager.register({
   auth: function(params){
     //  先取签名
-    // alert('before sign----');
     rsqadmg.execute('sign', {
         success: function(res){
-          // alert('after sign----' + JSON.stringify(res));
           // var json = JSON.stringify(res);
           // 再进行jssdk初始化
           rsqadmg.execute('init', {
@@ -74,8 +72,6 @@ rsqAdapterManager.register({
             "nonceStr": res.nonce,
             "signature": res.signature,
             success: function(authUser){
-              // alert('after init----' + JSON.stringify(authUser));
-
               // var authUser = authResult.user;
               //  从authServer获取到用户数据后进行登录
               rsqAdapterManager.ajax.post(rsqConfig.apiServer + 'task/j_spring_security_check', {
@@ -100,6 +96,7 @@ rsqAdapterManager.register({
   sign: function(params){
     var currentUrl = window.location.href.split('#')[0];
     var pa = rsqadmg.store.app;
+    console.log(rsqConfig.authServer + 'get_js_config')
     rsqAdapterManager.ajax.get(rsqConfig.authServer + 'get_js_config', {
       url: currentUrl,
       corpid: pa.corpid,
@@ -108,8 +105,10 @@ rsqAdapterManager.register({
       var resJson = JSON.parse(resSign);
       rsqChk(params.success, [resJson]);
     });
+    // rsqChk(params.success, [{}]);
   },
   init: function(params){
+    // rsqChk(params.success, [{rsqUsername: 'KGcPR_1484054002748@dingtalk.rishiqing.com', rsqPassword: 'YcCTVA'}]);
     DingTalkPC.config({
       "agentId": params.agentId,
       "corpId": rsqadmg.store.app.corpid,
@@ -119,17 +118,6 @@ rsqAdapterManager.register({
       jsApiList: [
         'runtime.info',
         'biz.chat.pickConversation',
-        'device.notification.confirm',
-        'device.notification.alert',
-        'device.notification.prompt',
-        'device.notification.showPreloader',
-        'device.notification.hidePreloader',
-        'device.notification.toast',
-        'device.notification.actionSheet',
-        'biz.navigation.setTitle',
-        'biz.navigation.setMenu',
-        'biz.util.chosen',
-        'biz.util.datepicker',
         'biz.customContact.choose',
         'biz.customContact.multipleChoose',
         'biz.chat.open',
@@ -137,7 +125,16 @@ rsqAdapterManager.register({
         'biz.user.get',
         'biz.contact.choose',
         'biz.telephone.call',
+        'biz.ding.create',
         'biz.ding.post']
+    });
+    DingTalkPC.config({
+      "agentId": params.agentId,
+      "corpId": rsqadmg.store.app.corpid,
+      "timeStamp": params.timeStamp,
+      "nonceStr": params.nonceStr,
+      "signature": params.signature,
+      jsApiList: ['device.notification.alert', 'device.notification.confirm'] // 必填，需要使用的jsapi列表
     });
     DingTalkPC.ready(function(res){
 
@@ -201,14 +198,62 @@ rsqAdapterManager.register({
 
   },
   log: function(params){
-    console.log(params.message)
+    // console.log(params.message)
   },
   setTitle: function(params){
-
+    DingTalkPC.biz.navigation.setTitle({
+      title : params.title,//控制标题文本，空字符串表示显示默认文本
+      onSuccess : function(result) {
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
   },
   setOptionButtons: function(params){
+    if(params.hide){
+      DingTalkPC.biz.navigation.setRight({
+        show: false,//控制按钮显示， true 显示， false 隐藏， 默认true
+        control: true,//是否控制点击事件，true 控制，false 不控制， 默认false
+        text: '隐藏',//控制显示文本，空字符串表示显示默认文本
+        onSuccess : function(result) {
+          //如果control为true，则onSuccess将在发生按钮点击事件被回调
+          rsqChk(params.success);
+        },
+        onFail : function(err) {
+          alert(JSON.stringify(err));
+        }
+      });
+    }else{
+      params.btns = params.btns || []
+      var items = params.btns.map(function(item){
+        return {
+          id: item.key,
+          text: item.name
 
+        }
+      });
+      DingTalkPC.biz.navigation.setMenu({
+        // backgroundColor : "#ADingTalkPC8E6",
+        items : items,
+        onSuccess: function(data) {
+          var btn = {};
+          params.btns.forEach(function(item){
+            if(item.key == data.id
+
+            ){
+              btn = item;
+            }
+          });
+          rsqChk(params.success, [btn]);
+        },
+        onFail: function(err) {
+          alert(JSON.stringify(err));
+        }
+      });
+    }
   },
+
   /**
    * alert提示框
    * @param params.title
@@ -280,7 +325,19 @@ rsqAdapterManager.register({
    * @param params.onFail
    */
   showLoader: function(params){
-
+    params = params || {};
+    var text = params.text || '';
+    console.log(text)
+    DingTalkPC.device.notification.showPreloader({
+      text: text, //loading显示的字符，空表示不显示文字
+      showIcon: true, //是否显示icon，默认true
+      onSuccess : function(result) {
+        /*{}*/
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    })
   },
   /**
    * 隐藏加载库
@@ -288,6 +345,14 @@ rsqAdapterManager.register({
    * @param params.onFail
    */
   hideLoader: function(params){
+    DingTalkPC.device.notification.hidePreloader({
+      onSuccess : function(result) {
+        /*{}*/
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    })
   },
   /**
    * actionsheet
@@ -299,7 +364,7 @@ rsqAdapterManager.register({
    */
   actionsheet: function(params){
     DingTalkPC.device.notification.actionSheet({
-      title: "请选择", //标题
+      // title: "请选择操作", //标题
       cancelButton: '取消', //取消按钮文本
       otherButtons: params.buttonArray,
       onSuccess : function(result) {
@@ -336,18 +401,12 @@ rsqAdapterManager.register({
     })
   },
   selectDeptMember: function(params){
-    var maximum = params.maximum == -1 ? 1500 : params.maximum;
+    // console.log('selectDeptMember传过来的选人id' + params.selectedIds)
     DingTalkPC.biz.contact.choose({
-      startWithDepartmentId: -1, //-1表示打开的通讯录从自己所在部门开始展示, 0表示从企业最上层开始，(其他数字表示从该部门开始:暂时不支持)
       multiple: params.multiple, //是否多选： true多选 false单选； 默认true
       users: params.selectedIds, //默认选中的用户列表，userid；成功回调中应包含该信息
-      disabledUsers:params.disabledIds || [],//['10001', '10002', ...],// 不能选中的用户列表，员工userid
-      corpId: rsqadmg.store.app.corpid, //企业id
-      max: maximum, //人数限制，当multiple为true才生效，可选范围1-1500
-      limitTips:"超出人数限制", //超过人数限制的提示语可以用这个字段自定义
-      isNeedSearch:true, // 是否需要搜索功能
-      title : params.title, // 如果你需要修改选人页面的title，可以在这里赋值
-      local: true, // 是否显示本地联系人，默认false
+      corpId: params.corpId, //企业id
+      max: params.maximum, //人数限制，当multiple为true才生效，可选范围1-1500
       onSuccess: function(data) {
         rsqChk(params.success, [data]);
         //onSuccess将在选人结束，点击确定按钮的时候被回调
@@ -396,32 +455,24 @@ rsqAdapterManager.register({
     });
   },
   picker: function(params){
-    // var items = params.items.map(function(item){
-    //   return {
-    //     key: item.name,
-    //     value: item.value
-    //   }
-    // });
-    var buttons = params.items.map(function(item){
-      return item.name;
+    var items = params.items.map(function(item){
+      return {
+        key: item.name,
+        value: item.value
+      }
     });
-    DingTalkPC.device.notification.actionSheet({
-      title: "选择", //标题
-      cancelButton: '取消', //取消按钮文本
-      otherButtons: buttons,
+    DingTalkPC.biz.util.chosen({
+      source:items,
       onSuccess : function(result) {
-        /*{
-         buttonIndex: 0 //被点击按钮的索引值，Number，从0开始, 取消按钮为-1
-         }*/
         rsqChk(params.success, [{
-          name: buttons[result.buttonIndex],
-          value: params.items[result.buttonIndex].value
+          name: result.key,
+          value: result.value
         }]);
       },
       onFail : function(err) {
         alert(JSON.stringify(err));
       }
-    });
+    })
   },
   datePicker: function(params){
     var newDate = new Date(params.init);
@@ -441,5 +492,136 @@ rsqAdapterManager.register({
         alert(JSON.stringify(err));
       }
     })
-  }
-});
+  },
+  timePicker: function(params){
+    console.log('进来了timePicker')
+    var hours = [],
+      minites = [],
+      symbol = [{ label: ':', value: 0 }];
+    if (!hours.length) {
+      for (var i = 0; i< 24; i++) {
+        var hours_item = {};
+        hours_item.label = ('' + i).length === 1 ? '0' + i : '' + i;
+        hours_item.value = i;
+        hours.push(hours_item);
+      }
+    }
+    if (!minites.length) {
+      for (var j= 0; j < 60; j++) {
+        var minites_item = {};
+        minites_item.label = ('' + j).length === 1 ? '0' + j : '' + j;
+        minites_item.value = j;
+        minites.push(minites_item);
+      }
+    }
+    weui.picker(hours, symbol, minites, {
+      defaultValue: params.strInit || '00:00',
+      onConfirm: function(result) {
+        // console.log(result)
+        var time = result[0].label + ':' + result[2].label;
+        // console.log(time)
+        var result = {value: time}
+        rsqChk(params.success, [result]);
+      },
+      id: 'ma_expect_time'
+    });
+    // var strInit = params.strInit || '00:00'
+    // DingTalkPC.biz.util.timepicker({
+    //   format: 'HH:mm',
+    //   value: strInit, //默认显示时间  0.0.3
+    //   onSuccess : function(res) {
+    //     rsqChk(params.success, [res]);
+    //     //onSuccess将在点击完成之后回调
+    //     /*{
+    //                  value: "10:00"
+    //              }
+    //              */
+    //   },
+    //   onFail : function(err) {
+    //     alert(JSON.stringify(err));
+    //   }
+    // })
+  },
+  disableBounce: function(){
+    //  去掉iOS的回弹效果
+    // DingTalkPC.ui.webViewBounce.disable();
+  },
+  /**
+   * 钉钉中发Ding
+   * @param params
+   */
+  notify: function(params) {
+    DingTalkPC.biz.ding.post({
+      users: params.userIds, // 用户列表，工号
+      corpId: params.corpId, // 企业id
+      type: 2, // 钉类型 1：image  2：link
+      alertType: 2,
+      alertDate: {'format': 'yyyy-MM-DingTalkPC HH:mm', 'value': params.alertTime},
+      attachment: {
+        title: '',
+        url: '',
+        image: '',
+        text: ''
+      },
+      text: params.title, // 消息
+      onSuccess: function () {
+        rsqChk(params.success, [res]);
+      },
+      onFail: function () {}
+    })
+  },
+  /**
+   * 发送到聊天
+   * @param prams
+   */
+  pickConversation: function(params) {
+    DingTalkPC.biz.chat.pickConversation({
+      corpId: params.corpId, // 企业id
+      isConfirm: 'true', // 是否弹出确认窗口，默认为true
+      onSuccess: function (res) {
+        rsqChk(params.success, [res]);
+      },
+      onFail: function () {
+      }
+    })
+  },
+  /**
+   * 从localStorage中获取值
+   * @param params
+   */
+  getItem: function(params) {
+    //  检查是否存在version信息，version信息以整数为准，初始值为1
+    DingTalkPC.util.domainStorage.getItem({
+      name: params.name , // 存储信息的key值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
+  setItem: function(params) {
+    DingTalkPC.util.domainStorage.setItem({
+      name: params.name, // 存储信息的key值
+      value: params.value, // 存储信息的Value值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
+  removeItem: function(params) {
+    DingTalkPC.util.domainStorage.removeItem({
+      name: params.name, // 存储信息的key值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
+})

@@ -1,5 +1,5 @@
 <template>
-  <li class="todoItem" @click="clickItem">
+  <li class="todoItem handle" @click="clickItem" draggable='true' @dragstart="drag(item)">
     <!--<v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">-->
     <div class="todo-checkbox" v-if="isCheckable" @click="clickCheckOut">
       <i class="icon2-check-box select"
@@ -10,31 +10,68 @@
     <div class="title-todo" >
         <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'delay-width':isDelay, 'no-delay-width': !isDelay}">{{ item.pTitle }}</span>
         <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
-        <span v-if="!isCheckable" v-show="isFromSche" class="receive">我收到的</span>
-        <span v-if="!isCheckable" v-show="isFromKanban" class="receive">来自计划</span>
+        <span>{{item.pDisplayOrder}}</span>
         <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
-          <i class="icon2-plan plan"></i>
-          <div class="displayName" v-show="this.IsNameShow">李永州</div>
+          <i class="icon2-receive plan" v-show="isFromSche"></i>
+          <div id="cssTest" class="displayName" v-show="this.IsNameShow">{{fromName}}</div>
         </div>
         <i v-show="isFromKanban" class="icon2-receive receive"></i>
+    <i class="handle"></i>
         <!--<div  v-show="this.IsNameShow">{{item.kanbanOrCreatorName}}</div>-->
     </div>
     <!--</v-touch>-->
   </li>
 </template>
 <style lang="scss" scoped>
+  #cssTest{
+    position: absolute;
+    bottom: 30px;
+    left: -20px;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    background-color: black;
+    color: white;
+    /*float:left;*/
+    min-width:60px;
+    height:20px;
+    border:1px solid black;
+    z-index: 305;
+    /*overflow-y: auto ;*/
+    /*position:relative;*/
+    /*left:10px;*/
+    /*top:10px;*/
+  }
+  #cssTest:before{
+    content:"";
+    border:9px solid black;
+    border-top-color:transparent;
+    border-right-color:transparent;
+    border-bottom-color:transparent;
+    width:0px;
+    height:0px;
+    position:absolute;
+    left:20px;
+    top:20px;
+    transform: rotate(90deg);
+  }
+  /*#cssTest:after{*/
+    /*content:"";*/
+    /*border:8px solid #fff;*/
+    /*border-top-color:transparent;*/
+    /*border-right-color:transparent;*/
+    /*border-bottom-color:transparent;*/
+    /*width:0px;*/
+    /*height:0px;*/
+    /*position:absolute;*/
+    /*left:2px;*/
+    /*top:5px;*/
+  /*}*/
   .text-grey{
     color: gray;
   }
   .text-mid-line{
     text-decoration: line-through;
-  }
-  .displayName{
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    background-color: lightgray;
-    z-index: 2;
   }
   .delay-width{
     width: 70%;
@@ -44,7 +81,7 @@
   }
   .wrap-icon{
     position: absolute;
-    right: 5px;
+    right: 15px;
     /*border: 1px solid red;*/
   }
   .delayer{
@@ -146,11 +183,20 @@
       isFromSche () {
         return this.item.isFrom === 'receive'
       },
+      fromName () {
+        if (this.item.from != null) {
+          return this.item.from.levelOneName
+        }
+      },
       isFromKanban () {
         return this.item.isFrom === 'kanban'
       }
     },
     methods: {
+      drag (item) {
+//        console.log('drag的item是' + JSON.stringify(item))
+        this.$store.dispatch('setDragItem', item)
+      },
       isMaxlength (item) {
         return item.pTitle.length > 10
       },

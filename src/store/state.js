@@ -52,7 +52,9 @@ export default {
     strCurrentDate: null,
     //  当前的日程列表
     items: null,
-    titleArray: []
+    titleArray: [],
+    dragItemId: null,
+    dragItem: null
   },
   /**
    * 日程与收纳箱公共的数据对象

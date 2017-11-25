@@ -1,7 +1,9 @@
 <template>
-  <div class="section-wrap">
+  <div class="section-wrap" :class="{'showheight': showHeight}" @drop="drop($event)" @dragover="allowDrop($event)">
     <div class="section-head">
       <input type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)">
+      <button style="width: 50px" class="enlarge" @click="showLarge" v-show="!this.showHeight">变大</button>
+      <button style="width: 50px" class="enlarge" @click="showSmall" v-show="this.showHeight">变小</button>
       <i class="icon2-add-circle create-icon" @click="changeInputState"></i>
     </div>
     <div class="wrap-input">
@@ -12,10 +14,10 @@
       <div class="rotate-square" v-show="this.remindState"></div>
     </div>
     <r-todo-item-list
-      :id="this.itemTitle.id"
       :items="items"
       :itemTitle="itemTitle"
       :is-checkable="true"
+      :showHeight="showHeight"
       v-if="items.length!==0"
       @todo-item-click="showModel"
     ></r-todo-item-list>
@@ -28,6 +30,7 @@
     name: 'ScheduleView',
     data () {
       return {
+        showHeight: false,
         titleName: '日程',
         currentDate: new Date(),
         InputState: false,
@@ -59,6 +62,15 @@
         } else {
           return []
         }
+      },
+      dragItemId () {
+        return this.$store.state.schedule.dragItemId
+      },
+      dragItem () {
+        return this.$store.state.schedule.dragItem
+      },
+      sectionItems () {
+        return this.items.filter((item) => { return item.pContainer === this.itemTitle.pContainer })
       }
 //      title () {
 //        var titleArray = this.$store.state.schedule.titleArray
@@ -73,13 +85,49 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
-      changeTitle (value, e) {
-        if (e.keyCode === 13) {
-          this.$store.dispatch('changeScheTitle', {title: value, id: this.itemTitle.id}).then(
+      drop (event) {
+        console.log('进来drop次')
+        if (this.dragItem.pContainer !== this.itemTitle.pContainer) {
+//          console.log('this.sectionItems' + JSON.stringify(this.sectionItems))
+          if (this.sectionItems && this.sectionItems.length > 0) {
+            var lastSectionItems = this.sectionItems[this.sectionItems.length - 1]
+            var displayOrder = (lastSectionItems.pDisplayOrder - 1) / 2
+          } else {
+            displayOrder = 65535
+          }
+          this.$store.dispatch('changePriority', {id: this.dragItemId, pContainer: this.itemTitle.pContainer, pDisplayOrder: displayOrder}).then(
             () => {
-              e.target.blur()
             }
           )
+        }
+        event.preventDefault()
+      },
+      allowDrop (event) {
+        event.preventDefault()
+      },
+      showSmall () {
+        console.log('变大了')
+        this.showHeight = !this.showHeight
+      },
+      showLarge () {
+        console.log('变大了')
+        this.showHeight = !this.showHeight
+      },
+      changeTitle (value, e) {
+        if (e.keyCode === 13) {
+          if (typeof (this.itemTitle.id) === 'string') {
+            this.$store.dispatch('createScheTitle', {title: value, pContainer: this.itemTitle.pContainer}).then(
+              () => {
+                e.target.blur()
+              }
+            )
+          } else {
+            this.$store.dispatch('changeScheTitle', {title: value, id: this.itemTitle.id}).then(
+              () => {
+                e.target.blur()
+              }
+            )
+          }
         }
       },
       showModel (item) {
@@ -97,15 +145,15 @@
           return
         }
         if (event.keyCode === 13) {
-          console.log('进来了')
+//          console.log('进来了')
 //          var todoType = this.isInbox ? 'inbox' : 'schedule'
-          console.log(dateUtil.getStandardTime(this.currentDate))
+//          console.log(dateUtil.getStandardTime(this.currentDate))
           this.$store.dispatch('submitCreateTodoItem', {createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
             .then(item => {
               this.InputState = false
               this.remindState = false
               this.content = ''
-              console.log('返回来的item是' + item)
+//              console.log('返回来的item是' + item)
               return item
             })
         }
@@ -140,6 +188,7 @@
       }
     },
     mounted () {
+      console.log('section中拿到的title是' + this.titleArray)
 //      window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(this.dateSelect)})
 //      var btnParams
 //      var that = this
@@ -203,6 +252,7 @@
     height: 42px;
   }
   .section-head{
+    position: relative;
     padding-left: 10px;
     padding-right: 10px;
     height: 50px;
@@ -215,13 +265,41 @@
     height:20px;
     float: right;
   }
+  div.showheight{
+    height: 80%;
+    width: 98%;
+    overflow: hidden;
+    /*transform:scale(2,2);*/
+    z-index:100;
+    position: fixed;
+    bottom: 0;
+    top: 110px;
+    left: 0;
+    right: 0;
+  }
+  .enlarge{
+    position: absolute;
+    right: 5%;
+    top: 30%;
+  }
+  /*.enlarge:hover .section-wrap{*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+  /*}*/
   .section-wrap{
+    transition: 0.3s;
+    overflow: hidden;
    margin-left:1%;
    margin-top:1% ;
     width: 48%;
-    height: 264px;
+    height: 30%;
     float: left;
     border:1px solid red;
     background-color: #FAFAFA;
   }
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{background-color:#bee1eb;}
+  ::-webkit-scrollbar-thumb{background-color:gray;}
+  ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
+  ::-webkit-scrollbar-thumb:active {background-color:#00aff0}
 </style>

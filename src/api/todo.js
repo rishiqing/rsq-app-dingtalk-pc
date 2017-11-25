@@ -230,6 +230,17 @@ export default {
         })
     })
   },
+  createScheTitle (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.CREATE_SCHE_TITLE, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
   changePriority (props) {
     var path = util.replaceUrlParams(mapping.POST_DESP, props)
     // console.log('prps是' + JSON.stringify(props))
@@ -245,7 +256,7 @@ export default {
   },
   getAllTodoTitleList () {
     return new Promise((resolve, reject) => {
-      Vue.http.get(mapping.GET_TODO_TITLE)
+      Vue.http.get(mapping.GET_TODO_TITLE + '?_=' + new Date().getTime())
         .then(res => {
           resolve(res.json())
         }, err => {

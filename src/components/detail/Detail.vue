@@ -31,7 +31,11 @@
           :currentTodo="currentTodo"
         >
         </r-input-time>
-        <r-input-member></r-input-member>
+        <r-input-member
+          :selected-rsq-ids="joinUserRsqIds"
+          @member-changed="saveMember"
+        >
+        </r-input-member>
         <r-input-priority
           :item="currentTodo"
           :itemTitle="itemTitle"
@@ -85,6 +89,7 @@
 //  import dateUtil from 'ut/dateUtil'
   import ComentList from 'com/pub/ComentList'
   import Bus from 'com/bus'
+  import util from 'ut/jsUtil'
   export default {
     name: 'app',
     components: {
@@ -102,6 +107,7 @@
     },
     data () {
       return {
+        joinUserRsqIds: [],
         buttonState: false,
         commentState: true,
         commentContent: '',
@@ -116,6 +122,9 @@
       }
     },
     computed: {
+      userId () {
+        return [this.currentTodo.pUserId]
+      },
       fileCountOne () {
         return this.fileId.length === 1
       },
@@ -146,6 +155,19 @@
       itemTitle: Object
     },
     methods: {
+      saveMember (idArray) { // 这个方法关键之处是每次要穿的参数是总接收id，增加的id减少的id
+        var compRes = util.compareList(this.joinUserRsqIds, idArray)
+//        console.log('比较之后的结果是' + JSON.stringify(compRes))
+        var params = {
+          receiverIds: idArray.join(','),
+          addJoinUsers: compRes.addList.join(','),
+          deleteJoinUsers: compRes.delList.join(',')
+        }
+//        window.rsqadmg.execute('showLoader', {text: '保存中...'})
+        this.$store.dispatch('updateTodo', {editItem: params}).then(() => {
+          this.joinUserRsqIds = idArray
+        })
+      },
       showEditComment () {
         this.commentState = false
       },
@@ -155,11 +177,11 @@
       },
       removeFileId (name) {
         for (var i = 0; i < this.fileName.length; i++) {
-          console.log('name是' + name + '' + 'this.fileName[i]是' + this.fileName[i])
+//          console.log('name是' + name + '' + 'this.fileName[i]是' + this.fileName[i])
           if (this.fileName[i].substr(5) === name) {
-            console.log('想等了')
+//            console.log('想等了')
             this.fileId.splice(i, 1)
-            console.log(this.fileId.length)
+//            console.log(this.fileId.length)
             this.fileName.splice(i, 1)
           }
         }
@@ -171,14 +193,15 @@
         this.uploadingFile = []
       },
       reply (item) {
-        this.commentContent = '@' + item.authorName
+        this.commentState = !this.commentState
+        this.commentContent = '@' + item.authorName + ' '
       },
       hideButton () {
         this.commentState = true
       },
       postComment (value) {
 //        console.log('传进来value是' + value)
-        console.log('进来评论了')
+//        console.log('进来评论了')
         this.$store.dispatch('postTodoComment', {commentContent: value, fileIds: this.fileId, createTaskDate: this.defaultTaskDate})
           .then(() => {
             Bus.$emit('clearTask')
@@ -233,6 +256,7 @@
       }
     },
     mounted () {
+      this.joinUserRsqIds = [this.currentTodo.receiverIds]
 //      console.log('现在的currenttode是' + JSON.stringify(this.currentTodo))
 //      console.log('拿到的item' + JSON.stringify(this.item))
 //      console.log('拿到的评论' + JSON.stringify(this.item.comments))

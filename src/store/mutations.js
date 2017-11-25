@@ -201,8 +201,8 @@ export default {
     p.item.pIsDone = p.status
   },
   SCH_LIST_SUBTODO_CHECKED (state, p) {
-    console.log('p.item是' + JSON.stringify(p.item))
-    p.item.pIsDone = p.status
+    // console.log('p.item是' + JSON.stringify(p.item))
+    p.item.isDone = p.status
   },
   /* --------------------------------- */
 
@@ -417,13 +417,20 @@ export default {
     }
   },
   CHANGE_PRIORITY (state, p) {
-    state.todo.currentTodo.pContainer = p.pContainer
-    // var items = state.schedule.items
-    // for (var i = 0; i < items.length; i++) {
-    //   if (items[i].id === p.id) {
-    //     items[i].pContainer = p.pContainer
-    //   }
-    // }
+    var id = state.todo.currentTodo.id || ''
+    if (id) {
+      state.todo.currentTodo.pContainer = p.pContainer
+    } else {
+      console.log('进来了else')
+      var items = state.schedule.items
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].id === p.id) {
+          items[i].pContainer = p.pContainer
+          items[i].pDisplayOrder = p.pDisplayOrder
+          console.log('变了')
+        }
+      }
+    }
   },
   PUB_SCHE_DATE_UPDATE (state, p) {
     state.pub.year = p.year
@@ -432,8 +439,36 @@ export default {
   GET_TODO_TITLE (state, p) {
     // console.log('进来mutationle ' + JSON.stringify(p.items))
     var items = p.items
-    for (var i = 0; i < items.length; i++) {
-      state.schedule.titleArray.push(items[i])
+    state.schedule.titleArray = []
+    var initItems = [
+      {id: '1', pContainer: 'IE', title: '重要紧急'},
+      {id: '2', pContainer: 'IU', title: '重要不紧急'},
+      {id: '3', pContainer: 'UE', title: '不重要紧急'},
+      {id: '4', pContainer: 'UU', title: '不重要不紧急'}
+    ]
+    if (items.length === 0) {
+      for (var i = 0; i < initItems.length; i++) {
+        state.schedule.titleArray.push(initItems[i])
+      }
+    } else { // 这里可能item就有一个，所以要循环遍历下看看哪些需要替换哪些不需要替换
+      for (i = 0; i < initItems.length; i++) {
+        state.schedule.titleArray.push(initItems[i])
+      }
+      for (i = 0; i < items.length; i++) {
+        for (var j = 0; j < state.schedule.titleArray.length; j++) {
+          if (state.schedule.titleArray[j].pContainer === items[i].pContainer) {
+            state.schedule.titleArray[j] = items[i]
+          }
+        }
+      }
     }
+  },
+  SAVE_DRAG_ITEM (state, p) {
+    state.schedule.dragItemId = p.item.id
+    state.schedule.dragItem = p.item
+    console.log('state.schedule.dragItem是' + JSON.stringify(state.schedule.dragItemId))
+  },
+  CREATE_SCHE_TITLE (state, p) {
+    state.schedule.titleArray.push(p)
   }
 }

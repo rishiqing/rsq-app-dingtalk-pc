@@ -85,9 +85,11 @@
   }
   .delete-task{
     position: absolute;
-    top: 30px;
+    right: 0;
+    top: 40px;
     font-size: 20px;
     cursor: pointer;
+    box-shadow:3px 5px 24px #888888 ;
   }
   .plan,.other,.cancel{
     font-size: 16px;

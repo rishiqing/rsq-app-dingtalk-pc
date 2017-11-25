@@ -76,7 +76,7 @@
     position: absolute;
     top:100px;
     right: -300px;
-    transition: 1s;
+    transition: 0.1s;
     height: 600px;
     z-index: 5;
     background: #F9F9F9;

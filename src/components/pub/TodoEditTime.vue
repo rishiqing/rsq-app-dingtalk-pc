@@ -1,7 +1,12 @@
 <template>
   <div class="edit-time">
-    <input type="text" @focus="setStartTime($event)" placeholder="开始时间" value="16:00">
-    <input type="text" @focus="setEndTime($event)" placeholder="结束时间" value="18:00">
+    <div class="timeContainer" @click="setStartTime($event)">{{startTimeShow}}</div>
+    <div class="timeContainer" @click="setEndTime($event)">{{endTimeShow}}</div>
+    <TimePicker
+      :startFlag = "startFlag"
+      @changeTime="changeTime"
+      v-show="this.showTimePicker">
+    </TimePicker>
     <ul class="alert-list">
       <div tag="li" @click="selectAlert(alertContent)" v-for="(alertContent, index) in displayedRuleList" :key="index">
         <span>{{parseCode(alertContent.schedule)}}</span>
@@ -11,8 +16,9 @@
         <!--<span class="userDefineStr">{{userDefine}}</span>-->
       <!--</li>-->
       <li @click="showUserDefine()" class="user-define">自定义</li>
+      <div class="clear-time" @click="clearTime">清除时间</div>
       <button style="font-size: 14px" @click="sendTime">确定</button>
-      <div v-show="this.userDefine">
+      <div v-show="this.userDefine" class="userDefine">
         <p class="remind">自定义提醒</p>
         <div>
           <select name="" id="selectTask">
@@ -34,6 +40,16 @@
   </div>
 </template>
 <style lang="scss">
+  .timeContainer{
+    display: inline-block;
+  }
+  .userDefine{
+    z-index:200;
+    position: relative;
+    top: -200px;
+    background-color: white;
+    box-shadow: 3px 5px 24px #888888
+  }
   .user-define,.remind,.userDefineStr{
     font-size: 14px;
   }
@@ -48,6 +64,7 @@
     top:35px;
     background-color: white;
     z-index: 3;
+    box-shadow: 3px 5px 24px #888888
   }
   .edit-time {
     .switch-wrapper {
@@ -150,10 +167,14 @@
 <script>
   import moment from 'moment'
   import jsUtil from 'ut/jsUtil'
-
+  import TimePicker from './TimePicker'
   export default {
     data () {
       return {
+        startFlag: true,
+        getStartTime: '',
+        getEndTime: '',
+        showTimePicker: false,
         userDefine: false,
         autoStart: true,
         autoEnd: true,
@@ -161,9 +182,9 @@
         isAllDay: true,
         clock: {
           alert: [],
-          startTime: '16:00',
-          endTime: '18:00',
-          alwaysAlert: true
+          startTime: '',
+          endTime: '',
+          alwaysAlert: false
         },
         displayedRuleList: [
           {schedule: 'begin_0_hour', selected: false},
@@ -177,9 +198,18 @@
         ]
       }
     },
+    components: {
+      TimePicker: TimePicker
+    },
     computed: {
       currentTodo () {
         return this.$store.state.todo.currentTodo
+      },
+      startTimeShow () {
+        return this.getStartTime ? this.getStartTime : '开始时间'
+      },
+      endTimeShow () {
+        return this.getEndTime ? this.getEndTime : '结束时间'
       },
       isEdit () {
         return !!this.currentTodo.id
@@ -209,7 +239,24 @@
       }
     },
     methods: {
+      clearTime () {
+        this.getStartTime = null
+        this.getEndTime = null
+        this.$store.dispatch('clearTime', {clock: {}})
+      },
+      changeTime (time, flag) {
+        if (flag) {
+          this.getStartTime = time
+          this.showTimePicker = false
+          this.clock.startTime = time
+        } else {
+          this.getEndTime = time
+          this.showTimePicker = false
+          this.clock.endTime = time
+        }
+      },
       sendTime () {
+//        console.log(JSON.stringify(this.clock))
         return this.$store.dispatch('updateTodoTime', {clock: this.clock})
           .then(item => {
             this.$emit('close-time')
@@ -337,6 +384,8 @@
        * 设置开始时间
        */
       setStartTime (e) {
+        this.showTimePicker = !this.showTimePicker
+        this.startFlag = true
         e.preventDefault()
         e.stopPropagation()
         this.clock.startTime = '12:00'
@@ -362,6 +411,8 @@
        * 设置结束时间
        */
       setEndTime () {
+        this.showTimePicker = !this.showTimePicker
+        this.startFlag = false
         this.clock.endTime = '12:45'
 //        if (this.isAllDay) return
 //        var that = this
@@ -469,6 +520,8 @@
     mounted () {
 //      console.log('拿到的currentTodo是' + JSON.stringify(this.currentTodo))
       if (this.currentTodo.clock != null && this.currentTodo.clock.alert != null) {
+        this.getStartTime = this.currentTodo.clock.startTime
+        this.getEndTime = this.currentTodo.clock.endTime
         var alert = this.currentTodo.clock.alert
         for (var i = 0; i < alert.length; i++) {
           if (alert[i].isUserDefined) {

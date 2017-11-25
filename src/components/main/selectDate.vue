@@ -37,7 +37,7 @@
   }
   .edit-date {
     position: absolute;
-    top: 0;
+    top: 60px;
     z-index: 10;
     background-color: lightgray;
   }
@@ -55,7 +55,7 @@
       align-items: center;
     }
     .dp-title-text {
-      /*text-align: center;*/
+      text-align: center;
       /*font-family: PingFangSC-Regular;*/
       width: 90%;
       font-size: 14px;
@@ -101,7 +101,7 @@
     }
     .dp-day {
       margin:0 auto;
-      width:30px;
+      width:40px;
       height:30px;
       line-height:30px;
       text-align: center;

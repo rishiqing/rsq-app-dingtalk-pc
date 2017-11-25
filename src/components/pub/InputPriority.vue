@@ -13,13 +13,16 @@
 </template>
 <style scoped>
   .priority-menu{
-    /*position: absolute;*/
-    /*width: 100px;*/
-    top:0;
-    left:0;
+    position: absolute;
+    width: 100px;
+    top:40px;
+    left:21px;
     right: 0;
     margin: 0;
-    list-style: none;
+    /*list-style: none;*/
+    z-index: 100;
+    background-color: white;
+    box-shadow: 3px 5px 24px #888888
   }
   .priority-name{
     display: flex;
@@ -74,7 +77,7 @@
     },
     methods: {
       changeSection (titleItem) {
-        console.log('惦记的id' + titleItem.id + '--' + titleItem.pContainer)
+//        console.log('惦记的id' + titleItem.id + '--' + titleItem.pContainer)
 //        if (e.target.innerText === '重要紧急') {
 //          var pContainer = 'IE'
 //        } else if (e.target.innerText === '不重要紧急') {

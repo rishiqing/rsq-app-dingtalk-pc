@@ -79,6 +79,11 @@
   }
 </script>
 <style>
+  .wrap-week{
+    width: 240px;
+    height:164px;
+    margin-top: 30px;
+  }
   .selected{
     background-color: blue;
     color:white;
@@ -90,6 +95,7 @@
     color:green
   }
   .week-top div{
+    margin: 10px;
     width: 40px;
     height: 40px;
     display: flex;
@@ -101,6 +107,8 @@
     border:1px solid red;
   }
   .week-bottom div{
+    border:1px solid red;
+    margin:10px ;
     width: 40px;
     height: 40px;
     display: flex;

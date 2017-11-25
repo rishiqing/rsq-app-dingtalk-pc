@@ -200,12 +200,15 @@ export default {
     // var strDate = moment(p.dateStruct.dateResult[0]).format('YYYY-MM-DD')
     var strDate = p.createTaskDate
     strDate = strDate.substring(0, 4) + '-' + strDate.substring(4, 6) + '-' + strDate.substring(6, 8)
-    console.log('strdate是' + strDate)
+    // console.log('strdate是' + strDate)
     var itemCache = state.dateTodosCache
     // 读取顺序号
     return dispatch('fetchScheduleItems', {strDate})
       .then(() => {
-        p['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
+        console.log('缓存长度' + JSON.stringify(itemCache[strDate][77]))
+        // p['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
+        p['pDisplayOrder'] = 65535
+        console.log('p.displayorder是' + p.pDisplayOrder)
         return api.todo.postNewTodo(p)
           .then(item => {
             // console.log('回来了sce' + JSON.stringify(item))
@@ -558,7 +561,21 @@ export default {
     var promise
     //  如果this.currentTodo.id存在，则更新currentTodo
     if (todo.id) {
-      var taskDate = todo.createTaskDate || getters.defaultTaskDate
+      if (todo.startDate != null) {
+        var taskDate = todo.startDate.split('/').join('')
+        // console.log('taskDate' + taskDate)
+      } else {
+        // console.log('todo.dates[0]' + todo.dates.split(',')[0])
+        taskDate = todo.dates.split(',')[0]
+      }
+      if (p.clock.alert.length === 0) {
+        p.clock = {
+          startTime: p.clock.startTime,
+          endTime: p.clock.endTime,
+          alwaysAlert: false
+        }
+      }
+      // var taskDate = todo.createTaskDate || getters.defaultTaskDate
       promise = dispatch('updateTodo', {
         editItem: {
           createTaskDate: taskDate,
@@ -727,16 +744,27 @@ export default {
     var result = {}
     var cache = state.rsqidCache
     var promise
-    p.idArray.forEach(openid => {
-      if (cache[openid]) {
-        result[openid] = cache[openid]
+    p.idArray = p.idArray.toString().split(',')
+    for (var i = 0; i < p.idArray.length; i++) {
+      if (cache[p.idArray[i]]) {
+        result[p.idArray[i]] = cache[p.idArray[i]]
       } else {
-        idsNotInCache.push(openid)
+        console.log('openid' + p.idArray[i])
+        idsNotInCache.push(p.idArray[i])
       }
-    })
+    }
+    // p.idArray.forEach(openid => {
+    //   if (cache[openid]) {
+    //     result[openid] = cache[openid]
+    //   } else {
+    //     console.log('openid' + openid)
+    //     idsNotInCache.push(openid)
+    //   }
+    // })
     if (idsNotInCache.length > 0) {
       promise = api.appAuth.getRsqidMap({corpId: p.corpId, idArray: idsNotInCache})
         .then(resp => {
+          // console.log('返回来的resp' + JSON.stringify(resp))
           var mapList = resp.result
           mapList.forEach(idMap => {
             //  双向缓存
@@ -761,12 +789,12 @@ export default {
     // if (props.commentContent) {
     currentItem = state.todo.currentTodo
     var replyId = state.replyId
-    var replyName = state.replyName
+    // var replyName = state.replyName
     props['todoId'] = currentItem.id
     props['type'] = 0
     if (replyId !== null) {
       props['atIds'] = replyId
-      props.commentContent = '@' + replyName + '&' + props.commentContent // 这里可能要去掉前面的@
+      props.commentContent = props.commentContent // 这里可能要去掉前面的@
     }
 
     return api.todo.postComment(props)
@@ -954,10 +982,12 @@ export default {
       .then(() => {
         commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
       })
+    // commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
   },
   getAllTodoTitleList ({commit, state}, item) {
     return api.todo.getAllTodoTitleList()
       .then((items) => {
+        console.log('服务器拿回来的title是' + JSON.stringify(items))
         commit('GET_TODO_TITLE', {items: items})
       })
   },
@@ -967,5 +997,33 @@ export default {
         return item
         // commit('GET_TODO_TITLE', {item: item}) 在这里setCurrentTodo跟回去then里面set是一个道理
       })
+  },
+  setDragItem ({commit, state}, item) {
+    // console.log('setDragItem' + JSON.stringify(item))
+    commit('SAVE_DRAG_ITEM', {item: item})
+  },
+  createScheTitle ({commit, state}, p) {
+    return api.todo.createScheTitle(p)
+      .then((item) => {
+        commit('CREATE_SCHE_TITLE', {title: item.title, id: item.id, pContainer: item.pContainer})
+      })
+  },
+  clearTime ({ commit, state, getters, dispatch }, p) {
+    p = p || {}
+    var todo = state.todo.currentTodo
+    if (todo.startDate != null) {
+      var taskDate = todo.startDate.split('/').join('')
+      // console.log('taskDate' + taskDate)
+    } else {
+      // console.log('todo.dates[0]' + todo.dates.split(',')[0])
+      taskDate = todo.dates.split(',')[0]
+    }
+    // var taskDate = todo.createTaskDate || getters.defaultTaskDate
+    return dispatch('updateTodo', {
+      editItem: {
+        createTaskDate: taskDate,
+        clock: p.clock
+      }
+    })
   }
 }

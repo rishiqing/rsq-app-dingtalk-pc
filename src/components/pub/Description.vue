@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="noteEditable" contenteditable="true" class="desp editor-style"
+         ref="description"
          name="note" rows="5"
          placeholder="添加任务描述..."
          @focus="inputFocus"
@@ -19,7 +20,9 @@
     font-size: 15px;
   }
   .desp{
+    line-height: 36px;
     font-size: 15px;
+    padding-left: 15px;
   }
 </style>
 <script>
@@ -42,11 +45,13 @@
     methods: {
       hideButton () {
         this.despState = false
+        this.$refs.description.innerText = this.pNote
       },
       postDesp () {
         var noteElement = document.getElementById('noteEditable').innerHTML
         var params = {pNote: noteElement}
         this.$store.dispatch('postdesp', params).then(() => {
+          this.despState = false
           this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
         })
       },
@@ -59,7 +64,7 @@
           if (noteElement.innerText === '添加任务描述...') {
             noteElement.innerHTML = ''
           }
-          this.isBlank = false
+//          this.isBlank = false
         }
       },
       inputChange () {

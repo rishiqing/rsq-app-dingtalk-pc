@@ -1,5 +1,5 @@
 <template>
-  <div class="cal-bar" :style="{'left': barOffsetStyle}">
+  <div class="cal-bar" >
     <table class="cal-table">
       <tr>
         <td class="cal-weekday"
@@ -7,9 +7,12 @@
             :key="day.date.getTime()"
             >
           <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
-          <div class="cal-day" @click="calDayClick(day.date)" @mouseover="showWeekday(day)" @mouseout="hideWeekday"
-                   :class="{'cal-day--focus': isHighLight(day.date)}">
-            {{dateText(day)}}
+          <div class="cal-day" @click="calDayClick(day.date)"
+                   >
+            <div class="wrap-show-week">
+              <span class="showDate" :class="{'cal-day--focus': isHighLight(day.date)}">{{dateText(day)}}</span>
+              <span class="showWeek">{{week[day.date.getDay()]}}</span>
+            </div>
           </div>
         </td>
         <!--<td><i class="icon2-arrow-right-small arrow"></i></td>-->
@@ -23,7 +26,7 @@
       return {
         showWeek: false,
         weekday: '',
-        week: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        week: ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
       }
     }, // 为社么只显示一周的数据  不是三周的数据吗
     props: {
@@ -39,21 +42,8 @@
     },
     components: {},
     methods: {
-      hideWeekday () {
-        this.showWeek = false
-      },
-      showWeekday (day) {
-//        return day.date.getDay()
-        this.showWeek = true
-//        console.log('进来一次')
-      },
       dateText (day) {
-        if (this.showWeek) {
-          return this.week[day.date.getDay() - 1]
-        } else {
-          return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
-        }
-        //  如果是当天，则显示“今”这个字
+        return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
       },
       isHighLight (date) {
         return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
@@ -65,26 +55,63 @@
       }
     },
     mounted () {
-//      console.log('传过来的days是' + JSON.stringify(this.days) + 'index是' + this.barIndex) // 这个循环执行了3次
+      console.log('传过来的days是' + JSON.stringify(this.days) + 'index是' + this.barIndex) // 这个循环执行了3次
     }
   }
 </script>
 <style lang="scss" scope>
+  .wrap-show-week:hover .showDate{
+    display: none;
+  }
+  .wrap-show-week:hover .showWeek{
+    display: inline-block;
+  }
+  .wrap-show-week{
+    /*width: 10%;*/
+    /*width: 30px;*/
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .showWeek{
+    display: none;
+  }
+  .IfShowWeek{
+    display: none;
+  }
   .arrow{
     font-size: 12px;
   }
   .cal-bar {
     /*position: absolute;*/
-    width: 100%;
+    width: 47%;
     height: 100%;
     /*top: 0;*/
+    /*padding-left: 30px;*/
     display: inline-block;
+    /*overflow: hidden;*/
+    /*:style="{'left': barOffsetStyle}"*/
+  }
+  .cal-bar:last-child{
+    /*margin-left: 10%;*/
+  }
+  .cal-bar:first-child .cal-table{
+    margin-left: -55%;
+    margin-right: 30px;
+  }
+  .cal-bar:first-child{
+    margin-left: -55%;
+  }
+  .cal-bar:nth-child(2){
+    margin-left: 11%;
   }
   .cal-table {
     border-collapse: collapse;
+    margin: 0;
     text-align: center;
     border-spacing: 0;
-    table-layout: fixed;
+    /*table-layout: fixed;*/
     width: 100%;
     height: 100%;
   }
@@ -94,8 +121,13 @@
     font-size: 11px;
     color: #FFFFFF;
     line-height: 12px;
+    text-align: center;
   }
-  .cal-day-tag {position:absolute;top:5px;right: 15px;border-radius:50%;}
+  .cal-day-tag {
+    margin: 0 auto;
+    /*margin-left: 13px;*/
+    border-radius:50%;
+  }
   .tag-active {width:4px;height:4px;background:#30FFA8;}
   .cal-day {
     font-family: PingFangSC-Regular;
@@ -111,9 +143,15 @@
     /*color: #FFFFFF;*/
   }
   .cal-day--focus {
-    background:white;
-    color:#479AEF;
+    /*text-align: center;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:blue;
+    color:white;
     border-radius: 50%;
-    font-size: 17px;
+    font-size: 15px;
+    width: 30px;
+    height: 30px;
   }
 </style>

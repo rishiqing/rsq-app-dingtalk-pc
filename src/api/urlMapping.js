@@ -29,5 +29,6 @@ export default {
   'POST_TODO_COMMENT': 'task/v2/todoComment',
   'POST_RECORD_COMMENT': 'task/rsqTodoAction/saveTodoAction',
   'GET_FILE_FROM_AlI': 'task/v2/folders/file/getFileFromAli',
-  'CHANGE_SCHE_TITLE': 'task/rsqTodoTitle/:id'
+  'CHANGE_SCHE_TITLE': 'task/rsqTodoTitle/:id',
+  'CREATE_SCHE_TITLE': 'task/rsqTodoTitle'
 }

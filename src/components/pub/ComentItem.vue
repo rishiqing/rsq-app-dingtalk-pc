@@ -12,13 +12,15 @@
         <div class="top">
           <span class="author">{{item.authorName}}</span>
           <span class="time" v-show="this.timeState">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
-          <span class="delete-comment" v-show="this.delete" @click="deleteComment(item)">删除</span>
-          <span class="reply-comment" v-show="this.reply" @click="replyComment(item)">回复</span>
+          <span class="delete-comment" v-show="this.delete" @click="deleteComment(item,$event)">删除</span>
+          <span class="reply-comment" v-show="this.reply" @click="replyComment(item,$event)">回复</span>
         </div>
         <div class="bottom">
           <div class="comentContent" v-if="IfReplyComment">
-            <span class="replyComment">{{item.commentContent.substring(0,IndexOfBlank)}}</span>
-            <span class="comentContent">{{item.commentContent.substr(IndexOfBlank + 1)}}</span>
+            <span class="replyComment">{{replaceReplyComment(item.commentContent)}}</span>
+            <!--<span class="comentContent">{{item.commentContent.substr(IndexOfBlank + 1)}}</span>-->
+            <!--<span class="replyComment">{{item.commentContent.substring(0,IndexOfBlank)}}</span>-->
+            <!--<span class="comentContent">{{item.commentContent.substr(IndexOfBlank + 1)}}</span>-->
           </div>
           <div class="comentContent" v-else>{{item.commentContent}}</div>
           <div class="coment-item-picture file-touch" v-for="file in item.fileList" :key="file.id">
@@ -189,7 +191,7 @@
       },
       IndexOfBlank () {
         if (this.IfReplyComment) {
-          return this.item.commentContent.indexOf('&')
+          return this.item.commentContent.indexOf(' ')
         }
       }
     },
@@ -201,6 +203,10 @@
     components: {
     },
     methods: {
+      replaceReplyComment (item) {
+        console.log(item.innerHTML)
+        return item.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n').replace('&nbsp;', '')
+      },
       showButton (item) {
         this.timeState = false
         if (this.rsqUserId === item.authorId) {
@@ -229,15 +235,19 @@
           return fileSize
         }
       },
-      deleteComment (item) {
+      deleteComment (item, e) {
+        console.log('delete进来了')
         this.$store.dispatch('deleteCommentItem', {item: item})
           .then(() => {
+            e.stopPropagation()
           })
       },
-      replyComment (item) {
+      replyComment (item, e) {
+//        console.log('reply进来了')
         this.$emit('reply', item)
         this.$store.dispatch('ReplyCommentItem', {item: item})
           .then(() => {
+            e.stopPropagation()
           })
       },
       filePreview (file) {

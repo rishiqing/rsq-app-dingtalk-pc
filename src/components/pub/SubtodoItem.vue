@@ -2,9 +2,9 @@
   <li class="SubtodoItem">
     <div class="todo-checkbox" @click="clickCheckOut(item)">
       <i class="icon2-check-box select"
-         :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
-      <div class="hide" :class="{'square-icon':item.pIsDone}"></div>
-      <i class="icon2-selected finish-icon" :class="{'isdisplay':item.pIsDone}"></i>
+         :class="{'icon-check_box_outline_blank': !item.isDone, 'icon-check': item.isDone}"></i>
+      <div class="hide" :class="{'square-icon':item.isDone}"></div>
+      <i class="icon2-selected finish-icon" :class="{'isdisplay':item.isDone}"></i>
     </div>
     <input  @keypress="changeSubItemTitle($event.target.value,$event)" class="subtodo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}" :value=item.name>
     <i class="icon2-arrow-down2 arrow-down" @click="showOption"></i>
@@ -88,6 +88,7 @@
     height: 35px;
   }
   .subtodo-content{
+    border: none;
     font-size: 12px;
   }
   .select,.finish-icon{

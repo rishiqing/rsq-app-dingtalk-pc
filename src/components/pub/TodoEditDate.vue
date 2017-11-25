@@ -22,16 +22,19 @@
       </div>
       <div class="repeat-wrap" v-show="this.repeatState">
         <div>
-          <span class="repeat-style" @click="changeRepeatOption">重复方式</span>
-          <span class="repeat-style">{{repeatKind}}</span>
-          <i class="icon2-arrow-down2 arrow"></i>
-          <ul style="margin: 0" v-show="this.repeatOption">
+          <span class="repeat-style" >重复方式</span>
+          <div @click="changeRepeatOption" style="display: inline-block">
+            <span class="repeat-style">{{repeatKind}}</span>
+            <i class="icon2-arrow-down2 arrow"></i>
+          </div>
+          <ul style="margin: 0" v-show="this.repeatOption" class="repeat-option">
             <li  class="repeat-style-wrap" v-for="item in this.repeatStyle" @click="changeRepeat(item)">
               <span class="repeat-style">{{item.title}}</span>
             </li>
           </ul>
         </div>
-        <img src="" alt="" v-show="this.everyDay">
+        <img src="https://res-front-cdn.timetask.cn/beta/images/repeatBg.62b428d0ff.png" alt="" v-show="this.everyDay" class="every-day">
+        <img src="https://res-front-cdn.timetask.cn/beta/images/repeatBg.62b428d0ff.png" alt="" v-show="this.everyYear" class="every-day">
         <r-repeat-week
           v-show="this.everyWeek"
           :weekDate="this.repeatWeek"
@@ -48,14 +51,15 @@
             </td>
           </tr>
         </table>
+
       </div>
-      <div v-show="this.repeatState">
+      <div v-show="this.repeatState" class="repeat-state">
         <span class="repeat-deadline">截止重复直到</span>
         <span class="repeat-deadline" @click="selectDeadLine">{{deadLineKind}}</span>
         <i class="icon2-arrow-down2 arrow"></i>
-        <ul style="margin: 0" v-show="this.deadLine" class="repeat-style-wrap">
-          <li class="repeat-style-wrap">永久</li>
-          <li class="repeat-style-wrap" @click="showDeadLine">按日期截止</li>
+        <ul style="margin: 0" v-show="this.deadLine" class="repeat-style-wrap-deadline">
+          <li class="repeat-style-wrap-item"  @click="repeatAlways">永久</li>
+          <li class="repeat-style-wrap-item" @click="showDeadLine">按日期截止</li>
         </ul>
       </div>
       <r-deadline
@@ -99,6 +103,10 @@
                 </div>
               </td>
             </tr>
+            <tr>
+              <td class="today" @click="backToToday">今天</td>
+              <td class="clear-date" @click="backToToday">清除</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -114,12 +122,38 @@
   </div>
 </template>
 <style lang="scss">
+  .repeat-style-wrap-deadline{
+    position: absolute;
+    background-color: white;
+    z-index: 120;
+    top: -50px;
+    left:40px;
+  }
+  .repeat-state{
+    position: relative;
+  }
+  .every-day{
+    margin: 10px 0;
+    width: 240px;
+    height: 120px;
+  }
+  .repeat-option{
+    position: absolute;
+    z-index:300;
+    left:40px;
+    background-color: white;
+  }
   .repeat-style-wrap-show{
     width: 20px;
     font-size: 14px;
     list-style: none;
   }
   .repeat-style-wrap{
+    /*position: absolute;*/
+    top:-40px;
+    left:50px;
+    background-color: white;
+    z-index: 102;
     padding: 0;
     margin: 0;
     list-style: none;
@@ -291,8 +325,8 @@
         repeatOption: false,
         everyWeek: false,
         everyMonth: false,
-        everyDay: true,
-        everyYear: true,
+        everyDay: false,
+        everyYear: false,
         selectRepeatDate: [],
         repeatWeek: [],
         repeatWeekState: [],
@@ -318,10 +352,15 @@
         return this.deadLineRepeat || '永久'
       },
       repeatKind () {
+        var flag = 1
         for (var i = 0; i < this.repeatStyle.length; i++) {
           if (this.repeatStyle[i].selected) {
+            flag = 0
             return this.repeatStyle[i].title
           }
+        }
+        if (flag === 1) {
+          return '每周'
         }
       },
       numToday () {
@@ -353,6 +392,15 @@
       }
     },
     methods: {
+      clearDate () {
+        console.log('j')
+      },
+      backToToday () {
+        this.focusDate = new Date()
+        this.dateType = 'single'
+        this.selectNumDate = [dateUtil.getZeroTime(new Date()).getTime()]
+        this.resetType()
+      },
       getDeadLine (obj) {
         var year = obj.date.getFullYear()
         var month = obj.date.getMonth() + 1
@@ -364,7 +412,11 @@
         this.deadLineDate = false
       },
       selectDeadLine () {
-        this.deadLine = true
+        this.deadLine = !this.deadLine
+      },
+      repeatAlways () {
+        this.deadLine = false
+        this.deadLineRepeat = ''
       },
       showDeadLine () {
         this.deadLine = false
@@ -435,11 +487,11 @@
       initData () {
         console.log('this.currentTodoDate是' + JSON.stringify(this.currentTodoDate))
         var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
-        console.log('处理过后的dateStruct是' + JSON.stringify(dateStruct))
+        console.log('后端转化成前端dateStruct是' + JSON.stringify(dateStruct))
         this.dateType = dateStruct.dateType || 'single'
         this.selectNumDate = dateStruct.dateResult || []
         this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
-//        console.log('this.focusDate是' + this.focusDate)
+        console.log('this.focusDate是' + this.focusDate)
         this.resetType()
         if (this.dateType === 'repeat') {
           this.selectDateState = false
@@ -525,14 +577,20 @@
       },
       tapChangeType (e, type) {
         if (type === 'repeat') {
+          console.log('进来repesat了' + this.everyDay + this.everyWeek + this.everyMonth + this.everyYear)
           this.dateType = type
           this.selectDateState = false
           this.repeatState = true
+          if (!(this.everyDay || this.everyWeek || this.everyMonth || this.everyYear)) {
+            console.log('捡来repwatweek了')
+            this.everyWeek = true
+          }
           this.resetType()
           if (e) e.preventDefault()
         } else {
           this.dateType = type
           this.selectDateState = true
+          this.repeatState = false
           this.resetType()
           if (e) e.preventDefault()
         }
@@ -731,11 +789,12 @@
                 }
               }
             } else {
+              console.log('进来this.selectNumDate.length=0')
 //              startWeek = new Date().getDay()
 //              startDate = new Date().getDate()
 //              year = new Date().getFullYear()
 //              month = new Date().getMonth() + 1
-              weekArray = this.weekDate
+//              weekArray = this.weekDate
 //              for (i = 0; i < weekArray.length; i++) {
 //                if (weekArray[i] > startWeek) {
 //                  day = startDate + weekArray[i] - startWeek

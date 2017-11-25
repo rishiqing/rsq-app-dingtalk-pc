@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-calendar">
-    <i class="icon2-arrow-left arrow-right" @click="onMoveLeft"></i>
+    <i class="icon2-arrow-left arrow-left" @click="onMoveLeft"></i>
     <div class="cal-inner" id="hMoveBar"
          :style="{'transform': translateX}"
          :class="{'animate': easeTrans }">
@@ -102,6 +102,7 @@
         if (this.easeTrans) {
           return
         }
+        console.log('jinlai左边')
 //        if (this.count === 800) {
 //          this.count = 0
 //        } else {
@@ -142,7 +143,7 @@
           this.translateX = 'translateX(' + (direction * 100) + '%)'
         } else {
           direction = 0
-          this.translateX = 'translateX(0)'
+          this.translateX = 'translateX(-550px)'
         }
 
         this.focusDate = this.firstDayOfWeek(this.focusDate, -direction)// 这个是根据方向改变focusdate
@@ -150,18 +151,18 @@
       resetBar () { // 其实就是改变了下daysArray,更新了下界面
 //        console.log('resetBar的daysArray是' + JSON.stringify(this.daysArray))
         this.daysArray = this.resetDays(this.focusDate)
-//        console.log('改变后的daysArray是' + JSON.stringify(this.daysArray)) // 正好是三周的数据
+        console.log('改变后的daysArray是' + JSON.stringify(this.daysArray)) // 正好是三周的数据
         this.easeTrans = false
-        this.translateX = 'translateX(-800px)' // 这个是控制左右滑动的位移吗
+        this.translateX = 'translateX(0px)' // 这个是控制左右滑动的位移吗
         this.$emit('after-cal-swipe', {daysArray: this.daysArray})
       }
     },
     mounted () {
       //  初始化工作
       Bus.$on('changeCalendar', (month, year) => {
-        console.log(month + year)
-        var newDate = new Date(year, month, 1)
-        console.log(newDate)
+//        console.log(month + year)
+        var newDate = new Date(year, month - 1, 1)
+//        console.log(newDate)
         this.focusDate = newDate
         this.resetBar()
       })
@@ -185,16 +186,27 @@
 </script>
 <style lang="scss" scope>
   .wrap-calendar{
+    /*margin: 0 auto;*/
     display: flex;
     align-items: center;
-    width: 80%;
+    /*width: 80%;*/
     height: 50px;
     position: relative;
     overflow: hidden;
     white-space: nowrap;
+    margin-left: 2%;
+    padding: 0;
+  }
+  .arrow-right, .arrow-left{
+    font-size: 14px;
+  }
+  .arrow-left{
+    /*margin-right: 30px;*/
+    cursor: pointer;
   }
   .arrow-right{
-    font-size: 14px;
+    cursor: pointer;
+    /*margin-left: 20px;*/
   }
   .c-cal-main {
     position: fixed;color:white;font-size: 15px;
@@ -221,6 +233,8 @@
   }
   .c-cal-main td {}
   .cal-weekday {
+    margin-right: 30px;
+    width:50px;
     font-size: 15px;
     font-family: PingFangSC-Medium;
   }
@@ -231,7 +245,8 @@
   }
   .cal-outer {position:relative;width:100%;height:100%;overflow:hidden;}
   .cal-inner {
-   width:100%;
+   width:90%;
+    overflow: hidden;
   }
   .animate {
     transition: transform 0.3s ease;
