@@ -1,8 +1,8 @@
 <template>
   <div class="wrap-member" @click="showNativeMemberEdit($event)">
     <i class="icon2-member member-icon"></i>
-    <span class="member">执行人</span>
-    <div class="wrap-member-name">
+    <span class="member margin-detail">执行人</span>
+    <div class="wrap-member-name margin-detail font-style">
       {{nameConcat}}
     </div>
   </div>
@@ -13,6 +13,8 @@
   }
   .member{
     font-size: 12px;
+    font-family: PingFangSC-Regular;
+    color: #B1B1B1;
   }
   .wrap-member{
     display: flex;
@@ -20,7 +22,8 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid gray ;
+    border-bottom:1px solid #EAEAEA ;
+    cursor: pointer;
   }
 
 </style>

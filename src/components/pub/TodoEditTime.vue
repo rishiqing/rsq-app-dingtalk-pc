@@ -1,23 +1,22 @@
 <template>
-  <div class="edit-time">
+  <div class="edit-time" :tabindex="2" @blur="blurEvent">
     <div class="timeContainer" @click="setStartTime($event)">{{startTimeShow}}</div>
     <div class="timeContainer" @click="setEndTime($event)">{{endTimeShow}}</div>
     <TimePicker
+      :getScrollTime="getScrollTime"
       :startFlag = "startFlag"
       @changeTime="changeTime"
       v-show="this.showTimePicker">
     </TimePicker>
     <ul class="alert-list">
       <div tag="li" @click="selectAlert(alertContent)" v-for="(alertContent, index) in displayedRuleList" :key="index">
-        <span>{{parseCode(alertContent.schedule)}}</span>
+        <span class="remind-option">{{parseCode(alertContent.schedule)}}</span>
         <i class="icon2-selected finish" v-show="alertContent.selected"></i>
       </div>
       <!--<li v-for="userDefine in userDefineList">-->
         <!--<span class="userDefineStr">{{userDefine}}</span>-->
       <!--</li>-->
       <li @click="showUserDefine()" class="user-define">自定义</li>
-      <div class="clear-time" @click="clearTime">清除时间</div>
-      <button style="font-size: 14px" @click="sendTime">确定</button>
       <div v-show="this.userDefine" class="userDefine">
         <p class="remind">自定义提醒</p>
         <div>
@@ -34,34 +33,89 @@
             <option value="">小时</option>
           </select>
         </div>
-        <button @click="saveUserDefine">确定</button>
+        <button class="save-user-define" @click="saveUserDefine">确定</button>
       </div>
     </ul>
+    <div class="clear-time" @click="clearTime">清除时间</div>
+    <button style="font-size: 14px" @click="sendTime">确定</button>
   </div>
 </template>
 <style lang="scss">
+  .save-user-define{
+    background: #5EADFD;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.18);
+    border-radius: 2px;
+    margin-top: 20px;
+    border: none;
+    width: 250px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #selectTask{
+    width: 120px;
+  }
+  #selectTime{
+    width: 50px;
+  }
+  .clear-time{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .alert-list >div{
+    margin-top: 15px;
+  }
+  .remind-option{
+
+  }
   .timeContainer{
     display: inline-block;
+    margin-left: 23px;
+    background: #FFFFFF;
+    border: 1px solid #D5D5D5;
+    border-radius: 2px;
+    padding: 5px 10px;
+    width: 65px;
+    text-align: center;
   }
   .userDefine{
     z-index:200;
-    position: relative;
-    top: -200px;
+    position: absolute;
+    top: 50px;
+    left: -30px;
+    width: 270px;
+    padding-left: 30px;
+    height: 150px;
     background-color: white;
     box-shadow: 3px 5px 24px #888888
   }
   .user-define,.remind,.userDefineStr{
     font-size: 14px;
   }
+  .user-define{
+    margin-top: 15px;
+    list-style: none;
+  }
   .finish{
     font-size: 12px;
+    margin-left: 50px;
   }
   .alert-list{
+    border-top: 1px solid #ECECEC;
+    border-bottom: 1px solid #ECECEC;
     margin: 0;
+    margin-top: 15px;
+    padding: 10px 0 20px 20px;
+    position: relative;
   }
   .edit-time{
     position: absolute;
     top:35px;
+    left:20px;
+    width: 250px;
+    padding-top: 20px;
     background-color: white;
     z-index: 3;
     box-shadow: 3px 5px 24px #888888
@@ -137,7 +191,6 @@
       position: relative;
       line-height:1.2rem ;
       height: 1.2rem;
-      border-bottom:0.5px solid #DADADA;
       box-sizing: border-box;
     }
     .sec{
@@ -168,10 +221,15 @@
   import moment from 'moment'
   import jsUtil from 'ut/jsUtil'
   import TimePicker from './TimePicker'
+  import Bus from 'com/bus'
+//  document.getElementsByClassName('edit-time')[0].onblur = function () {
+//    console.log('触发了')
+//  }
   export default {
     data () {
       return {
-        startFlag: true,
+        scrollTime: '',
+        startFlag: false,
         getStartTime: '',
         getEndTime: '',
         showTimePicker: false,
@@ -184,7 +242,7 @@
           alert: [],
           startTime: '',
           endTime: '',
-          alwaysAlert: false
+          alwaysAlert: true
         },
         displayedRuleList: [
           {schedule: 'begin_0_hour', selected: false},
@@ -202,6 +260,11 @@
       TimePicker: TimePicker
     },
     computed: {
+      getScrollTime () {
+        var minute = new Date().getMinutes() < 10 ? '00' : (parseInt(new Date().getMinutes() / 10) + '0')
+        var initTime = new Date().getHours() + ':' + minute
+        return this.scrollTime ? this.scrollTime : initTime
+      },
       currentTodo () {
         return this.$store.state.todo.currentTodo
       },
@@ -239,6 +302,9 @@
       }
     },
     methods: {
+      blurEvent () {
+        console.log('触发了模糊')
+      },
       clearTime () {
         this.getStartTime = null
         this.getEndTime = null
@@ -386,9 +452,10 @@
       setStartTime (e) {
         this.showTimePicker = !this.showTimePicker
         this.startFlag = true
+        this.scrollTime = this.getStartTime
         e.preventDefault()
         e.stopPropagation()
-        this.clock.startTime = '12:00'
+//        this.clock.startTime = '12:00'
         if (this.clock.endTime === '') {
           this.clock.endTime = this.clock.startTime + 5 // (延后5分钟)
         }
@@ -413,7 +480,8 @@
       setEndTime () {
         this.showTimePicker = !this.showTimePicker
         this.startFlag = false
-        this.clock.endTime = '12:45'
+        this.scrollTime = this.getEndTime
+//        this.clock.endTime = '12:45'
 //        if (this.isAllDay) return
 //        var that = this
 //        window.rsqadmg.exec('timePicker', {
@@ -537,6 +605,10 @@
           }
         }
       }
+      Bus.$on('close', () => {
+        console.log('要想后台发送时间了')
+        this.sendTime()
+      })
     },
     /**
      * vue-router hook

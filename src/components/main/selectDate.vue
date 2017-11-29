@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-date">
+  <div class="edit-date-month">
     <div class="date-picker">
       <div class="dp-title">
         <!--<div class="dp-title-tag u-pull-left" @click="tapEmpty($event)">空</div>-->
@@ -35,13 +35,14 @@
   .dp-content .dp-table .is-today{
     color:#67B2FE
   }
-  .edit-date {
+  .edit-date-month {
     position: absolute;
-    top: 60px;
-    z-index: 10;
-    background-color: lightgray;
+    top: 55px;
+    left: 0px;
+    background-color: white;
+    z-index: 200;
   }
-  .edit-date {
+  .edit-date-month {
     .light-color {color: #999999;}
     .date-picker {
       /*box-sizing: border-box;margin-top: 0.25rem;background: #fff;*/
@@ -92,7 +93,7 @@
       /*font-size: 2.8rem;}*/
     }
     .dp-v-sep {
-      width: 1px; height: 0.64rem;background: #979797;
+      width: 1px; height: 90%;background: #979797;
     }
     .week{
       font-family: PingFangSC-Regular;
@@ -219,6 +220,7 @@
         month = month.substring(0, month.length - 1)
         this.$store.commit('PUB_SCHE_DATE_UPDATE', {month: month, year: this.selectYear})
         this.$emit('changeMonth')
+//        console.log('进来changeMonth')
         Bus.$emit('changeCalendar', month, this.selectYear)
       },
       thisMonth (month) {
@@ -409,71 +411,9 @@
 
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: resObj})
       }
-//      getSubmitResult () {
-//        var c = this.currentTodoDate
-//        var o = {
-//          startDate: c.startDate,
-//          endDate: c.endDate,
-//          dates: c.dates
-//        }
-//        //  如果重复相关属性存在，那么处理重复相关的其他属性
-//        if (c.repeatType) {
-//          o.repeatType = c.repeatType
-//          o.repeatBaseTime = c.repeatBaseTime
-//          o.alwaysRepeat = c.alwaysRepeat
-//          o.isCloseRepeat = false
-//          o.isLastDate = c.isLastDate
-//          o.repeatOverDate = c.repeatOverDate
-//        } else {
-//          o.isCloseRepeat = true
-//        }
-//        var actParamse = JSON.parse(JSON.stringify(o))
-//        o.createActive = {
-//          name: 'saveDate',
-//          params: actParamse
-//        }
-//        return o
-//      },
-//      submitTodo (next) {
-//        if (this.isModified()) {
-//          if (this.isEdit) {
-//            window.rsqadmg.exec('showLoader', {text: '保存中...'})
-//          }
-//          var editItem = this.getSubmitResult()
-//          console.log('submitTodo的editItem是' + editItem)
-//          //  如果日期均为空，则容器为收纳箱
-//          if (!editItem.startDate && !editItem.endDate && !editItem.dates) {
-//            editItem['pContainer'] = 'inbox'
-//          } else {
-//            editItem['pContainer'] = 'IE'
-//          }
-//          return this.$store.dispatch('updateTodoDate', {editItem: editItem})
-//            .then(() => {
-//              this.$store.commit('PUB_TODO_DATE_DELETE')
-//              if (this.isEdit) {
-//                window.rsqadmg.exec('hideLoader')
-//                window.rsqadmg.execute('toast', {message: '保存成功'})
-//              }
-//              next()
-//            })
-//        } else {
-//          next()
-//        }
-//      }
     },
     created () {
       this.initData()
-//      var that = this
-//      window.rsqadmg.exec('setTitle', {title: '日期选择'})
-//      window.rsqadmg.exec('setOptionButtons', {
-//        btns: [{key: 'backToday', name: '今天'}],
-//        success (res) {
-//          if (res.key === 'backToday') {
-//            that.tapBackToday()
-//          }
-//        }
-//      })
-//      this.$store.dispatch('setNav', {isShow: false})
     },
     beforeRouteLeave (to, from, next) {
       //  做pub区缓存

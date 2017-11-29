@@ -2,27 +2,44 @@
   <div class="subtodo">
     <div class="subtodo-head">
       <i class="icon2-subplan-web subplan-icon"></i>
-      <span class="subplan">子任务</span>
+      <span class="subplan margin-detail">子任务</span>
     </div>
     <r-subtodo-item-list
       :subTodos="subTodos"
       :isCheckable="true"
     >
     </r-subtodo-item-list>
-    <input type="text" class="subtodo-input" v-show="InputState" @keypress="createSubtodo($event.target.value,$event)">
+    <input autofocus ref="subtodoInput" type="text" class="subtodo-input" v-show="InputState" @keypress="createSubtodo($event.target.value,$event)" @blur="hideInput">
     <div class="subtodo-create" @click="showSubTodoInput">
       <i class="icon2-add-circle add-icon"></i>
-      <span class="subplan">添加子任务</span>
+      <span class="subplan-add margin-detail">添加子任务</span>
     </div>
 
   </div>
 </template>
 <style lang="" scoped>
+  .subplan-add{
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #5EADFD;
+  }
+  .subtodo{
+    background-color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .subtodo-head{
+    border-bottom: 1px solid #EAEAEA;
+  }
   .subtodo-head,.subtodo-create,.subtodo-input{
     padding-left: 15px;
     display: flex;
     align-items: center;
     height: 35px;
+  }
+  .subtodo-input{
+    margin-left: 15px;
+    /*border: none;*/
   }
   .subtodo-create{
     cursor: pointer;
@@ -35,7 +52,8 @@
   }
   .subplan{
     font-size: 12px;
-    color:#5EADFD
+    font-family: PingFangSC-Regular;
+    color: #B1B1B1;
   }
 </style>
 <script>
@@ -60,19 +78,25 @@
       }
     },
     methods: {
+      hideInput () {
+        this.InputState = false
+      },
       showSubTodoInput () {
 //        if (this.disabled) {
 //          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
 //          return
 //        }
         this.InputState = true
+//        console.log(this.$refs.subtodoInput)
+//        this.$refs.subtodoInput.focus()
       },
-      createSubtodo (value) {
+      createSubtodo (value, event) {
         if (event.keyCode === 13) {
-          console.log('进来了') // 参数有主任务id和name
+//          console.log('进来了') // 参数有主任务id和name
           this.$store.dispatch('createSubTodo', {id: this.item.id, name: value, pIsDone: false})
             .then(item => {
-              this.InputState = false
+//              this.InputState = false
+              event.target.value = ''
               document.getElementsByClassName('subtodo-input').value = ''
 //              console.log('返回来的item是' + item)
               return item

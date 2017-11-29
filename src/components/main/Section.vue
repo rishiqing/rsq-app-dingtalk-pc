@@ -1,13 +1,13 @@
 <template>
   <div class="section-wrap" :class="{'showheight': showHeight}" @drop="drop($event)" @dragover="allowDrop($event)">
     <div class="section-head">
-      <input type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)">
-      <button style="width: 50px" class="enlarge" @click="showLarge" v-show="!this.showHeight">变大</button>
-      <button style="width: 50px" class="enlarge" @click="showSmall" v-show="this.showHeight">变小</button>
+      <input type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)" >
+      <img src="../../assets/big.png" class="enlarge" @click="showLarge" v-show="!this.showHeight">
+      <img src="../../assets/small.png" class="enSmall" @click="showSmall" v-show="this.showHeight">
       <i class="icon2-add-circle create-icon" @click="changeInputState"></i>
     </div>
     <div class="wrap-input">
-      <input v-model="content" placeholder="输入任务标题，按回车保存" type="text" v-show="InputState" @keypress="createSche($event.target.value,$event)">
+      <input v-model="content" placeholder="输入任务标题，按回车保存" type="text" v-show="InputState" @blur="hideInput" @keypress="createSche($event.target.value,$event)" autofocus>
       <div class="square" v-show="this.remindState">
         <span>请填写任务名称</span>
       </div>
@@ -85,8 +85,12 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
+      hideInput () {
+        this.InputState = false
+        this.content = ''
+      },
       drop (event) {
-        console.log('进来drop次')
+//        console.log('进来drop次')
         if (this.dragItem.pContainer !== this.itemTitle.pContainer) {
 //          console.log('this.sectionItems' + JSON.stringify(this.sectionItems))
           if (this.sectionItems && this.sectionItems.length > 0) {
@@ -150,7 +154,7 @@
 //          console.log(dateUtil.getStandardTime(this.currentDate))
           this.$store.dispatch('submitCreateTodoItem', {createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
             .then(item => {
-              this.InputState = false
+//              this.InputState = false
               this.remindState = false
               this.content = ''
 //              console.log('返回来的item是' + item)
@@ -231,6 +235,7 @@
     background-color: white;
   }
   .sche-name{
+    background: none;
     border: none;
     font-family: PingFangSC-Regular;
     font-size: 16px;
@@ -238,6 +243,7 @@
   }
   .create-icon{
     font-size: 15px;
+    color: #D4D8DC
   }
   .wrap-input{
     position: relative;
@@ -279,8 +285,19 @@
   }
   .enlarge{
     position: absolute;
+    right: 8%;
+    top: 30%;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+  }
+  .enSmall{
+    position: absolute;
     right: 5%;
     top: 30%;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
   }
   /*.enlarge:hover .section-wrap{*/
     /*width: 100%;*/
@@ -289,8 +306,10 @@
   .section-wrap{
     transition: 0.3s;
     overflow: hidden;
-   margin-left:1%;
+    overflow-x: hidden;
+   margin-left:1.2%;
    margin-top:1% ;
+    /*margin-bottom: 2%;*/
     width: 48%;
     height: 30%;
     float: left;
@@ -298,7 +317,7 @@
     background-color: #FAFAFA;
   }
   ::-webkit-scrollbar{width:4px;}
-  ::-webkit-scrollbar-track{background-color:#bee1eb;}
+  ::-webkit-scrollbar-track{background-color:#D3D7D9;}
   ::-webkit-scrollbar-thumb{background-color:gray;}
   ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
   ::-webkit-scrollbar-thumb:active {background-color:#00aff0}

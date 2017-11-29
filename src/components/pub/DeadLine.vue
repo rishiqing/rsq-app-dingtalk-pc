@@ -53,8 +53,8 @@
     list-style: none;
   }
   .repeat-style-wrap{
-    padding: 0;
-    margin: 0;
+    /*padding: 0;*/
+    /*margin: 0;*/
     list-style: none;
     font-size: 14px;
   }
@@ -74,7 +74,7 @@
     position: absolute;
     top: 40px;
     z-index: 10;
-    background-color: lightgray;
+    background-color: white;
   }
   .edit-date {
   .light-color {color: #999999;}
@@ -127,7 +127,7 @@
     /*font-size: 2.8rem;}*/
   }
   .dp-v-sep {
-    width: 1px; height: 0.64rem;background: #979797;
+    width: 1px; height: 90%;background: #979797;
   }
   .week{
     font-family: PingFangSC-Regular;

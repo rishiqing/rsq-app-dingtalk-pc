@@ -2,8 +2,8 @@
   <div class="wrap-edit-time">
     <div class="wrap-time" @click="changeEditTime">
       <i class="icon2-alarm time-icon"></i>
-      <span class="time">时间</span>
-      <span class="showTime">{{timeValue}}</span>
+      <span class="time margin-detail">时间</span>
+      <span class="showTime font-style">{{timeValue}}</span>
     </div>
     <r-todo-edit-time
       v-show="this.editTime"
@@ -15,12 +15,15 @@
 <style lang="" scoped>
   .wrap-edit-time{
     position: relative;
+    cursor: pointer;
   }
   .time-icon{
     font-size: 14px;
   }
-  .time, .showTime{
+  .time{
     font-size: 12px;
+    font-family: PingFangSC-Regular;
+    color: #B1B1B1;
   }
   .showTime {
     margin-left: 10px;
@@ -32,11 +35,12 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid gray ;
+    border-bottom:1px solid #EAEAEA ;
   }
 </style>
 <script>
   import TodoEditTime from 'com/pub/TodoEditTime'
+  import Bus from 'com/bus'
   export default {
     data () {
       return {
@@ -58,14 +62,15 @@
       'r-todo-edit-time': TodoEditTime
     },
     props: {
-      currentTodo: Object
+      currentTodo: Object,
+      showTime: Boolean
 //      editTime: Boolean,
 //      disabled: Boolean,
 //      newItem: Boolean
     },
     methods: {
       changeEditTime () {
-        console.log('进来了')
+//        console.log('进来了')
         this.editTime = !this.editTime
       },
       gotoTodoTime () {
@@ -84,6 +89,14 @@
 //        this.$router.push('/todoEdit/time')
       }
     },
-    created () {}
+    created () {},
+    mounted () {
+      Bus.$on('close', () => {
+        if (this.editTime) {
+          this.editTime = false
+          console.log('编辑时间要关闭了')
+        }
+      })
+    }
   }
 </script>

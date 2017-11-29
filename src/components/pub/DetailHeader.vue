@@ -1,10 +1,14 @@
 <template>
   <div id="detail-header">
     <div class="wrap-header" :class="{'no-edit-desp':editDesp}">
-      <i class="icon2-plan plan"></i>
-      <span class="add-to-plan">添加至计划</span>
-      <i class="icon2-other other" @click="showOption"></i>
-      <i class="icon2-cancel cancel" @click="closeDetail"></i>
+      <div class="">
+        <i class="icon2-plan plan"></i>
+        <span class="add-to-plan">添加至计划</span>
+      </div>
+      <div class="close-icon">
+        <i class="icon2-other other" @click="showOption"></i>
+        <i class="icon2-cancel cancel" @click="closeDetail"></i>
+      </div>
       <div class="delete-task" v-show="this.deleteState" @click="deleteTask(item)">删除任务</div>
       <ul class="wrap-repeat" v-show="this.deleteOptionState">
         <li v-for="item in this.deleteOption" @click="deleteRepeat(item)">
@@ -75,10 +79,14 @@
 </script>
 
 <style>
+  .close-icon{
+    margin-right: 10px;
+  }
   .wrap-header{
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 64px;
     background-color: white;
     padding-left: 15px;
@@ -87,6 +95,11 @@
     position: absolute;
     right: 0;
     top: 40px;
+    width: 100px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 20px;
     cursor: pointer;
     box-shadow:3px 5px 24px #888888 ;
@@ -95,12 +108,14 @@
     font-size: 16px;
   }
   .other{
-    position: absolute;
-    right: 50px;
+    margin-right: 10px;
+    cursor: pointer;
+    /*position: absolute;*/
+    /*right: 50px;*/
   }
   .cancel{
-    position: absolute;
-    right: 30px;
+    /*position: absolute;*/
+    /*right: 30px;*/
     cursor: pointer;
   }
   .add-to-plan{

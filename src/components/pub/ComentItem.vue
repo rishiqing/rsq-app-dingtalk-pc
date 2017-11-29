@@ -1,12 +1,12 @@
 <template>
-  <div @click="triggerAndroid($event)">
+  <div @click="triggerAndroid($event)" class="wrap-comment-item">
     <li class="coment" @mouseover="showButton(item)" @mouseout="showTime">
       <div class="left">
-        {{item.authorName}}
-        <!--<avatar :src="item.authorAvatar"-->
-                <!--:username="item.authorName"-->
-                <!--:size="30">-->
-        <!--</avatar>-->
+        <!--{{item.authorName}}-->
+        <avatar :src="item.authorAvatar"
+                :username="item.authorName"
+                :size="30">
+        </avatar>
       </div>
       <div class="right">
         <div class="top">
@@ -28,8 +28,8 @@
               <img class="comment-photo file-touch" :src="file.realPath"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
-              <span class="file-size" @click="filePreview(file)">预览</span>
-              <span class="file-size" @click="fileDownload(file)">下载</span>
+              <span class="file-preview" @click="filePreview(file)">预览</span>
+              <span class="file-preview" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() == 'PDF'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
@@ -73,17 +73,29 @@
   </div>
 </template>
 <style scoped>
-  .delete-comment,.reply-comment{
-    font-size: 14px;
+  .wrap-comment-item:last-child{
+    /*margin-bottom: 50px;*/
+  }
+  .delete-comment{
     color: red;
     cursor: pointer;
+    font-family: PingFangSC-Regular;
+    font-size: 11.9px;
+    color: #5EADFD;
+  }
+  .reply-comment{
+    font-size: 12px;
+    color: blue;
+    cursor: pointer;
+    color:#FF7A7A
   }
   .replyComment{
     background: rgba(0,0,0,.1);
   }
   .coment{
-    padding-left: 3%;
-    margin-top:0.613rem ;
+    /*padding-left: 3%;*/
+    margin-top:20px;
+    list-style: none;
     /*margin-bottom: 10px;*/
     line-height: 0.7rem;
     border-bottom: none;
@@ -96,8 +108,19 @@
     font-size: 13px;
     color: #BFBFBF;
     margin-left: 10px;
+    width: 60%;
+  }
+  .file-preview{
+    width: 30px;
+    cursor: pointer;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #BFBFBF;
+    margin-left: 30px;
   }
   .file-size{
+    width: 40px;
+    cursor: pointer;
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #BFBFBF;
@@ -115,7 +138,7 @@
     padding: 5px;
     background-color: white;
     border: 1px solid #E0E0E0;
-    width: 91%;
+    width: 100%;
     margin-top: 5px;
   }
   .coment:after{
@@ -124,12 +147,16 @@
     clear: both;
   }
   .time{
-    font-size: 10px;
-    color:#8C8C8C ;
-    /*width: 2.186rem;*/
-    /*position: absolute;*/
-    /*right:0.26rem;*/
-    font-family: PingFangSC-Regular;
+    /*font-size: 10px;*/
+    /*color:#8C8C8C ;*/
+    /*!*width: 2.186rem;*!*/
+    /*!*position: absolute;*!*/
+    /*!*right:0.26rem;*!*/
+    /*font-family: PingFangSC-Regular;*/
+    font-family: SFNSText;
+    font-size: 11.9px;
+    color: #8C8C8C;
+    line-height: 15.87px;
   }
   .left{
     /*width: 1.093rem;*/
@@ -139,6 +166,7 @@
   }
   .right{
     padding: 0;
+    margin-left: 10px;
     width: calc(100% - 52px);
     float: left;
     border: none;
@@ -148,7 +176,8 @@
     align-items: center;
     justify-content: space-between;
     padding-right: 0.3rem;
-    margin-top: -4px;
+    height: 20px;
+    /*margin-top: -4px;*/
   }
   .author{
     /*width: 5.733rem;*/
@@ -163,11 +192,12 @@
     font-size: 15px;
     color: #111111;
     letter-spacing: 0;
-    line-height: 21px;
+    margin-top: 10px;
+    /*line-height: 21px;*/
   }
 </style>
 <script>
-//  import Avatar from 'com/pub/TextAvatar'
+  import Avatar from 'com/pub/TextAvatar'
   export default {
     data () {
       return {
@@ -201,10 +231,11 @@
       more: Boolean
     },
     components: {
+      'avatar': Avatar
     },
     methods: {
       replaceReplyComment (item) {
-        console.log(item.innerHTML)
+//        console.log(item.innerHTML)
         return item.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n').replace('&nbsp;', '')
       },
       showButton (item) {
@@ -221,7 +252,7 @@
         this.reply = false
       },
       getFileName (orgName) {
-        return orgName.substr(5)
+        return orgName.substr(32)
 //        if (!orgName) return ''
 //        var arr = orgName.split('/')
 //        return arr[arr.length - 1].substr(14, 25)

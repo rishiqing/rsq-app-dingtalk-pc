@@ -1,8 +1,8 @@
 <template>
   <div class="wrap-priority" @click="changeMenuState">
     <i class="icon2-four-quadrant priority-icon"></i>
-    <span class="priority">优先级</span>
-    <span class="section-name">{{sectionName}}</span>
+    <span class="priority margin-detail">优先级</span>
+    <span class="section-name margin-detail font-style">{{sectionName}}</span>
     <ul class="priority-menu" v-show="this.menuState">
       <li class="priority-name" @click="changeSection(titleItem)" v-for="titleItem in this.titleArray">
         <span class="section-name">{{titleItem.title}}</span>
@@ -12,9 +12,18 @@
   </div>
 </template>
 <style scoped>
+  .priority-name:before{
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: black;
+    margin-top: 4px;
+  }
   .priority-menu{
     position: absolute;
-    width: 100px;
+    width: 150px;
     top:40px;
     left:21px;
     right: 0;
@@ -22,11 +31,14 @@
     /*list-style: none;*/
     z-index: 100;
     background-color: white;
-    box-shadow: 3px 5px 24px #888888
+    box-shadow: 3px 5px 24px #888888;
+    padding-left: 15px;
   }
   .priority-name{
     display: flex;
-    height: 20px;
+    height: 30px;
+    /*width: 150px;*/
+    padding: 5px 0;
   }
   .section-name {
     font-size: 12px;
@@ -34,10 +46,15 @@
   }
   .select,.priority-icon{
     font-size: 14px;
+    /*margin-left: 20px;*/
+  }
+  .select{
+    margin-left: 20px;
   }
   .priority{
     font-size: 12px;
-
+    font-family: PingFangSC-Regular;
+    color: #B1B1B1;
   }
   .wrap-priority{
     position: relative;
@@ -46,7 +63,7 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid gray ;
+    border-bottom:1px solid #EAEAEA ;
     cursor: pointer;
   }
 

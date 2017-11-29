@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="header-me">
-      <img src="" alt="">
+      <a class="link-wrap-img" href="https://www.rishiqing.com/"><img class="link-to-rsq" src="../../assets/link.png" alt=""></a>
       <avatar v-for="item in selectedLocalList"
               :key="item.rsqUserId"
               :src="item.avatar"
@@ -25,10 +25,14 @@
         @click-cal-day="fetchItems"
         @after-cal-swipe="fetchDatesHasTodo"
       ></r-calendar>
-      <span class="return-to-today" @click="returnToday">返回今天</span>
-      <span class="divide">|</span>
-      <i class="icon2-filed inbox-icon"></i>
-      <span class="inbox" @click="showInboxState">收纳箱</span>
+      <div class="right-side">
+        <span class="return-to-today" @click="returnToday">返回今天</span>
+        <span class="divide">|</span>
+        <div class="wrap-inbox-icon">
+          <i class="icon2-filed inbox-icon"></i>
+          <span class="inbox" @click="showInboxState">收纳箱</span>
+        </div>
+      </div>
       <r-inbox
         :showInbox="showInbox"
       ></r-inbox>
@@ -196,29 +200,116 @@
 </script>
 
 <style>
-  .inbox-icon{
-    font-size: 14px;
-    margin-left: 1%;
+ @media (min-width: 1100px) and (max-width: 1200px) {
+   .right-side{
+     width: 18%;
+     margin-left: -3%;
+   }
+    .return-to-today{
+      /*margin-left: -30px;*/
+   }
+   .inbox-icon{
+     /*margin-left: 15px;*/
+   }
   }
-  .divide{
-    margin-left: 4%;
-  }
-  .main{
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  .month{
-    display: flex;
-    justify-content: flex-end;
-  }
-  .arrow-down-date{
-    font-size: 12px;
-  }
-  .return-to-today{
-    /*margin-left: -5%;*/
-    font-size: 15px;
-    cursor: pointer;
+ @media (max-width: 1100px) and (min-width: 1001px) {
+   .right-side{
+     width: 16%;
+   }
+   .return-to-today{
+     /*margin-left: -25px;*/
+   }
+   .inbox-icon{
+     /*margin-left: 20px;*/
+   }
+ }
+ @media (max-width: 1000px) and (min-width: 901px) {
+   .right-side{
+     width: 20%;
+   }
+   .return-to-today{
+     /*margin-left: -20px;*/
+   }
+   .inbox-icon{
+     /*margin-left: 15px;*/
+   }
+ }
+ @media (max-width: 900px) and (min-width: 801px){
+   .right-side{
+     width: 19%;
+   }
+   .return-to-today{
+     /*margin-left: -15px;*/
+   }
+   .inbox-icon{
+     /*margin-left:1% ;*/
+   }
+ }
+ @media (max-width: 800px) {
+   .right-side{
+     width: 22%;
+   }
+   .inbox-icon{
+     /*margin-left: 13px;*/
+   }
+   .return-to-today{
+     /*margin-left: -10px;*/
+   }
+ }
+ .wrap-inbox-icon{
+   flex:2;
+   display: flex;
+   align-items: center;
+   margin-right: 10px;
+
+ }
+ .right-side{
+   display: flex;
+   align-items: center;
+   /*margin-left: -1%;*/
+   /*width: 18%;*/
+ }
+ .link-wrap-img{
+   width: 96%;
+ }
+ .header-me{
+   display: flex;
+   align-items: center;
+   background-color: white;
+ }
+ .link-to-rsq{
+   /*width: 96%;*/
+   height: 30px;
+ }
+ .inbox-icon{
+   font-size: 14px;
+   color:#5EADFD
+   /*margin-left: 15px;*/
+ }
+ .divide{
+   /*margin-left: 15px;*/
+   flex: 1;
+ }
+ .main{
+   width: 100%;
+   height: 100%;
+   overflow: hidden;
+ }
+ .month{
+   display: flex;
+   justify-content: flex-end;
+ }
+ .arrow-down-date{
+   font-size: 12px;
+   color:#4A90E2
+ }
+ .return-to-today{
+   /*margin-left: -30px;*/
+   flex:2;
+   font-family: PingFangSC-Regular;
+   font-size: 12px;
+   color: #8C8C8C;
+   cursor: pointer;
   }
   .wrap-month{
 
@@ -231,17 +322,30 @@
     align-items: center;
   }
   .inbox{
-    top: 35%;
+    /*top: 35%;*/
     font-size: 14px;
-    margin-left: 70px;
-    position: absolute;
-    right: 2%;
+    margin-left: 5px;
+    /*margin-left: 70px;*/
+    /*position: absolute;*/
+    /*right: 1.5%;*/
+    cursor: pointer;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #5EADFD;
   }
   .year{
     font-size: 18px;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #3D3D3D;
+    letter-spacing: -0.29px;
   }
   .month{
     font-size: 14px;
+    font-family: PingFangSC-Medium;
+    font-size: 18px;
+    color: #3D3D3D;
+    letter-spacing: -0.43px;
   }
   .wrap-date{
     display: flex;
@@ -253,6 +357,8 @@
     overflow: hidden;
     width: 100%;
     height: 70%;
+    background-color: #F0F0F0;
+    padding-bottom: 1%;
   }
   #sche-wrap:after{
     content: '';

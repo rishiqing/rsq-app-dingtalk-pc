@@ -15,20 +15,24 @@
         </ul>
       </div>
       <div class="detail-content" :class="{'fileCountZero':EditComment,'fileCountOne':fileCountOne,'fileCountTwo':fileCountTwo,'fileCountThree':fileCountThree, 'noComment': this.commentState}">
-        <r-input-title
-          :item-title="item.pTitle"
-          @changeTitle="changeTitle"
-          :isInbox="isInbox"
-          :item="item"
-        >
-        </r-input-title>
-        <r-description></r-description>
+        <div class="wrap-title-desp">
+          <r-input-title
+            :item-title="item.pTitle"
+            @changeTitle="changeTitle"
+            :isInbox="isInbox"
+            :item="item"
+          >
+          </r-input-title>
+          <r-description></r-description>
+        </div>
         <r-input-date
           :currentTodo="currentTodo"
+          :showTime="showTime"
         >
         </r-input-date>
         <r-input-time
           :currentTodo="currentTodo"
+          :showDate="showDate"
         >
         </r-input-time>
         <r-input-member
@@ -54,7 +58,7 @@
         <div v-show="this.commentState" class="bottom-comment" @click="changeCommentState">
           输入的讨论内容或发送文件
         </div>
-        <textarea  v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
+        <textarea  ref="textareaComment" autofocus="autofocus" v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
         <r-upload
           :commentState="this.commentState"
           @get-file-id="setFileId"
@@ -66,7 +70,7 @@
         </r-upload>
         <div class="wrap-button" v-show="!this.commentState">
           <button @click="postComment(commentContent)" class="send">发送</button>
-          <button @click="hideButton">取消</button>
+          <button @click="hideButton" class="cancel-comment">取消</button>
         </div>
       </div>
     </div>
@@ -107,6 +111,8 @@
     },
     data () {
       return {
+        showTime: false,
+        showDate: false,
         joinUserRsqIds: [],
         buttonState: false,
         commentState: true,
@@ -155,6 +161,11 @@
       itemTitle: Object
     },
     methods: {
+//      closeAll () {
+//        console.log('发送出去了--')
+//        Bus.$emit('close')
+//        console.log('发送出去了')
+//      },
       saveMember (idArray) { // 这个方法关键之处是每次要穿的参数是总接收id，增加的id减少的id
         var compRes = util.compareList(this.joinUserRsqIds, idArray)
 //        console.log('比较之后的结果是' + JSON.stringify(compRes))
@@ -177,8 +188,8 @@
       },
       removeFileId (name) {
         for (var i = 0; i < this.fileName.length; i++) {
-//          console.log('name是' + name + '' + 'this.fileName[i]是' + this.fileName[i])
-          if (this.fileName[i].substr(5) === name) {
+//          console.log('name是' + name + '' + 'this.fileName[i]是' + this.fileName[i].substr(33))
+          if (this.fileName[i].substr(32) === name) {
 //            console.log('想等了')
             this.fileId.splice(i, 1)
 //            console.log(this.fileId.length)
@@ -202,16 +213,27 @@
       postComment (value) {
 //        console.log('传进来value是' + value)
 //        console.log('进来评论了')
-        this.$store.dispatch('postTodoComment', {commentContent: value, fileIds: this.fileId, createTaskDate: this.defaultTaskDate})
-          .then(() => {
-            Bus.$emit('clearTask')
-            this.commentContent = ''
-            this.fileId = []
-            this.fileName = []
+        if ((!value) && (this.fileId.length === 0)) {
+          window.rsqadmg.execute('alert', {title: '', message: '评论不能为空', buttonName: '确定'})
+        } else {
+          this.$store.dispatch('postTodoComment', {
+            commentContent: value,
+            fileIds: this.fileId,
+            createTaskDate: this.defaultTaskDate
           })
+            .then(() => {
+              Bus.$emit('clearTask')
+              this.commentContent = ''
+              this.fileId = []
+              this.fileName = []
+              var scrollBar = document.getElementsByClassName('detail-content')[0]
+              scrollBar.scrollTop = scrollBar.scrollHeight
+            })
+        }
       },
       changeCommentState () {
         this.commentState = !this.commentState
+        this.$refs.textareaComment.focus() // 为什么不起作用
       },
       updateRepeat (p) {
         return this.$store.dispatch('updateRepeatTodo', p)
@@ -265,6 +287,9 @@
 </script>
 
 <style>
+  .wrap-title-desp{
+    background-color: white;
+  }
   .fileCountZero{
     max-height: 70%;
   }
@@ -284,10 +309,28 @@
     max-height: 80%;
   }
   .send{
+    font-family: PingFangSC-Regular;
+    border: none;
+    border-radius: 2px;
+    padding: 5px 10px;
+    background-color: #5EADFD;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  .cancel-comment{
+    font-family: PingFangSC-Regular;
+    border: 1px solid #5EADFD;
+    border-radius: 2px;
+    padding: 3px 8px;
+    background-color: white;
+    color: #5EADFD;
     cursor: pointer;
   }
   .detail-bottom{
     /*position: relative;*/
+    background-color: #EEF1F4 ;
+    padding: 10px;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -295,30 +338,33 @@
   }
   .wrap-button{
     position: absolute;
-    right: 0px;
+    right: 20px;
     display: flex;
     align-items: center;
-    top:67px;
-    width:100px;
+    top:70px;
+    width:120px;
     height: 26px;
   }
   .comment-text{
+    border: none;
     width: 98%;
     height: 90px;
   }
   .bottom-comment{
-    position: fixed;
-    left:0;
-    right:0;
-    bottom: 0;
+    /*position: fixed;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*bottom: 0;*/
     /*background-color: white;*/
     /*margin-top: 20px;*/
+    cursor: pointer;
+    background-color: white;
     font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 50px;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
     margin-rigth: 10px;
   }
   ::-webkit-scrollbar{width:4px;}
@@ -327,6 +373,7 @@
   ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
   ::-webkit-scrollbar-thumb:active {background-color:#00aff0}
   .detail-content{
+    margin-top: 10px;
     /*max-height:60%;*/
     /*height: calc(100% - 45px);*/
     overflow-y: auto;

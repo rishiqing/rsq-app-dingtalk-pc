@@ -1,7 +1,7 @@
 <template>
   <ul class="coment-list">
     <div class="comment-top">
-      <i class=""></i>
+      <i class="icon2-filed inbox-icon-comment"></i>
       <span class="word-update">动态</span>
       <div :class="{'isDisplay': !more}" class="operation" @click="changeState">收起操作记录</div>
       <div :class="{'isDisplay': more}" class="operation"  @click="changeState">显示操作记录</div>
@@ -30,14 +30,22 @@
 </template>
 <style>
   .comment-top{
+    /*display: flex;*/
+    /*justify-content: space-around;*/
+    position: relative;
     height: 40px;
   }
   .coment-list{
+    padding-bottom: 10%;
+    background-color: white;
     padding-left: 15px;
     margin: 0;
   }
   .word-update{
     font-size: 12px;
+    margin-left: 10px;
+    font-family: PingFangSC-Regular;
+    color: #B1B1B1;
   }
   .comment-top{
     display: flex;
@@ -70,10 +78,16 @@
     /*!*border-top: 1px solid #E0E0E0;*!*/
   /*}*/
   .operation{
+    position: absolute;
+    right:10px;
+    top: 15px;
     font-family: PingFangSC-Regular;
-    color:#55A8FD;
-    font-size:15px ;
+    color:#5EADFD;
+    font-size:12px ;
     cursor: pointer;
+  }
+  .inbox-icon-comment{
+    font-size: 14px;
   }
 </style>
 <script>

@@ -55,20 +55,53 @@
       }
     },
     mounted () {
-      console.log('传过来的days是' + JSON.stringify(this.days) + 'index是' + this.barIndex) // 这个循环执行了3次
+//      console.log('传过来的days是' + JSON.stringify(this.days) + 'index是' + this.barIndex) // 这个循环执行了3次
     }
   }
 </script>
 <style lang="scss" scope>
+  /*@media (max-width: 800px) {*/
+    /*.cal-bar{*/
+      /*!*width: 47%;*!*/
+      /*width: 270px;*/
+    /*}*/
+  /*}*/
+  /*@media (max-width: 900px) and (min-width: 801px){*/
+    /*.cal-bar{*/
+      /*width: 270px;*/
+    /*}*/
+  /*}*/
+  /*@media (max-width: 1000px) and (min-width: 901px) {*/
+    /*.cal-bar{*/
+      /*width: 270px;*/
+    /*}*/
+  /*}*/
+  /*@media (max-width: 1100px) and (min-width: 1001px) {*/
+    /*.cal-bar{*/
+      /*width: 270px;*/
+    /*}*/
+  /*}*/
+  /*@media (min-width: 1101px) and (max-width: 1200px) {*/
+    /*.cal-bar{*/
+      /*width: 278px;*/
+    /*}*/
+  /*}*/
   .wrap-show-week:hover .showDate{
     display: none;
+  }
+  .showDate{
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #4A4A4A;
+    letter-spacing: -0.29px;
   }
   .wrap-show-week:hover .showWeek{
     display: inline-block;
   }
   .wrap-show-week{
     /*width: 10%;*/
-    /*width: 30px;*/
+    /*width: 40px;*/
+    cursor: pointer;
     height: 30px;
     display: flex;
     align-items: center;
@@ -84,27 +117,24 @@
     font-size: 12px;
   }
   .cal-bar {
-    /*position: absolute;*/
-    width: 47%;
+    width: 278px;
+    /*width: 47%;*/
     height: 100%;
-    /*top: 0;*/
-    /*padding-left: 30px;*/
     display: inline-block;
-    /*overflow: hidden;*/
     /*:style="{'left': barOffsetStyle}"*/
   }
   .cal-bar:last-child{
     /*margin-left: 10%;*/
   }
   .cal-bar:first-child .cal-table{
-    margin-left: -55%;
-    margin-right: 30px;
+    // margin-left: -55%;
+    // margin-right: 30px;
   }
   .cal-bar:first-child{
-    margin-left: -55%;
+     margin-left: 10px;
   }
   .cal-bar:nth-child(2){
-    margin-left: 11%;
+    // margin-left: 11%;
   }
   .cal-table {
     border-collapse: collapse;
@@ -124,16 +154,17 @@
     text-align: center;
   }
   .cal-day-tag {
-    margin: 0 auto;
-    /*margin-left: 13px;*/
+    /*margin: 0 auto;*/
+    margin-left: 13px;
     border-radius:50%;
   }
-  .tag-active {width:4px;height:4px;background:#30FFA8;}
+  .tag-active {width:4px;height:4px;background:#4A90E2;}
   .cal-day {
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #3D3D3D;
     letter-spacing: -0.29px;
+    width: 30px;
     /*margin:0 auto;*/
     /*width:30px;*/
     /*height:30px;*/

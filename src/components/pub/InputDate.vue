@@ -1,9 +1,9 @@
 <template>
   <div class="wrap-edit-date">
-    <div class="wrap-date" @click="changeEditDate">
+    <div class="wrap-date-detail" @click="changeEditDate">
       <i class="icon2-schedule date-icon"></i>
-      <span class="date">日期</span>
-      <span class="now" >{{dateString}}</span>
+      <span class="date margin-detail">日期</span>
+      <span class="now margin-detail font-style" >{{dateString}}</span>
     </div>
     <r-todo-edit-date
       v-show="this.editDate"
@@ -14,9 +14,10 @@
 </template>
 <style>
   .now{
-    font-size: 15px;
+    /*font-size: 15px;*/
   }
   .wrap-edit-date{
+    margin-top: 10px;
     position: relative;
   }
   .date-icon{
@@ -24,15 +25,17 @@
   }
   .date{
     font-size: 12px;
+    font-family: PingFangSC-Regular;
+    color: #B1B1B1;
   }
-  .wrap-date{
+  .wrap-date-detail{
     position: relative;
     display: flex;
     align-items: center;
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid gray ;
+    border-bottom:1px solid #EAEAEA ;
     cursor: pointer;
   }
 

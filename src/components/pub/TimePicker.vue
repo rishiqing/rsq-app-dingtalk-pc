@@ -1,5 +1,5 @@
 <template>
-  <ul class="edit-time-wrap" :class="{'IfStart': !startFlag}">
+  <ul class="edit-time-wrap" :class="{'IfStart': !startFlag, 'IfEnd': startFlag}">
     <li class="wrap-time"  v-for="item in timeArray" @click="changeTime(item)">
       {{item}}
     </li>
@@ -14,7 +14,8 @@
       }
     },
     props: {
-      startFlag: Boolean
+      startFlag: Boolean,
+      getScrollTime: String
     },
     methods: {
       changeTime (time) {
@@ -28,21 +29,33 @@
     },
     mounted () {
       this.initData()
-      console.log('事件数组是' + this.titleArray)
+      console.log('穿过俩的时间' + this.getScrollTime)
+      var index = this.timeArray.indexOf(this.getScrollTime)
+      console.log('第几个索引' + index)
+//      console.log('拿到的li' + document.getElementsByClassName('wrap-time')[8].innerText)
+//      var distance = document.getElementsByClassName('wrap-time')[index].offsetTop
+//      console.log('距离时' + distance)
+      var distance = index * 20 + 'px'
+      var parent = document.getElementsByClassName('edit-time-wrap')[0]
+      parent.scrollTop = distance
     }
   }
 </script>
 <style>
+  .IfEnd{
+    left:25px;
+  }
   .IfStart{
-    left:100px
+    left:138px
   }
   .edit-time-wrap{
+    box-shadow: 0 4px 20px 0 rgba(90,152,212,.32);
     z-index: 500;
     position: absolute;
-    top: 10px;
+    top: 40px;
     height: 300px;
     overflow: auto;
-    width: 100px;
+    width: 85px;
     list-style: none;
     padding: 0;
   }

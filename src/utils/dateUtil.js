@@ -80,6 +80,21 @@ export default {
     }
     return days
   },
+  getMonthSevenDays (firstDay) {
+    // var firstDay = this.firstDayOfWeek(focusDate, 0)
+    // console.log('进来1次')
+    var fullYear = firstDay.getFullYear()
+    var month = firstDay.getMonth()
+    var startDate = firstDay.getDate()
+    var days = []
+
+    for (var j = 0; j <= 6; j++) {
+      var newDate = new Date(fullYear, month, startDate + j)
+      days.push({date: newDate})
+    }
+    // console.log('days是' + JSON.stringify(days))
+    return days
+  },
   /**
    * 获取focusDate所在的月包括月初所在周和月末所在周的的所有date，以二维数组的方式表示
    * options.type: single/range/discrete，分别表示单日期，日期范围，离散日期

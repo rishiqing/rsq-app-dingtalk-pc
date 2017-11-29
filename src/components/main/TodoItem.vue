@@ -9,20 +9,60 @@
     </div>
     <div class="title-todo" >
         <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'delay-width':isDelay, 'no-delay-width': !isDelay}">{{ item.pTitle }}</span>
-        <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
-        <span>{{item.pDisplayOrder}}</span>
+        <span class="delayer" :class="{'is-alert': isDelay, 'ifMax': }" v-show="isDelay">延期{{delayDays}}天</span>
+        <!--<span>{{item.pDisplayOrder}}</span>-->
         <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
           <i class="icon2-receive plan" v-show="isFromSche"></i>
+          <i v-show="isFromKanban" class="icon2-plan receive"></i>
           <div id="cssTest" class="displayName" v-show="this.IsNameShow">{{fromName}}</div>
         </div>
-        <i v-show="isFromKanban" class="icon2-receive receive"></i>
-    <i class="handle"></i>
+    <!--<i class="handle"></i>-->
         <!--<div  v-show="this.IsNameShow">{{item.kanbanOrCreatorName}}</div>-->
     </div>
     <!--</v-touch>-->
   </li>
 </template>
 <style lang="scss" scoped>
+  @media (max-width: 1200px) and (min-width: 1101px){
+    .title-todo {
+      width:90%;
+    }
+    .delay-width {
+      width: 85%;
+    }
+  }
+  @media (max-width: 1100px) and (min-width: 1001px) {
+    .title-todo {
+      width:88.5%;
+    }
+    .delay-width {
+      width: 83%;
+    }
+  }
+  @media (max-width: 1000px) and (min-width: 901px) {
+    .title-todo {
+      width:87.5%;
+    }
+    .delay-width {
+      width: 81%;
+    }
+  }
+  @media (max-width: 900px) and (min-width: 801px){
+    .title-todo {
+      width:86.5%;
+    }
+    .delay-width {
+      width: 78%;
+    }
+  }
+  @media (max-width: 800px) {
+    .title-todo {
+      width:85%;
+    }
+    .delay-width {
+      width: 77%;
+    }
+  }
   #cssTest{
     position: absolute;
     bottom: 30px;
@@ -30,10 +70,12 @@
     /*display: flex;*/
     /*align-items: center;*/
     /*justify-content: center;*/
+    text-align: center;
     background-color: black;
     color: white;
     /*float:left;*/
-    min-width:60px;
+    min-width:50px;
+    overflow: visible;
     height:20px;
     border:1px solid black;
     z-index: 305;
@@ -51,22 +93,10 @@
     width:0px;
     height:0px;
     position:absolute;
-    left:20px;
-    top:20px;
+    left:30%;
+    top:17px;
     transform: rotate(90deg);
   }
-  /*#cssTest:after{*/
-    /*content:"";*/
-    /*border:8px solid #fff;*/
-    /*border-top-color:transparent;*/
-    /*border-right-color:transparent;*/
-    /*border-bottom-color:transparent;*/
-    /*width:0px;*/
-    /*height:0px;*/
-    /*position:absolute;*/
-    /*left:2px;*/
-    /*top:5px;*/
-  /*}*/
   .text-grey{
     color: gray;
   }
@@ -74,18 +104,26 @@
     text-decoration: line-through;
   }
   .delay-width{
-    width: 70%;
+    /*width: 80%;*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .no-delay-width{
-    width: 100%;
+    width: 90%;
   }
   .wrap-icon{
     position: absolute;
     right: 15px;
+    top: 10px;
     /*border: 1px solid red;*/
   }
   .delayer{
-    margin-left: 5px;
+    /*width: 20%;*/
+    /*margin-left: 5px;*/
+    /*margin-right: 5px;*/
+    /*display: flex;*/
+    /*justify-content: flex-end;*/
     font-family: PingFangSC-Regular;
     font-size: 14px;
     color: #E91010;
@@ -124,20 +162,21 @@
     display: none;
   }
   .title-todo{
+    /*position: relative;*/
     height: 42px;
     font-size: 14px;
     display: flex;
     align-items: center;
-    width: 90%;
+    /*width: 87%;*/
     background: #FFFFFF;
-    border: 1px solid #ECECEC;
+    /*border: 1px solid #ECECEC;*/
     border-radius: 2px;
   }
   .todo-content-sche{
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    display: flex;
+    /*text-overflow: ellipsis;*/
+    /*overflow: hidden;*/
+    /*white-space: nowrap;*/
+    /*display: flex;*/
     margin-left:10px;
     font-family: PingFangSC-Regular;
     font-size: 14px;
@@ -150,10 +189,12 @@
     background-color: #FFFFFF;
     border: 1px solid #ECECEC;
     margin-top: 3px;
+    padding-left: 10px;
+    cursor: pointer;
   }
 </style>
 <script>
-//  import dateUtil from 'ut/dateUtil'
+  import dateUtil from 'ut/dateUtil'
 
   export default {
     name: 'TodoItem',
@@ -174,8 +215,8 @@
       isUE () { return this.item.pContainer === 'UE' },
       isUU () { return this.item.pContainer === 'UU' },
       delayDays () {
-//        return dateUtil.getDelayDays(this.item, this.currentDate, false)
-        return (new Date().getDate() - this.item.date)
+        return dateUtil.getDelayDays(this.item, this.currentDate, false)
+//        return (new Date().getDate() - this.item.date)
       },
       isDelay () {
         return this.delayDays > 0

@@ -20,6 +20,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
+.margin-detail {
+  margin-left: 10px; }
+
+.font-style {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #3D3D3D; }
+
 .icon-import_contacts:before {
   content: "\e0e0"; }
 

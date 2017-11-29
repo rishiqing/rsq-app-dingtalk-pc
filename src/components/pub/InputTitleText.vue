@@ -11,7 +11,7 @@
       <input type="text" placeholder="输入任务标题"
              ref="titleInput"
              :value="itemTitle"
-             class="input-title"
+             class="input-title margin-detail"
              @keypress="changeItemTitle($event.target.value,$event)"
              @input="inputChange($event.target.value)"
              @blur="inputBlur($event.target.value)"
@@ -43,6 +43,8 @@
     position: relative;
   }
   .select-title{
+    /*border: 1px solid #666666;*/
+    /*border-radius: 1.98px;*/
     font-size: 14px;
   }
   .hide{
@@ -57,11 +59,15 @@
     align-items: center;
     height: 38px;
     margin-left: 15px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #EAEAEA;
   }
   .input-title{
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #3D3D3D;
     border: none;
     height: 37px;
+    width: 80%;
   }
 </style>
 <script>

@@ -60,12 +60,13 @@
 </template>
 <style lang="scss" scoped>
   .sche-list{
-    background-color: white;
+    /*background-color: white;*/
     border-bottom:1px solid #E0E0E0 ;
     border-top:1px solid #DADADA ;
-    padding-left: 3%;
+    padding-left: 2%;
     margin:0;
-    height: 210px;
+    height: 220px;
+    /*height: 50%;*/
     overflow: auto;
   }
   .listHeight{
@@ -76,7 +77,7 @@
 
   }
   li:last-child{
-    border-bottom: none;
+    /*border-bottom: none;*/
   }
 </style>
 <script>

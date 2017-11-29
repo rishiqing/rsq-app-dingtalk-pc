@@ -21,9 +21,9 @@
              :class="{'is-active': dateType=='repeat'}">重复</div>
       </div>
       <div class="repeat-wrap" v-show="this.repeatState">
-        <div>
+        <div class="wrap-repeat-style">
           <span class="repeat-style" >重复方式</span>
-          <div @click="changeRepeatOption" style="display: inline-block">
+          <div @click="changeRepeatOption" class="repeat-border">
             <span class="repeat-style">{{repeatKind}}</span>
             <i class="icon2-arrow-down2 arrow"></i>
           </div>
@@ -55,8 +55,10 @@
       </div>
       <div v-show="this.repeatState" class="repeat-state">
         <span class="repeat-deadline">截止重复直到</span>
-        <span class="repeat-deadline" @click="selectDeadLine">{{deadLineKind}}</span>
-        <i class="icon2-arrow-down2 arrow"></i>
+        <div class="repeat-border" @click="selectDeadLine">
+          <span class="repeat-deadline">{{deadLineKind}}</span>
+          <i class="icon2-arrow-down2 arrow"></i>
+        </div>
         <ul style="margin: 0" v-show="this.deadLine" class="repeat-style-wrap-deadline">
           <li class="repeat-style-wrap-item"  @click="repeatAlways">永久</li>
           <li class="repeat-style-wrap-item" @click="showDeadLine">按日期截止</li>
@@ -103,12 +105,12 @@
                 </div>
               </td>
             </tr>
-            <tr>
-              <td class="today" @click="backToToday">今天</td>
-              <td class="clear-date" @click="backToToday">清除</td>
-            </tr>
             </tbody>
           </table>
+          <div class="wrap-button-date">
+            <button class="today" @click="backToToday">今天</button>
+            <button class="clear-date" @click="backToToday">清除</button>
+          </div>
         </div>
       </div>
       <button @click="changeDate">确定</button>
@@ -122,15 +124,63 @@
   </div>
 </template>
 <style lang="scss">
+  .repeat-style-wrap-item{
+    cursor: pointer;
+    margin-top: 5px;
+  }
+  .repeat-wrap{
+    padding-bottom: 10px;
+    border-bottom: 1px solid  #E1E1E1;
+  }
+  .repeat-border{
+    cursor: pointer;
+    border: 1px solid #D5D5D5;
+    padding: 0 4px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .wrap-repeat-style{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+  }
+  .wrap-button-date{
+    display: flex;
+    align-items: center;
+  }
+  .clear-date,.today{
+    display: inline-block;
+    width: 94px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #D5D5D5;
+    border-radius: 2px;
+    margin-left: 20px;
+    background-color: white;
+  }
   .repeat-style-wrap-deadline{
+    width: 100px;
+    height: 50px;
+    list-style: none;
+    padding-left: 10px;
     position: absolute;
     background-color: white;
     z-index: 120;
     top: -50px;
-    left:40px;
+    left:70px;
+    box-shadow: 3px 5px 24px #888888;
   }
   .repeat-state{
+    display: flex;
+    margin-left: 15px;
+    align-items: center;
     position: relative;
+    margin-top: 10px;
   }
   .every-day{
     margin: 10px 0;
@@ -140,8 +190,13 @@
   .repeat-option{
     position: absolute;
     z-index:300;
-    left:40px;
+    height: 100px;
+    width: 100px;
+    left:50px;
+    padding: 0;
     background-color: white;
+    top:80px;
+    box-shadow: 0 4px 20px 0 rgba(90,152,212,.32);
   }
   .repeat-style-wrap-show{
     width: 20px;
@@ -153,11 +208,16 @@
     top:-40px;
     left:50px;
     background-color: white;
+    padding: 10px;
     z-index: 102;
-    padding: 0;
-    margin: 0;
+    /*padding: 0;*/
+    /*margin: 0;*/
     list-style: none;
     font-size: 14px;
+    cursor: pointer;
+  }
+  .repeat-style-wrap:hover{
+    background-color: lightgray;
   }
   .repeat-deadline{
     font-size: 14px;
@@ -166,7 +226,7 @@
     font-size: 14px;
   }
   .dp-sel-type .is-active{
-    color: blue;
+    color: #3D3D3D;
   }
   .dp-content .dp-table .is-today{
     color:#67B2FE
@@ -175,7 +235,8 @@
     position: absolute;
     top: 40px;
     z-index: 10;
-    background-color: lightgray;
+    background-color: white;
+    box-shadow: 3px 5px 24px #888888;
   }
   .edit-date {
     .light-color {color: #999999;}
@@ -191,7 +252,7 @@
       align-items: center;
     }
     .dp-title-text {
-      /*text-align: center;*/
+      text-align: center;
       /*font-family: PingFangSC-Regular;*/
       width: 90%;
       font-size: 14px;
@@ -215,7 +276,7 @@
       width: 23%;
       text-align: center;
       font-family: PingFangSC-Regular;
-      font-size: 15px;
+      font-size: 12px;
       /*color: #666666;*/
       line-height: 40px;}
     .dp-v-line {
@@ -228,7 +289,10 @@
       /*font-size: 2.8rem;}*/
     }
     .dp-v-sep {
-      width: 1px; height: 0.64rem;background: #979797;
+      width: 1px;
+      height: 90%;
+      background: #979797;
+      margin-top: 2px;
     }
     .week{
       font-family: PingFangSC-Regular;
@@ -245,6 +309,7 @@
       font-family: PingFangSC-Medium;
       font-size: 17px;
       color: #666666;
+      cursor: pointer;
     }
     .edit-date div{
 

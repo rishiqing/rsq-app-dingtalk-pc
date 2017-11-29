@@ -86,13 +86,15 @@
   }
   .selected{
     background-color: blue;
-    color:white;
+    color:white !important;
   }
   .week-bottom div:hover{
-    color:green
+    border: 1px solid blue;
+    color:blue
   }
   .week-top div:hover{
-    color:green
+    border: 1px solid blue;
+    color:blue
   }
   .week-top div{
     margin: 10px;
@@ -104,10 +106,10 @@
     border-radius: 50%;
     font-size: 13px;
     cursor: pointer;
-    border:1px solid red;
+    border:1px solid #D5D5D5;
   }
   .week-bottom div{
-    border:1px solid red;
+    border:1px solid #D5D5D5;
     margin:10px ;
     width: 40px;
     height: 40px;
@@ -122,7 +124,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
   }
 
 </style>

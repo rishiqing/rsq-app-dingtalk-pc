@@ -102,7 +102,7 @@
         if (this.easeTrans) {
           return
         }
-        console.log('jinlai左边')
+//        console.log('jinlai左边')
 //        if (this.count === 800) {
 //          this.count = 0
 //        } else {
@@ -110,7 +110,7 @@
 //        }
 //        this.translateX = 'translateX(' + this.count + 'px)'
         this.focusDate = this.firstDayOfWeek(this.focusDate, -1)
-        console.log('this.focusDate是' + this.focusDate)
+//        console.log('this.focusDate是' + this.focusDate)
         this.resetBar()
       },
       onMoveRight () {
@@ -151,7 +151,7 @@
       resetBar () { // 其实就是改变了下daysArray,更新了下界面
 //        console.log('resetBar的daysArray是' + JSON.stringify(this.daysArray))
         this.daysArray = this.resetDays(this.focusDate)
-        console.log('改变后的daysArray是' + JSON.stringify(this.daysArray)) // 正好是三周的数据
+//        console.log('改变后的daysArray是' + JSON.stringify(this.daysArray)) // 正好是三周的数据
         this.easeTrans = false
         this.translateX = 'translateX(0px)' // 这个是控制左右滑动的位移吗
         this.$emit('after-cal-swipe', {daysArray: this.daysArray})
@@ -160,11 +160,18 @@
     mounted () {
       //  初始化工作
       Bus.$on('changeCalendar', (month, year) => {
+//        console.log('进来changeCalendar')
 //        console.log(month + year)
         var newDate = new Date(year, month - 1, 1)
-//        console.log(newDate)
-        this.focusDate = newDate
-        this.resetBar()
+        var secondDate = new Date(year, month - 1, 8)
+        var thirdDate = new Date(year, month - 1, 15)
+        this.daysArray = [
+          dateUtil.getMonthSevenDays(newDate),
+          dateUtil.getMonthSevenDays(secondDate),
+          dateUtil.getMonthSevenDays(thirdDate)
+        ]
+        this.focusDate = new Date(year, month - 1, 10)
+        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
       })
       Bus.$on('returnToday', (date) => {
         this.focusDate = date
@@ -185,20 +192,46 @@
   }
 </script>
 <style lang="scss" scope>
+  @media (max-width: 800px) {
+    .wrap-calendar{
+      width: 70%;
+    }
+  }
+  @media (max-width: 900px) and (min-width: 801px){
+    .wrap-calendar{
+      width: 72.5%;
+    }
+  }
+  @media (max-width: 1000px) and (min-width: 901px) {
+    .wrap-calendar{
+      width: 75%;
+    }
+  }
+  @media (max-width: 1100px) and (min-width: 1001px) {
+    .wrap-calendar{
+      width: 77.5%;
+    }
+  }
+  @media (min-width: 1101px) and (max-width: 1200px) {
+    .wrap-calendar{
+      width: 80%;
+    }
+  }
   .wrap-calendar{
     /*margin: 0 auto;*/
     display: flex;
     align-items: center;
-    /*width: 80%;*/
+    /*width: 75%;*/
     height: 50px;
     position: relative;
-    overflow: hidden;
-    white-space: nowrap;
+    /*overflow: hidden;*/
+    /*white-space: nowrap;*/
     margin-left: 2%;
     padding: 0;
   }
   .arrow-right, .arrow-left{
     font-size: 14px;
+    color: #CFCFCF;
   }
   .arrow-left{
     /*margin-right: 30px;*/
@@ -247,6 +280,8 @@
   .cal-inner {
    width:90%;
     overflow: hidden;
+    /*height: 30px;*/
+    white-space: nowrap;
   }
   .animate {
     transition: transform 0.3s ease;

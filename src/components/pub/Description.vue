@@ -6,13 +6,14 @@
          placeholder="添加任务描述..."
          @focus="inputFocus"
          @input="inputChange"
+         @blur="postDesp"
         >
       添加任务描述...
     </div>
-    <div v-show="this.despState">
-      <button @click="postDesp">确定</button>
-      <button @click="hideButton">取消</button>
-    </div>
+    <!--<div v-show="this.despState">-->
+      <!--<button @click="postDesp">确定</button>-->
+      <!--<button @click="hideButton">取消</button>-->
+    <!--</div>-->
   </div>
 </template>
 <style>
@@ -21,8 +22,10 @@
   }
   .desp{
     line-height: 36px;
-    font-size: 15px;
     padding-left: 15px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #666666;
   }
 </style>
 <script>
@@ -48,6 +51,7 @@
         this.$refs.description.innerText = this.pNote
       },
       postDesp () {
+//        console.log('post进俩了')
         var noteElement = document.getElementById('noteEditable').innerHTML
         var params = {pNote: noteElement}
         this.$store.dispatch('postdesp', params).then(() => {
@@ -56,6 +60,7 @@
         })
       },
       inputFocus () {
+//        console.log('进来了inputFocus')
         if (this.isBlank) {
           this.despState = true
           var noteElement = document.getElementById('noteEditable')
@@ -68,6 +73,7 @@
         }
       },
       inputChange () {
+//        console.log('进来了inputChange')
         var noteElement = document.getElementById('noteEditable')
         this.newItemNote = noteElement.innerHTML
         // this.$dispatch('text-change', this.newItemNote)

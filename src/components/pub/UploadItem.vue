@@ -19,7 +19,8 @@
   }
   .icon-wrap {
     position:absolute;
-    right:0.5rem;
+    right:10px;
+    top: 12px;
   }
   .icon-wrap > * {
     float: right;

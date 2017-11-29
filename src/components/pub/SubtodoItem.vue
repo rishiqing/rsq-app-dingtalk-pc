@@ -6,7 +6,7 @@
       <div class="hide" :class="{'square-icon':item.isDone}"></div>
       <i class="icon2-selected finish-icon" :class="{'isdisplay':item.isDone}"></i>
     </div>
-    <input  @keypress="changeSubItemTitle($event.target.value,$event)" class="subtodo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}" :value=item.name>
+    <input  @keypress="changeSubItemTitle($event.target.value,$event)" class="subtodo-content margin-detail" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}" :value=item.name>
     <i class="icon2-arrow-down2 arrow-down" @click="showOption"></i>
     <div class="delete-subtodo" @click="deleteTask(item)" v-show="this.deleteState">删除子任务</div>
   </li>
@@ -65,31 +65,45 @@
 </script>
 <style scoped>
   .delete-subtodo{
+    z-index: 200;
     font-size: 14px;
     position: absolute;
     top: 30px;
     right:5px;
     cursor: pointer;
+    background-color: white;
+    box-shadow: 3px 5px 24px #888888;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*text-align: center;*/
+    height: 40px;
   }
   .arrow-down{
+    cursor: pointer;
     position: absolute;
     right:5px;
     font-size: 14px;
+    top: 10px;
   }
   .todo-checkbox{
     display: flex;
     align-items: center;
     height: 35px;
   }
-  .SubtodoItem{
+  li.SubtodoItem{
     position: relative;
     display: flex;
     align-items: center;
     height: 35px;
+    border-bottom: 1px solid #EAEAEA;
   }
   .subtodo-content{
     border: none;
     font-size: 12px;
+    font-family: PingFangSC-Regular;
+    color: #3D3D3D;
   }
   .select,.finish-icon{
     font-size: 14px;

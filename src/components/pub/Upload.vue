@@ -26,6 +26,8 @@
   }
   .ul-list{
     margin: 0;
+    padding-left: 0;
+    margin-top: 10px;
     max-height: 150px;
     overflow-y: auto;
   }
@@ -103,20 +105,22 @@
         }
         for (var i = 0; i < files.length; i++) {
           var file = files[i]
-//          if (parseInt(file.size) > (50 * 1024 * 1024)) {
+          if (parseInt(file.size) > (50 * 1024 * 1024)) {
+            window.rsqadmg.execute('alert', {title: '', message: '上传文件最大不能超过50M', buttonName: '确定'})
 //            alert('上传文件最大不能超过50M')
-//          } else {
-          var url = URL.createObjectURL(file)
-          this.taskList.push({
-            finished: false,
-            isShowProgress: true,  //  刚创建未上传时显示进度条
-            progress: 0,
-            img: {
-              name: file.name,
-              src: url
-            },
-            file: file
-          })
+          } else {
+            var url = URL.createObjectURL(file)
+            this.taskList.push({
+              finished: false,
+              isShowProgress: true,  //  刚创建未上传时显示进度条
+              progress: 0,
+              img: {
+                name: file.name,
+                src: url
+              },
+              file: file
+            })
+          }
         }
         // }
         this.triggerUpload()
