@@ -1,6 +1,6 @@
 <template>
   <ul class="edit-time-wrap" :class="{'IfStart': !startFlag, 'IfEnd': startFlag}">
-    <li class="wrap-time"  v-for="item in timeArray" @click="changeTime(item)">
+    <li class="wrap-time"  v-for="item in timeArray" @click="changeTime(item, $event)">
       {{item}}
     </li>
   </ul>
@@ -18,8 +18,8 @@
       getScrollTime: String
     },
     methods: {
-      changeTime (time) {
-        this.$emit('changeTime', time, this.startFlag)
+      changeTime (time, e) {
+        this.$emit('changeTime', time, this.startFlag, e)
       },
       initData () {
         for (var i = 0; i < 290; i++) {
@@ -35,9 +35,9 @@
 //      console.log('拿到的li' + document.getElementsByClassName('wrap-time')[8].innerText)
 //      var distance = document.getElementsByClassName('wrap-time')[index].offsetTop
 //      console.log('距离时' + distance)
-      var distance = index * 20 + 'px'
+//      var distance = index * 20 + 'px'
       var parent = document.getElementsByClassName('edit-time-wrap')[0]
-      parent.scrollTop = distance
+      parent.scrollTop = 100 + 'px'
     }
   }
 </script>

@@ -1,7 +1,10 @@
 <template>
   <div class="main">
     <div class="header-me">
-      <a class="link-wrap-img" href="https://www.rishiqing.com/"><img class="link-to-rsq" src="../../assets/link.png" alt=""></a>
+      <div class="wrap-head-img">
+        <img class="link-to-rsq" src="../../assets/link.png" alt="" @click="openLink">
+        <div class="box" id="box" >打开网页版</div>
+      </div>
       <avatar v-for="item in selectedLocalList"
               :key="item.rsqUserId"
               :src="item.avatar"
@@ -112,30 +115,41 @@
       }
     },
     methods: {
+      openLink () {
+        window.rsqadmg.execute('openLink', {
+          success () {
+            window.rsqadmg.execute('freeLogin', {
+              corpId: this.corpId
+            })
+          }
+        })
+      },
       returnToday () {
         Bus.$emit('returnToday', new Date())
         this.$store.commit('PUB_SCHE_DATE_UPDATE', {month: new Date().getMonth() + 1, year: new Date().getFullYear()})
       },
       fetchDatesHasTodo (p) {
         var weekArray = p.daysArray[1]
-        var firstDate = weekArray[0].date
+        var firstDate = p.daysArray[0][0].date
         var secondDate = weekArray[1].date
 //        console.log('拿到的日期' + (secondDate.getMonth() + 1) + ':' + secondDate.getDate())
 //        console.log('目前日期' + this.dateSelect.getMonth())
 //        if (secondDate.getMonth() + 1 !== this.dateSelect.getMonth()) {
         this.$store.commit('PUB_SCHE_DATE_UPDATE', {month: secondDate.getMonth() + 1, year: secondDate.getFullYear()})
 //        }
-        var lastDate = weekArray[weekArray.length - 1].date
+        var lastDate = p.daysArray[2][6].date
 //        var titleDate = weekArray[3].date
 //        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(titleDate)})
         this.$store.dispatch('getDatesHasTodo', {
           startDate: firstDate,
           endDate: lastDate
         }).then(res => {
-          weekArray.forEach(day => {
-            if (res.indexOf(String(day.date.getTime())) !== -1) {
-              this.$set(day, 'showTag', true)
-            }
+          p.daysArray.forEach((days) => {
+            days.forEach((day) => {
+              if (res.indexOf(String(day.date.getTime())) !== -1) {
+                this.$set(day, 'showTag', true)
+              }
+            })
           })
         })
       },
@@ -166,7 +180,7 @@
         this.itemTitle = itemTitle
 //        this.$store.dispatch('setCurrentTodo', item)
         this.IsShow = true
-        console.log('进来了')
+        console.log('进来了showDetail')
       },
       closeDetail () {
         this.IsShow = false
@@ -190,7 +204,7 @@
           })
       }
     },
-    mounted () {
+    created () {
       this.getAllTodoTitleList()
       this.getInboxTodos()
       this.fetchUserIds('selectedLocalList')
@@ -200,6 +214,32 @@
 </script>
 
 <style>
+  #box {
+    width: 150px;
+    height: 30px;
+    font-size: 13px;
+    /*border: 1px solid red;*/
+    background: #3D95EB;
+    position: relative;
+    color:white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 30px;
+  }
+  #box:before{
+    content: "";
+    width: 21px;
+    height: 21px;
+    /*border:1px solid blue;*/
+    transform: rotate(45deg);
+    position:absolute;
+    left:-11px;
+    top:4px;
+    border-left:none;
+    border-bottom:none;
+    background: #3D95EB
+  }
  @media (min-width: 1100px) and (max-width: 1200px) {
    .right-side{
      width: 18%;
@@ -256,6 +296,12 @@
      /*margin-left: -10px;*/
    }
  }
+ .wrap-head-img{
+   position: relative;
+   display: flex;
+   align-items: center;
+   width: 95%;
+ }
  .wrap-inbox-icon{
    flex:2;
    display: flex;
@@ -276,9 +322,11 @@
    display: flex;
    align-items: center;
    background-color: white;
+   height: 39px;
  }
  .link-to-rsq{
    /*width: 96%;*/
+   cursor: pointer;
    height: 30px;
  }
  .inbox-icon{
@@ -310,12 +358,15 @@
    font-size: 12px;
    color: #8C8C8C;
    cursor: pointer;
+   z-index: 100;
   }
   .wrap-month{
 
   }
   .calendar{
-    border: 1px solid red;
+    /*border: 1px solid red;*/
+    border-top: 1px solid #D6D4D4;
+    border-bottom: 1px solid #D6D4D4;
     background-color: white;
     position: relative;
     display: flex;
@@ -356,9 +407,12 @@
   #sche-wrap{
     overflow: hidden;
     width: 100%;
-    height: 70%;
+    height: 83%;
     background-color: #F0F0F0;
-    padding-bottom: 1%;
+    padding-bottom: 8%;
+    display: flex;
+    flex-wrap: wrap;
+    /*position: absolute;*/
   }
   #sche-wrap:after{
     content: '';

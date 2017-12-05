@@ -9,12 +9,12 @@
     </div>
     <div class="title-todo" >
         <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'delay-width':isDelay, 'no-delay-width': !isDelay}">{{ item.pTitle }}</span>
-        <span class="delayer" :class="{'is-alert': isDelay, 'ifMax': }" v-show="isDelay">延期{{delayDays}}天</span>
+        <span class="delayer" :class="{'is-alert': isDelay, 'ifMax': bigger}" v-show="isDelay">延期{{delayDays}}天</span>
         <!--<span>{{item.pDisplayOrder}}</span>-->
         <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
           <i class="icon2-receive plan" v-show="isFromSche"></i>
           <i v-show="isFromKanban" class="icon2-plan receive"></i>
-          <div id="cssTest" class="displayName" v-show="this.IsNameShow">{{fromName}}</div>
+          <p id="cssTest" class="displayName" v-show="this.IsNameShow">{{fromName}}</p>
         </div>
     <!--<i class="handle"></i>-->
         <!--<div  v-show="this.IsNameShow">{{item.kanbanOrCreatorName}}</div>-->
@@ -60,8 +60,13 @@
       width:85%;
     }
     .delay-width {
-      width: 77%;
+      width: 75%;
     }
+  }
+  .ifMax{
+    position: absolute;
+    right: 35px;
+    top: 12px;
   }
   #cssTest{
     position: absolute;
@@ -74,11 +79,10 @@
     background-color: black;
     color: white;
     /*float:left;*/
-    min-width:50px;
-    overflow: visible;
+    min-width:80px;
     height:20px;
     border:1px solid black;
-    z-index: 305;
+    z-index: 1900;
     /*overflow-y: auto ;*/
     /*position:relative;*/
     /*left:10px;*/
@@ -111,11 +115,14 @@
   }
   .no-delay-width{
     width: 90%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .wrap-icon{
     position: absolute;
     right: 15px;
-    top: 10px;
+    top: 13px;
     /*border: 1px solid red;*/
   }
   .delayer{
@@ -206,7 +213,8 @@
     props: {
       item: Object,
       isCheckable: Boolean,
-      itemTitle: Object
+      itemTitle: Object,
+      bigger: Boolean
     },
     computed: {
       currentDate () { return this.$store.getters.defaultTaskDate },

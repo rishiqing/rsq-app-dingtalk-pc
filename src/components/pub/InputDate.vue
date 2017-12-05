@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-edit-date">
-    <div class="wrap-date-detail" @click="changeEditDate">
+    <div class="wrap-date-detail" @click="changeEditDate($event)">
       <i class="icon2-schedule date-icon"></i>
       <span class="date margin-detail">日期</span>
       <span class="now margin-detail font-style" >{{dateString}}</span>
@@ -44,6 +44,7 @@
 <script>
   import TodoEditDate from 'com/pub/TodoEditDate'
   import dateUtil from 'ut/dateUtil'
+  import Bus from 'com/bus'
   export default {
     data () {
       return {
@@ -74,8 +75,10 @@
       'r-todo-edit-date': TodoEditDate
     },
     methods: {
-      changeEditDate () {
+      changeEditDate (e) {
+        e.stopPropagation()
         this.editDate = !this.editDate
+        this.$store.commit('SHOW_DATE')
       },
       closeEditDate () {
         this.editDate = false
@@ -93,6 +96,11 @@
         isCloseRepeat: c.isCloseRepeat
       }
       this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
+    },
+    mounted () {
+      Bus.$on('close', () => {
+        this.editDate = false
+      })
     }
   }
 </script>

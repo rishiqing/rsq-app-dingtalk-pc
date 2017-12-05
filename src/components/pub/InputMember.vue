@@ -161,7 +161,7 @@
 //        window.rsqadmg.exec('showLoader')
         return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
           .then(idMap => {
-//            console.log('----%o', idMap)
+            console.log('----%o', idMap)
             this[targetListName] = util.getMapValuePropArray(idMap)
 //            console.log('this.selectedLocalList' + JSON.stringify(this[targetListName]))
 //            window.rsqadmg.exec('hideLoader')
@@ -169,7 +169,7 @@
       }
     },
     mounted () {
-//      console.log('传过来的选人id' + (this.selectedRsqIds))
+      console.log('传过来的选人id' + (this.selectedRsqIds))
 //      this.fetchUserIds(this.selectedRsqIds, 'selectedLocalList')
     }
   }

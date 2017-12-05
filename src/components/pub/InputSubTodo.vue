@@ -14,7 +14,6 @@
       <i class="icon2-add-circle add-icon"></i>
       <span class="subplan-add margin-detail">添加子任务</span>
     </div>
-
   </div>
 </template>
 <style lang="" scoped>
@@ -75,6 +74,15 @@
     computed: {
       subTodos () {
         return this.$store.state.todo.currentTodo.subTodos// 其实有没有必要写这个呢，因为currenttodo是动态变化的，只要重新和后台打交道setcurrent以后自然可以变化
+      },
+      pNote () {
+        return this.$store.state.todo.currentTodo.pNote
+      },
+      id () {
+        return this.$store.state.todo.currentTodo.id
+      },
+      title () {
+        return this.$store.state.todo.currentTodo.pTitle
       }
     },
     methods: {
@@ -87,17 +95,25 @@
 //          return
 //        }
         this.InputState = true
+        this.$nextTick(() => {
+          this.$refs.subtodoInput.focus()
+        }) // 为什么不起作用
 //        console.log(this.$refs.subtodoInput)
 //        this.$refs.subtodoInput.focus()
       },
       createSubtodo (value, event) {
         if (event.keyCode === 13) {
 //          console.log('进来了') // 参数有主任务id和name
+          var params = {subtodo: this.subTodos}
+          params['id'] = this.item.id
+          params['oldPTitle'] = this.title
+          params['oldPNote'] = this.pNote
           this.$store.dispatch('createSubTodo', {id: this.item.id, name: value, pIsDone: false})
             .then(item => {
 //              this.InputState = false
               event.target.value = ''
               document.getElementsByClassName('subtodo-input').value = ''
+              this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
 //              console.log('返回来的item是' + item)
               return item
             })

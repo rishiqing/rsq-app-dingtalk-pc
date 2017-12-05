@@ -68,6 +68,9 @@
     border: none;
     height: 37px;
     width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 </style>
 <script>

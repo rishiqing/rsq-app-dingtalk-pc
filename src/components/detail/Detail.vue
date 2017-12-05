@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="modal" @click="closeModal"></div>
-    <div class="detail">
+    <div class="modal"></div>
+    <div class="detail" @click="disappear($event)">
       <div class="detail-top">
         <r-detail-header
           @close-detail="closeDetail"
           :item="item"
         >
         </r-detail-header>
-        <ul class="wrap-repeat" v-show="repeatState">
+        <ul class="wrap-repeat-select" v-show="repeatState">
           <li v-for="item in this.repeatOption" @click="SelectRepeat(item)">
             {{item}}
           </li>
@@ -58,7 +58,7 @@
         <div v-show="this.commentState" class="bottom-comment" @click="changeCommentState">
           输入的讨论内容或发送文件
         </div>
-        <textarea  ref="textareaComment" autofocus="autofocus" v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
+        <textarea  ref="textareaComment" autofocus v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
         <r-upload
           :commentState="this.commentState"
           @get-file-id="setFileId"
@@ -66,6 +66,7 @@
           @ready-to-upload="isUploading"
           @finish-upload="finishUpload"
           @showEditComment="showEditComment"
+          @member-changed="getMemberName"
         >
         </r-upload>
         <div class="wrap-button" v-show="!this.commentState">
@@ -94,6 +95,7 @@
   import ComentList from 'com/pub/ComentList'
   import Bus from 'com/bus'
   import util from 'ut/jsUtil'
+  import moment from 'moment'
   export default {
     name: 'app',
     components: {
@@ -154,6 +156,15 @@
       },
       defaultTaskDate () {
         return this.$store.getters.defaultTaskDate
+      },
+      loginUser () {
+        return this.$store.getters.loginUser || {}
+      },
+//      userId () {
+//        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
+//      },
+      corpId () {
+        return this.loginUser.authUser.corpId ? this.loginUser.authUser.corpId : 'dingtalkupload'
       }
     },
     props: {
@@ -161,11 +172,14 @@
       itemTitle: Object
     },
     methods: {
-//      closeAll () {
-//        console.log('发送出去了--')
+      disappear (e) {
+        console.log('到父组件detail了' + e.target.classList)
+        this.$store.commit('HIDE_POP')
 //        Bus.$emit('close')
-//        console.log('发送出去了')
-//      },
+      },
+      getMemberName () {
+
+      },
       saveMember (idArray) { // 这个方法关键之处是每次要穿的参数是总接收id，增加的id减少的id
         var compRes = util.compareList(this.joinUserRsqIds, idArray)
 //        console.log('比较之后的结果是' + JSON.stringify(compRes))
@@ -177,6 +191,27 @@
 //        window.rsqadmg.execute('showLoader', {text: '保存中...'})
         this.$store.dispatch('updateTodo', {editItem: params}).then(() => {
           this.joinUserRsqIds = idArray
+          if (params.addJoinUsers) {
+            var IDArrays = params.addJoinUsers.split(',')
+            var empIDArray = []
+            var that = this
+            this.$store.dispatch('fetchUseridFromRsqid', {corpId: this.corpId, idArray: IDArrays})
+              .then(idMap => {
+                for (var i = 0; i < IDArrays.length; i++) {
+                  empIDArray.push(idMap[IDArrays[i]].emplId)
+                }
+                var standardTime = moment().format('YYYY-MM-DD HH:mm')
+                window.rsqadmg.exec('notify', {
+                  userIds: empIDArray,
+                  corpId: that.corpId,
+                  alertTime: standardTime,
+                  title: this.item.pTitle,
+                  success: () => {
+                    console.log('发送成功')
+                  }
+                })
+              })
+          }
         })
       },
       showEditComment () {
@@ -216,6 +251,10 @@
         if ((!value) && (this.fileId.length === 0)) {
           window.rsqadmg.execute('alert', {title: '', message: '评论不能为空', buttonName: '确定'})
         } else {
+          if (value.indexOf('@') !== -1) {
+            var newValue = value.split(' ')
+            value = '<input value="' + newValue[0] + '">' + newValue[1]
+          }
           this.$store.dispatch('postTodoComment', {
             commentContent: value,
             fileIds: this.fileId,
@@ -233,7 +272,9 @@
       },
       changeCommentState () {
         this.commentState = !this.commentState
-        this.$refs.textareaComment.focus() // 为什么不起作用
+        this.$nextTick(() => {
+          this.$refs.textareaComment.focus()
+        }) // 为什么不起作用
       },
       updateRepeat (p) {
         return this.$store.dispatch('updateRepeatTodo', p)
@@ -244,6 +285,10 @@
             window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
           }
           var params = {pTitle: newTitle}
+          params['oldPTitle'] = this.item.pTitle
+          params['id'] = this.item.id
+          params['oldPNote'] = this.item.pNote
+          params['oldSubTodos'] = this.item.subTodo
           return this.$store.dispatch('updateTodo', {editItem: params})
             .then(() => {
               e.target.blur()
@@ -270,14 +315,15 @@
         var isEdited = this.$store.state.todo.isRepeatFieldEdit
         if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
           this.repeatState = true
+        } else {
+          this.$emit('close-detail')
         }
-        this.$emit('close-detail')
       },
       closeModal () {
         this.$emit('close-detail')
       }
     },
-    mounted () {
+    created () {
       this.joinUserRsqIds = [this.currentTodo.receiverIds]
 //      console.log('现在的currenttode是' + JSON.stringify(this.currentTodo))
 //      console.log('拿到的item' + JSON.stringify(this.item))
@@ -287,6 +333,23 @@
 </script>
 
 <style>
+  .wrap-repeat-select{
+    position: absolute;
+    width: 200px;
+    top:30px;
+    list-style: none;
+    background-color: white;
+    right: 10px;
+    box-shadow: 3px 5px 24px #888888;
+    z-index:800;
+    padding-left: 20px;
+  }
+  .wrap-repeat-select>li{
+    cursor: pointer;
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
   .wrap-title-desp{
     background-color: white;
   }
@@ -329,6 +392,7 @@
   }
   .detail-bottom{
     /*position: relative;*/
+    /*height: 50px;*/
     background-color: #EEF1F4 ;
     padding: 10px;
     position: fixed;
@@ -347,7 +411,7 @@
   }
   .comment-text{
     border: none;
-    width: 98%;
+    width: 99%;
     height: 90px;
   }
   .bottom-comment{
@@ -366,6 +430,7 @@
     height: 50px;
     /*margin-left: 10px;*/
     margin-rigth: 10px;
+    margin-bottom: 10px;
   }
   ::-webkit-scrollbar{width:4px;}
   ::-webkit-scrollbar-track{background-color:#bee1eb;}
@@ -385,12 +450,14 @@
     right: 0;
     bottom: 0;
     left: 0;
-    /*z-index: 1;*/
+    z-index: 600;
     background-color: rgba(0,0,0,.4);
   }
   .detail{
+    z-index: 601;
     position:fixed;
-    border: 1px solid red;
+    border-radius: 10px;
+    /*border: 1px solid red;*/
     /*margin: 20px auto;*/
     top: 50%;
     left: 50%;

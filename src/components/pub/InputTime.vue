@@ -1,13 +1,13 @@
 <template>
-  <div class="wrap-edit-time">
-    <div class="wrap-time" @click="changeEditTime">
+  <div class="wrap-edit-time" @click="changeEditTime($event)">
+    <div class="wrap-time" @click="changeEditTime($event)">
       <i class="icon2-alarm time-icon"></i>
       <span class="time margin-detail">时间</span>
       <span class="showTime font-style">{{timeValue}}</span>
     </div>
     <r-todo-edit-time
       v-show="this.editTime"
-      @close-time="changeEditTime"
+      @close-time="hideEditTime"
     >
     </r-todo-edit-time>
   </div>
@@ -69,9 +69,13 @@
 //      newItem: Boolean
     },
     methods: {
-      changeEditTime () {
+      hideEditTime () {
+//        this.editTime = !this.editTime
+      },
+      changeEditTime (e) {
 //        console.log('进来了')
         this.editTime = !this.editTime
+        e.stopPropagation()
       },
       gotoTodoTime () {
 //        console.log('进来了')
@@ -92,9 +96,11 @@
     created () {},
     mounted () {
       Bus.$on('close', () => {
+        console.log('进inputtime了')
         if (this.editTime) {
           this.editTime = false
-          console.log('编辑时间要关闭了')
+          Bus.$emit('sendTime')
+//          console.log('编辑时间要关闭了')
         }
       })
     }

@@ -85,16 +85,16 @@
     margin-top: 30px;
   }
   .selected{
-    background-color: blue;
+    background-color: #5EADFD;
     color:white !important;
   }
   .week-bottom div:hover{
-    border: 1px solid blue;
-    color:blue
+    border: 1px solid #5EADFD;
+    color:#5EADFD
   }
   .week-top div:hover{
-    border: 1px solid blue;
-    color:blue
+    border: 1px solid #5EADFD;
+    color:#5EADFD
   }
   .week-top div{
     margin: 10px;

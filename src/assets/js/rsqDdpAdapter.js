@@ -9,6 +9,9 @@ function rsqNvl(orgVal, defValue){
 function padLeft(num){
   return (num > 9 ? '' :'0') + num;
 }
+function makeToken(corpId, userId){
+  return corpId + '--' + userId
+}
 function getJsonFromUrl() {
   var query = location.search.substr(1);
   var result = {};
@@ -74,8 +77,9 @@ rsqAdapterManager.register({
             success: function(authUser){
               // var authUser = authResult.user;
               //  从authServer获取到用户数据后进行登录
-              rsqAdapterManager.ajax.post(rsqConfig.apiServer + 'task/j_spring_security_check', {
-                j_username: authUser.rsqUsername, j_password: authUser.rsqPassword, _spring_security_remember_me: true
+              var token = makeToken(authUser.corpId, authUser.userId);
+              rsqAdapterManager.ajax.get(rsqConfig.apiServer + 'task/dingtalkOauth/tokenLogin', {
+                token: token
               }, function(result){
                 var resJson = JSON.parse(result);
                 if(resJson.success){
@@ -583,6 +587,28 @@ rsqAdapterManager.register({
       },
       onFail: function () {
       }
+    })
+  },
+  openLink: function (params) {
+    console.log('进来链接了')
+    DingTalkPC.biz.util.openLink({
+      url: "https://www.rishiqing.com/",//要打开链接的地址
+      onSuccess : function(res) {
+        rsqChk(params.success, [res]);
+      },
+      onFail : function() {}
+    })
+  },
+  freeLogin: function (params) {
+    DingTalkPC.runtime.permission.requestAuthCode({
+      corpId: params.corpId, //企业ID
+      onSuccess: function(result) {
+        /*{
+            code: 'hYLK98jkf0m' //string authCode
+        }*/
+      },
+      onFail : function(err) {}
+
     })
   },
   /**

@@ -178,7 +178,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background:blue;
+    background:#4A90E2;
     color:white;
     border-radius: 50%;
     font-size: 15px;

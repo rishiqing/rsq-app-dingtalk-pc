@@ -13,7 +13,7 @@ export default {
     date = this.clearTime(date)
     // console.log('clearTime之后的date是' + date)
     var day = date.getDay()
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset * 7 - day)
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset * 7 - day + 3)
   },
   /**
    * date的月份偏移offset之后所在月的第一天。如果需要返回date所在月份，则offset可以不传值。
@@ -432,5 +432,20 @@ export default {
     var month = initDate.getMonth()
     var date = initDate.getDate()
     return new Date(year, month, date)
+  },
+  createStandardTime (date) {
+    // console.log('进来DATe是' + date)
+    var year = date.getFullYear()
+    if (date.getMonth() + 1 >= 10) {
+      var month = date.getMonth() + 1
+    } else {
+      month = '0' + (date.getMonth() + 1)
+    }
+    var day = date.getDate()
+    if (day < 10) {
+      day = '0' + day
+    }
+    // console.log('出来DATe是' + year + month + day)
+    return year + '-' + month + '-' + day + ' 00:00:00'
   }
 }

@@ -30,5 +30,9 @@ export default {
   'POST_RECORD_COMMENT': 'task/rsqTodoAction/saveTodoAction',
   'GET_FILE_FROM_AlI': 'task/v2/folders/file/getFileFromAli',
   'CHANGE_SCHE_TITLE': 'task/rsqTodoTitle/:id',
-  'CREATE_SCHE_TITLE': 'task/rsqTodoTitle'
+  'CREATE_SCHE_TITLE': 'task/rsqTodoTitle',
+  'GET_PLANS': 'task/v2/kanban/getAuthorityKanbanList',
+  'GET_SUBPLAN': 'task/v2/kanbans/:id',
+  'GET_CARD': 'task/v2/kanbans/ck/:id',
+  'MOVE_TO_KANBAN': 'task/mainTodo/moveToKanbanCard'
 }

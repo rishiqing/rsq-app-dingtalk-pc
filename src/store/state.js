@@ -56,6 +56,12 @@ export default {
     dragItemId: null,
     dragItem: null
   },
+  plan: [],
+  subplan: [],
+  card: [],
+  inputDateState: false,
+  inputTimeState: false,
+  inputPriorityState: false,
   /**
    * 日程与收纳箱公共的数据对象
    */

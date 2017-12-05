@@ -86,7 +86,7 @@
         ]
       }, // 这个是靠getWeekDays和firstDayOfWeek一起完成的
       clearTime (date) {
-        console.log('date是' + date)
+//        console.log('date是' + date)
         return new Date(date.setHours(0, 0, 0, 0))
       },
       getWeekDays (focusDate) {

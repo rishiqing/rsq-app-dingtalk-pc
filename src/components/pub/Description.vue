@@ -43,6 +43,18 @@
     computed: {
       pNote () {
         return this.$store.state.todo.currentTodo.pNote
+      },
+      oldPNote () {
+        return this.$store.state.todo.currentTodo.pNote
+      },
+      id () {
+        return this.$store.state.todo.currentTodo.id
+      },
+      subtodos () {
+        return this.$store.state.todo.currentTodo.subTodos
+      },
+      title () {
+        return this.$store.state.todo.currentTodo.pTitle
       }
     }, // 定义事件
     methods: {
@@ -54,6 +66,10 @@
 //        console.log('post进俩了')
         var noteElement = document.getElementById('noteEditable').innerHTML
         var params = {pNote: noteElement}
+        params['id'] = this.id
+        params['oldPNote'] = this.oldPNote
+        params['oldPTitle'] = this.title
+        params['subtodo'] = this.subtodos
         this.$store.dispatch('postdesp', params).then(() => {
           this.despState = false
           this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)

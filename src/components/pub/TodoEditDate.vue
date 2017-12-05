@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-date">
+  <div class="edit-date" @click="stop($event)">
     <div class="date-picker">
       <div class="dp-sel-type">
         <div class="dp-btn"
@@ -225,8 +225,9 @@
   .repeat-style{
     font-size: 14px;
   }
-  .dp-sel-type .is-active{
+  .date-picker .dp-sel-type .is-active{
     color: #3D3D3D;
+    font-size: 14px;
   }
   .dp-content .dp-table .is-today{
     color:#67B2FE
@@ -234,6 +235,7 @@
   .edit-date {
     position: absolute;
     top: 40px;
+    left:10px;
     z-index: 10;
     background-color: white;
     box-shadow: 3px 5px 24px #888888;
@@ -271,6 +273,7 @@
     .dp-sel-type {position: relative;border-bottom: solid 1px #e4e4e4;overflow: hidden;
       height: 40px;line-height: 40px;}
     .dp-btn {
+      color:#8C8C8C;
       cursor: pointer;
       float: left;
       width: 23%;
@@ -360,6 +363,7 @@
   import dateUtil from 'ut/dateUtil'
   import repeatWeek from 'com/pub/repeatWeek'
   import DeadLine from 'com/pub/DeadLine'
+  import Bus from 'com/bus'
   /**
    * 主model：state.pub.currentTodoDate，带下划线的是用于不同页面数据共享的属性，不会存储在后台
    * {
@@ -457,8 +461,11 @@
       }
     },
     methods: {
+      stop (e) {
+        e.stopPropagation()
+      },
       clearDate () {
-        console.log('j')
+//        console.log('j')
       },
       backToToday () {
         this.focusDate = new Date()
@@ -556,8 +563,8 @@
         this.dateType = dateStruct.dateType || 'single'
         this.selectNumDate = dateStruct.dateResult || []
         this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
-        console.log('this.focusDate是' + this.focusDate)
         this.resetType()
+        console.log('进到resetType后')
         if (this.dateType === 'repeat') {
           this.selectDateState = false
           this.repeatState = true
@@ -574,6 +581,7 @@
               }
             }
           } else if (dateStruct.repeatType === 'everyWeek') {
+            console.log('进来每周了')
             this.repeatWeek = this.selectNumDate
             for (i = 0; i < this.repeatStyle.length; i++) {
               if (this.repeatStyle[i].title !== '每周') {
@@ -582,6 +590,7 @@
                 this.repeatStyle[i].selected = true
               }
             }
+            console.log('结束每周了')
             this.everyDay = false
             this.everyMonth = false
             this.everyWeek = true
@@ -618,6 +627,7 @@
             this.everyWeek = false
           }
         }
+        console.log('结束额')
       },
       clearType () {
         this.dateType = 'none'
@@ -842,7 +852,7 @@
               var weekArray = this.weekDate
               console.log('拿到this.weekdsatele ' + JSON.stringify(weekArray))
               for (var i = 0; i < weekArray.length; i++) {
-                if (weekArray[i] > startWeek) {
+                if (weekArray[i] >= startWeek) {
                   var day = startDate + weekArray[i] - startWeek
                   day = day < 10 ? ('0' + day) : day
                   this.repeatWeekState.push('' + year + month + day)
@@ -941,6 +951,11 @@
     },
     created () {
       this.initData()
+    },
+    mounted () {
+      Bus.$on('close', () => {
+//        this.changeDate()
+      })
     }
 //    beforeRouteLeave (to, from, next) {
 //      //  做pub区缓存

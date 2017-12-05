@@ -10,6 +10,7 @@
               :key="item.id"
               :id="id"
               :is-checkable="isCheckable"
+              :bigger="showHeight"
               @todo-item-click="showEdit"
               @todo-item-check="checkTodo"
               @drag="getDragItem"
@@ -23,6 +24,7 @@
                :key="item.id"
                :id="id"
                :is-checkable="isCheckable"
+               :bigger="showHeight"
                @todo-item-click="showEdit"
                @todo-item-check="checkTodo"
                @drag="getDragItem"
@@ -36,6 +38,7 @@
               :key="item.id"
               :id="id"
               :is-checkable="isCheckable"
+              :bigger="showHeight"
               @todo-item-click="showEdit"
               @todo-item-check="checkTodo"
               @drag="getDragItem"
@@ -48,6 +51,7 @@
               :item="item"
               :id="id"
               :is-checkable="isCheckable"
+              :bigger="showHeight"
               @todo-item-click="showEdit"
               @todo-item-check="checkTodo"
               @drag="getDragItem"
@@ -61,16 +65,17 @@
 <style lang="scss" scoped>
   .sche-list{
     /*background-color: white;*/
-    border-bottom:1px solid #E0E0E0 ;
+    /*border-bottom:1px solid #E0E0E0 ;*/
     border-top:1px solid #DADADA ;
     padding-left: 2%;
     margin:0;
-    height: 220px;
-    /*height: 50%;*/
-    overflow: auto;
+    /*height: 220px;*/
+    height: 75%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .listHeight{
-    height: 500px;
+    height: 89%;
   }
   .itemList{
     /*padding-bottom:1.306rem;*/
@@ -154,9 +159,10 @@
 //        console.log('穿够来的item是' + JSON.stringify(item))
         this.$store.dispatch('getItem', item).then(
           (item) => {
-//            console.log('返回来的item是' + JSON.stringify(item))
+            console.log('返回来的item是' + JSON.stringify(item))
             this.$store.dispatch('setCurrentTodo', item).then(
               () => {
+//                console.log('发动前')
                 this.$emit('todo-item-click', item)
               }
             )

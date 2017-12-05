@@ -65,7 +65,8 @@
     font-size: 14px;
   }
   .dp-sel-type .is-active{
-    color: blue;
+    color: #3D3D3D;
+    font-size: 14px;
   }
   .dp-content .dp-table .is-today{
     color:#67B2FE
@@ -114,7 +115,7 @@
     width: 23%;
     text-align: center;
     font-family: PingFangSC-Regular;
-    font-size: 15px;
+    font-size: 12px;
     /*color: #666666;*/
     line-height: 40px;}
   .dp-v-line {

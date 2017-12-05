@@ -181,7 +181,7 @@ export default {
    * @constructor
    */
   SCH_TODO_CREATED (state, p) {
-    console.log('进来mutation了' + JSON.stringify(p.item))
+    // console.log('进来mutation了' + JSON.stringify(p.item))
     state.schedule.items.unshift(p.item)
     // if (p.list instanceof Array) {
     //   p.list.unshift(p.item)
@@ -238,9 +238,23 @@ export default {
     // console.log('p.pTitle')
     if (p.pTitle) {
       state.todo.currentTodoRepeat.pTitle = p.pTitle
+      state.todo.currentTodoRepeat.id = p.id
+      state.todo.currentTodoRepeat.oldPTitle = p.oldPTitle
+      state.todo.currentTodoRepeat.oldPNote = p.oldPNote
+      state.todo.currentTodoRepeat.oldSubTodos = p.oldSubTodos
     }
     if (p.pNote) {
       state.todo.currentTodoRepeat.pNote = p.pNote
+      state.todo.currentTodoRepeat.id = p.id
+      state.todo.currentTodoRepeat.oldPTitle = p.oldPTitle
+      state.todo.currentTodoRepeat.oldSubTodos = p.subtodo
+      state.todo.currentTodoRepeat.oldPNote = p.oldPNote
+    }
+    if (p.subtodo) {
+      state.todo.currentTodoRepeat.oldSubTodos = p.subtodo
+      state.todo.currentTodoRepeat.id = p.id
+      state.todo.currentTodoRepeat.oldPTitle = p.oldPTitle
+      state.todo.currentTodoRepeat.oldPNote = p.oldPNote
     }
     // console.log('执行完毕')
   },
@@ -250,6 +264,9 @@ export default {
    * @param p
    * @constructor
    */
+  NO_REPEAT (state) {
+    state.todo.isRepeatFieldEdit = false
+  },
   TD_CURRENT_TODO_UPDATE (state, p) {
     util.extendObject(state.todo.currentTodo, p.item)
   },
@@ -466,9 +483,45 @@ export default {
   SAVE_DRAG_ITEM (state, p) {
     state.schedule.dragItemId = p.item.id
     state.schedule.dragItem = p.item
-    console.log('state.schedule.dragItem是' + JSON.stringify(state.schedule.dragItemId))
+    // console.log('state.schedule.dragItem是' + JSON.stringify(state.schedule.dragItemId))
   },
   CREATE_SCHE_TITLE (state, p) {
     state.schedule.titleArray.push(p)
+  },
+  GET_PlAN (state, p) {
+    state.plan = p.item
+    // console.log('state.plan是' + JSON.stringify(state.plan))
+  },
+  GET_SUB_PlAN (state, p) {
+    state.subplan = p.item.childKanbanList
+    // console.log('state.subplan' + JSON.stringify(state.plan))
+  },
+  GET_CARD (state, p) {
+    state.card = p.item.kanbanCardList
+    // console.log('state.card' + JSON.stringify(state.plan))
+  },
+  CHANGE_PLAN_ORDER (state, p) {
+    console.log('进来CHANGE_PLAN_ORDER')
+    if (p.id === 1) {
+      var index = state.plan.indexOf(p.plan)
+      console.log('index是' + index)
+      state.plan.splice(index, 1)
+      state.plan.unshift(p.plan)
+    } else if (p.id === 2) {
+      index = state.subplan.indexOf(p.subplan)
+      // console.log('index是' + index)
+      state.subplan.splice(index, 1)
+      state.subplan.unshift(p.subplan)
+    } else {
+      index = state.card.indexOf(p.card)
+      // console.log('index是' + index)
+      state.card.splice(index, 1)
+      state.card.unshift(p.card)
+    }
+  },
+  HIDE_POP (state) {
+    state.inputPriorityState = false
+    state.inputDateState = false
+    state.inputTimeState = false
   }
 }

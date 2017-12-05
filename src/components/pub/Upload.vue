@@ -1,7 +1,8 @@
 <template>
   <div class="wrap-upload">
     <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
-    <i class="icon-attachment upload-icon"></i>
+    <i class="icon-attachment upload-icon" v-show="!this.commentState"></i>
+    <!--<i class="icon2-at remind-sb" @click="showNativeMemberEdit"></i>-->
     <ul class="ul-list" v-show="!this.commentState">
       <r-upload-item
         v-for="(task, index) in taskList"
@@ -14,9 +15,14 @@
   </div>
 </template>
 <style lang="scss">
+  .remind-sb{
+    cursor: pointer;
+    margin-left: 15px;
+  }
   .upload-icon{
     font-size: 20px;
     margin-left: -32px;
+    margin-top: -15px;
   }
   .wrap-upload {
     /*position: absolute;*/
@@ -35,6 +41,7 @@
     cursor: pointer;
     width: 30px;
     opacity: 0;
+    /*<!--margin-left: -15px;-->*/
     /*position:absolute;*/
     /*top: 4.75rem;*/
     /*font-size:30px;*/
@@ -50,6 +57,7 @@
 <script>
   import UploadItem from 'com/pub/UploadItem'
   import Bus from 'com/bus'
+  import util from 'ut/jsUtil'
   export default {
     data () {
       return {
@@ -85,6 +93,44 @@
       'r-upload-item': UploadItem
     },
     methods: {
+      showNativeMemberEdit () {
+        var that = this
+        var corpId = that.loginUser.authUser.corpId
+//        console.log('提取之前内容是' + JSON.stringify(this.selectedLocalList))
+//        var selectedArray = util.extractProp(this.selectedLocalList, 'userId')
+//        alert('提取之后内容是' + (selectedArray))
+//        console.log('提取之后内容是' + (selectedArray))
+//        var disabledArray = util.extractProp(this.disabledLocalList, 'userId')
+//        console.log('提取之后禁止内容是' + (selectedArray))
+        window.rsqadmg.exec('selectDeptMember', {
+          btnText: '确定',  //  选择器按钮文本，pc端需要的参数
+          multiple: true, //  默认false，选择单人
+          maximum: 10,  //  可选择人数的上限，默认-1不限制人数
+          title: that.selectTitle, //  选择器标题，pc端需要的参数
+          corpId: corpId,  //  加密的企业 ID，
+          selectedIds: [],
+          disabledIds: [], //  不能选的人
+          success (res) {
+//            var list = res; //返回选中的成员列表[{openid:'联系人openid',name:'联系人姓名',headImg:'联系人头像url'}]
+//              that.memberList = res
+            if (res.length === 0) {
+              return this.$emit('member-changed', [])
+            }
+//            console.log('返回来的res是' + JSON.stringify(res))
+            var idArray = util.extractProp(res, 'emplId')
+//            console.log('返回来的idarray是' + idArray)
+//            window.rsqadmg.exec('showLoader')
+            that.$store.dispatch('fetchRsqidFromUserid', {corpId: corpId, idArray: idArray})
+              .then(function (idMap) {
+//                window.rsqadmg.exec('hideLoader')
+                var userArray = util.getMapValuePropArray(idMap)
+//                  console.log('userId是' + JSON.stringify(userArray))
+                var rsqIdArray = util.extractProp(userArray, 'rsqUserId') // 这里应该拿到name
+                that.$emit('member-changed', rsqIdArray)
+              })
+          }
+        })
+      },
       deleteTask (task) {
         for (var i = 0; i < this.taskList.length; i++) {
           if (task.img.name === this.taskList[i].img.name) {

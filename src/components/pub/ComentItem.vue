@@ -1,5 +1,5 @@
 <template>
-  <div @click="triggerAndroid($event)" class="wrap-comment-item">
+  <div  class="wrap-comment-item">
     <li class="coment" @mouseover="showButton(item)" @mouseout="showTime">
       <div class="left">
         <!--{{item.authorName}}-->
@@ -17,12 +17,12 @@
         </div>
         <div class="bottom">
           <div class="comentContent" v-if="IfReplyComment">
-            <span class="replyComment">{{replaceReplyComment(item.commentContent)}}</span>
+            <span class="replyComment" v-html="item.commentContent">{{item.commentContent}}</span>
             <!--<span class="comentContent">{{item.commentContent.substr(IndexOfBlank + 1)}}</span>-->
             <!--<span class="replyComment">{{item.commentContent.substring(0,IndexOfBlank)}}</span>-->
             <!--<span class="comentContent">{{item.commentContent.substr(IndexOfBlank + 1)}}</span>-->
           </div>
-          <div class="comentContent" v-else>{{item.commentContent}}</div>
+          <div class="comentContent" v-else>{{replaceComment(item.commentContent)}}</div>
           <div class="coment-item-picture file-touch" v-for="file in item.fileList" :key="file.id">
             <template v-if="(file.contentType.toUpperCase() === 'PNG'||file.contentType.toUpperCase() === 'JPEG'|| file.contentType.toUpperCase() === 'JPG')">
               <img class="comment-photo file-touch" :src="file.realPath"  alt="">
@@ -73,6 +73,24 @@
   </div>
 </template>
 <style scoped>
+  input.toolbox-atSpan {
+    background: rgba(0,0,0,.1);
+    padding: 2px;
+    margin: 4px;
+    font-size: 12px;
+    border: none;
+    display: inline;
+    border-radius: 4px;
+    line-height: normal;
+  }
+  .replyComment>input {
+    border: none;
+    background-color: lightgray;
+  }
+  input[type="button"] {
+    border: none;
+    background-color: red;
+  }
   .wrap-comment-item:last-child{
     /*margin-bottom: 50px;*/
   }
@@ -90,7 +108,7 @@
     color:#FF7A7A
   }
   .replyComment{
-    background: rgba(0,0,0,.1);
+    /*background: rgba(0,0,0,.1);*/
   }
   .coment{
     /*padding-left: 3%;*/
@@ -237,6 +255,9 @@
       replaceReplyComment (item) {
 //        console.log(item.innerHTML)
         return item.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n').replace('&nbsp;', '')
+      },
+      replaceComment (item) {
+        return item.replace(/<\/?.+?>/g, '')
       },
       showButton (item) {
         this.timeState = false

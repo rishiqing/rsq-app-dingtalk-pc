@@ -1,10 +1,10 @@
 <template>
-  <div class="wrap-priority" @click="changeMenuState">
+  <div class="wrap-priority" @click="changeMenuState($event)">
     <i class="icon2-four-quadrant priority-icon"></i>
     <span class="priority margin-detail">优先级</span>
     <span class="section-name margin-detail font-style">{{sectionName}}</span>
     <ul class="priority-menu" v-show="this.menuState">
-      <li class="priority-name" @click="changeSection(titleItem)" v-for="titleItem in this.titleArray">
+      <li class="priority-name" @click="changeSection(titleItem, $event)" v-for="titleItem in this.titleArray">
         <span class="section-name">{{titleItem.title}}</span>
         <i class="icon2-selected select" v-show="item.pContainer === titleItem.pContainer"></i>
       </li>
@@ -69,6 +69,7 @@
 
 </style>
 <script>
+  import Bus from 'com/bus'
   export default {
     data () {
       return {
@@ -93,7 +94,7 @@
       itemTitle: Object
     },
     methods: {
-      changeSection (titleItem) {
+      changeSection (titleItem, e) {
 //        console.log('惦记的id' + titleItem.id + '--' + titleItem.pContainer)
 //        if (e.target.innerText === '重要紧急') {
 //          var pContainer = 'IE'
@@ -107,11 +108,13 @@
         this.$store.dispatch('changePriority', {id: this.item.id, pContainer: titleItem.pContainer}).then(
           () => {
             this.menuState = false
+            e.stopPropagation()
           }
         )
       },
-      changeMenuState () {
+      changeMenuState (e) {
         this.menuState = !this.menuState
+        e.stopPropagation()
       },
       IsDisabled (e) {
         if (this.disabled) {
@@ -121,6 +124,12 @@
       }
     },
     mounted () {
+      Bus.$on('close', () => {
+//        console.log('进优先级了')
+//        if (this.menuState) {
+//          this.menuState = false
+//        }
+      })
 //      console.log(JSON.stringify(this.titleArray))
     }
   }

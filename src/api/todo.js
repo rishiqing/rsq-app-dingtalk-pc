@@ -2,6 +2,7 @@ import { Promise } from 'es6-promise'
 import Vue from 'vue'
 import mapping from './urlMapping'
 import util from 'ut/jsUtil'
+import dateutil from 'ut/dateUtil'
 export default {
   /**
    * 获取收纳箱中的任务
@@ -267,10 +268,57 @@ export default {
   },
   getItem (item) {
     // console.log('id是' + item.id)
-    var path = util.replaceUrlParams(mapping.POST_DESP, item)
-    // console.log('path是' + path)
+    var time = dateutil.getStandardTime(new Date())
+    var path = util.replaceUrlParams(mapping.POST_DESP, item) + '?createTaskDate=' + time
     return new Promise((resolve, reject) => {
       Vue.http.get(path, item)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getPlans () {
+    return new Promise((resolve, reject) => {
+      Vue.http.get(mapping.GET_PLANS)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getSubPlans (item) {
+    return new Promise((resolve, reject) => {
+      var path = util.replaceUrlParams(mapping.GET_SUBPLAN, item.defaultItem) // 注意虽然要在最后加ID，可是传的仍然是整个item,有机会看下replaceUrlParams实现
+      // console.log('路径是' + path)
+      Vue.http.get(path, item.defaultItem)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getCard (item) {
+    return new Promise((resolve, reject) => {
+      var path = util.replaceUrlParams(mapping.GET_CARD, item)
+      Vue.http.get(path, item)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  moveToPlan (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.MOVE_TO_KANBAN, props)
         .then(res => {
           resolve(res.json())
         }, err => {

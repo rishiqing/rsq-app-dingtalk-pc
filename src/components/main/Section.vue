@@ -1,5 +1,5 @@
 <template>
-  <div class="section-wrap" :class="{'showheight': showHeight}" @drop="drop($event)" @dragover="allowDrop($event)">
+  <div class="section-wrap" :class="{'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
     <div class="section-head">
       <input type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)" >
       <img src="../../assets/big.png" class="enlarge" @click="showLarge" v-show="!this.showHeight">
@@ -7,7 +7,7 @@
       <i class="icon2-add-circle create-icon" @click="changeInputState"></i>
     </div>
     <div class="wrap-input">
-      <input v-model="content" placeholder="输入任务标题，按回车保存" type="text" v-show="InputState" @blur="hideInput" @keypress="createSche($event.target.value,$event)" autofocus>
+      <input ref="createTask" v-model="content" placeholder="输入任务标题，按回车保存" type="text" v-show="InputState" @blur="hideInput" @keypress="createSche($event.target.value,$event)" autofocus>
       <div class="square" v-show="this.remindState">
         <span>请填写任务名称</span>
       </div>
@@ -30,6 +30,10 @@
     name: 'ScheduleView',
     data () {
       return {
+        ieLarge: false,
+        iuLarge: false,
+        ueLarge: false,
+        uuLarge: false,
         showHeight: false,
         titleName: '日程',
         currentDate: new Date(),
@@ -44,6 +48,12 @@
 //      sectionName: String
     },
     computed: {
+      loginUser () {
+        return this.$store.getters.loginUser || {}
+      },
+      userId () {
+        return this.items[0].pUserId.toString()
+      },
       items () {
         var items = this.$store.state.schedule.items
         var newItems = []
@@ -114,8 +124,17 @@
         this.showHeight = !this.showHeight
       },
       showLarge () {
-        console.log('变大了')
+//        console.log('变大了')
         this.showHeight = !this.showHeight
+        if (this.itemTitle.pContainer === 'IE') {
+          this.ieLarge = true
+        } else if (this.itemTitle.pContainer === 'IU') {
+          this.iuLarge = true
+        } else if (this.itemTitle.pContainer === 'UE') {
+          this.ueLarge = true
+        } else {
+          this.uuLarge = true
+        }
       },
       changeTitle (value, e) {
         if (e.keyCode === 13) {
@@ -139,6 +158,9 @@
       },
       changeInputState () {
         this.InputState = true
+        this.$nextTick(() => {
+          this.$refs.createTask.focus()
+        })
       },
       formatTitleDate (date) {
         return dateUtil.getStandardTime(date)
@@ -152,7 +174,13 @@
 //          console.log('进来了')
 //          var todoType = this.isInbox ? 'inbox' : 'schedule'
 //          console.log(dateUtil.getStandardTime(this.currentDate))
-          this.$store.dispatch('submitCreateTodoItem', {createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
+          var newdate = dateUtil.createStandardTime(new Date())
+//          console.log('newdate是' + newdate)
+          var date = this.formatTitleDate(this.currentDate)
+          var startTime = date.substring(0, 4) + '/' + date.substring(4, 6) + '/' + date.substring(6, 8)
+          var endTime = startTime
+          var displayOrder = this.sectionItems[0].pDisplayOrder + 65536
+          this.$store.dispatch('submitCreateTodoItem', {'startDate': startTime, 'endDate': endTime, receiverIds: this.userId, pPlanedTime: newdate, pDisplayOrder: displayOrder, createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
             .then(item => {
 //              this.InputState = false
               this.remindState = false
@@ -192,22 +220,7 @@
       }
     },
     mounted () {
-      console.log('section中拿到的title是' + this.titleArray)
-//      window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(this.dateSelect)})
-//      var btnParams
-//      var that = this
-//      btnParams = {
-//        btns: [{key: 'toInbox', name: '收纳箱'}],
-//        success (res) {
-//          if (res.key === 'toInbox') {
-//            that.$router.push('/inbox')
-//          }
-//        }
-//      }
-//      window.rsqadmg.execute('setOptionButtons', btnParams)
-//      var date = dateUtil.getStandardTime(new Date())
-//      this.fetchItems(new Date())
-//      this.$store.dispatch('setNav', {isShow: true})
+//      console.log('section中拿到的title是' + this.titleArray)
     }
   }
 </script>
@@ -272,16 +285,32 @@
     float: right;
   }
   div.showheight{
-    height: 80%;
+    height: 81%;
     width: 98%;
     overflow: hidden;
     /*transform:scale(2,2);*/
     z-index:100;
     position: fixed;
-    bottom: 0;
-    top: 110px;
+    /*bottom: 0;*/
+    /*top: 110px;*/
+    /*left: 0;*/
+    /*right: 0;*/
+  }
+  .IELarge{
+    left:0;
+    top: 100px;
+  }
+  .IULarge{
+    right:8px;
+    top: 100px
+  }
+  .UELarge{
     left: 0;
-    right: 0;
+    bottom: 8px;
+  }
+  .UULarge{
+    right: 8px;
+    bottom: 8px;
   }
   .enlarge{
     position: absolute;
@@ -297,7 +326,7 @@
     top: 30%;
     width: 17px;
     height: 17px;
-    cursor: pointer;
+    curor: pointer;
   }
   /*.enlarge:hover .section-wrap{*/
     /*width: 100%;*/
@@ -305,16 +334,20 @@
   /*}*/
   .section-wrap{
     transition: 0.3s;
-    overflow: hidden;
+    overflow-y: hidden;
     overflow-x: hidden;
-   margin-left:1.2%;
-   margin-top:1% ;
+    margin-left:1.2%;
+    margin-top:1% ;
+    /*padding-bottom: 2%;*/
     /*margin-bottom: 2%;*/
     width: 48%;
-    height: 30%;
-    float: left;
-    border:1px solid red;
+    height: 48%;
+    /*float: left;*/
+    /*border:1px solid red;*/
     background-color: #FAFAFA;
+    border: 0 solid #E6E6E6;
+    box-shadow: 0 1px 2px 0 rgba(186,215,225,0.50);
+    border-radius: 2px;
   }
   ::-webkit-scrollbar{width:4px;}
   ::-webkit-scrollbar-track{background-color:#D3D7D9;}

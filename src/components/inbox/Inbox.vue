@@ -33,12 +33,12 @@
     },
     methods: {
       getdata (evt) {
-        console.log('item' + evt.draggedContext)
-        console.log('id' + evt.draggedContext.item.id)
+//        console.log('item' + evt.draggedContext)
+//        console.log('id' + evt.draggedContext.item.id)
       },
       datadragEnd (evt) {
-        console.log('拖动前的索引 :' + evt.oldIndex)
-        console.log('拖动后的索引 :' + evt.newIndex)
+//        console.log('拖动前的索引 :' + evt.oldIndex)
+//        console.log('拖动后的索引 :' + evt.newIndex)
 //        if (this.dragItem.pContainer === this.itemTitle.pContainer) {
 //          if (evt.newIndex === 0) {
 //            var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
@@ -69,7 +69,7 @@
       }
     },
     mounted () {
-      console.log('手按箱' + JSON.stringify(this.items))
+//      console.log('手按箱' + JSON.stringify(this.items))
     }
   }
 </script>
@@ -114,6 +114,7 @@
     height: 42px;
     display: flex;
     align-items: center;
+    font-size: 15px;
   }
   .inbox-input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;

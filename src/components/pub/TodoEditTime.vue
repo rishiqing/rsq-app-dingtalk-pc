@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-time" :tabindex="2" @blur="blurEvent">
+  <div class="edit-time" :tabindex="2" @blur="blurEvent" @click="stopTime($event)">
     <div class="timeContainer" @click="setStartTime($event)">{{startTimeShow}}</div>
     <div class="timeContainer" @click="setEndTime($event)">{{endTimeShow}}</div>
     <TimePicker
@@ -17,25 +17,25 @@
         <!--<span class="userDefineStr">{{userDefine}}</span>-->
       <!--</li>-->
       <li @click="showUserDefine()" class="user-define">自定义</li>
-      <div v-show="this.userDefine" class="userDefine">
-        <p class="remind">自定义提醒</p>
-        <div>
-          <select name="" id="selectTask">
-            <option value="任务开始前">任务开始前</option>
-            <option value="任务开始后">任务开始后</option>
-            <option value="任务结束前">任务结束前</option>
-            <option value="任务结束后">任务结束后</option>
-          </select>
-          <select name="" id="selectTime" @focus="mySelect">
-          </select>
-          <select name="" id="selectKind">
-            <option value="">分钟</option>
-            <option value="">小时</option>
-          </select>
-        </div>
-        <button class="save-user-define" @click="saveUserDefine">确定</button>
-      </div>
     </ul>
+    <div v-show="this.userDefine" class="userDefine">
+      <p class="remind">自定义提醒</p>
+      <div>
+        <select name="" id="selectTask">
+          <option value="任务开始前">任务开始前</option>
+          <option value="任务开始后">任务开始后</option>
+          <option value="任务结束前">任务结束前</option>
+          <option value="任务结束后">任务结束后</option>
+        </select>
+        <select name="" id="selectTime" @focus="mySelect">
+        </select>
+        <select name="" id="selectKind">
+          <option value="">分钟</option>
+          <option value="">小时</option>
+        </select>
+      </div>
+      <button class="save-user-define" @click="saveUserDefine">确定</button>
+    </div>
     <div class="clear-time" @click="clearTime">清除时间</div>
     <button style="font-size: 14px" @click="sendTime">确定</button>
   </div>
@@ -66,9 +66,13 @@
   }
   .alert-list >div{
     margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
   }
   .remind-option{
-
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #3D3D3D;
   }
   .timeContainer{
     display: inline-block;
@@ -99,8 +103,10 @@
     list-style: none;
   }
   .finish{
-    font-size: 12px;
+    font-size: 14px;
     margin-left: 50px;
+    color:#55A8FD;
+    margin-right: 10px;
   }
   .alert-list{
     border-top: 1px solid #ECECEC;
@@ -109,10 +115,14 @@
     margin-top: 15px;
     padding: 10px 0 20px 20px;
     position: relative;
+    height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .edit-time{
-    position: absolute;
-    top:35px;
+    /*position: absolute;*/
+    position: fixed;
+    top:225px;
     left:20px;
     width: 250px;
     padding-top: 20px;
@@ -302,33 +312,66 @@
       }
     },
     methods: {
+      stopTime (e) {
+        e.stopPropagation()
+      },
       blurEvent () {
-        console.log('触发了模糊')
+        this.$nextTick(() => {
+          console.log('触发了模糊')
+        })
       },
       clearTime () {
         this.getStartTime = null
         this.getEndTime = null
+        this.clock.endTime = ''
+        this.clock.startTime = ''
         this.$store.dispatch('clearTime', {clock: {}})
       },
-      changeTime (time, flag) {
+      changeTime (time, flag, e) {
         if (flag) {
-          this.getStartTime = time
-          this.showTimePicker = false
-          this.clock.startTime = time
+          console.log('this.getEndTime是' + this.getEndTime)
+          if (this.getEndTime && time > this.getEndTime) {
+            window.rsqadmg.execute('alert', {message: '开始时间不能晚于结束时间'})
+          } else {
+            this.getStartTime = time
+//            console.log('结束时间' + this.clock.endTime)
+            if (this.clock.endTime === '') {
+//              console.log('进来了结束时间为空')
+              this.clock.endTime = this.getStartTime + 5 // (延后5分钟)
+              this.getEndTime = this.getStartTime + 5
+            }
+            this.showTimePicker = false
+            this.clock.startTime = time
+          }
         } else {
-          this.getEndTime = time
-          this.showTimePicker = false
-          this.clock.endTime = time
+          console.log('开始时间' + this.getStartTime)
+          if (time > this.getStartTime) {
+            this.getEndTime = time
+            if (this.clock.startTime === '') {
+              this.clock.startTime = this.getEndTime - 5 // (延后5分钟)
+              this.getStartTime = this.getEndTime - 5
+            }
+            this.showTimePicker = false
+            this.clock.endTime = time
+          } else {
+            window.rsqadmg.execute('alert', {message: '结束时间不能早于开始时间'})
+          }
         }
+        e.stopPropagation()
       },
       sendTime () {
-//        console.log(JSON.stringify(this.clock))
-        return this.$store.dispatch('updateTodoTime', {clock: this.clock})
-          .then(item => {
-            this.$emit('close-time')
-//            jsUtil.extendObject(item.clock, clockObject)
-//            return this.$store.dispatch('handleRemind', {item})
-          })
+        console.log('this.clock是' + JSON.stringify(this.clock))
+        if ((this.clock.startTime === '') && (this.clock.alert.length > 0)) {
+          window.rsqadmg.execute('alert', {'message': '请先设置时间'})
+        } else {
+          var clockObject = JSON.parse(JSON.stringify(this.clock || {}))
+          return this.$store.dispatch('updateTodoTime', {clock: this.clock})
+              .then(item => {
+                this.$emit('close-time')
+                jsUtil.extendObject(item.clock, clockObject)
+//                return this.$store.dispatch('handleRemind', {item})
+              })
+        }
       },
       saveUserDefine () {
         var selectTask = document.getElementById('selectTask')
@@ -413,7 +456,7 @@
           this.autoEnd = false
         }
         //  自动调整时间
-        this.autoChangeTime()
+//        this.autoChangeTime()
       },
       /**
        * 在用户修改具体时间前自动调整起止时间间隔1小时
@@ -450,7 +493,7 @@
        * 设置开始时间
        */
       setStartTime (e) {
-        this.showTimePicker = !this.showTimePicker
+        this.showTimePicker = true
         this.startFlag = true
         this.scrollTime = this.getStartTime
         e.preventDefault()
@@ -478,7 +521,7 @@
        * 设置结束时间
        */
       setEndTime () {
-        this.showTimePicker = !this.showTimePicker
+        this.showTimePicker = true
         this.startFlag = false
         this.scrollTime = this.getEndTime
 //        this.clock.endTime = '12:45'
@@ -580,7 +623,7 @@
       }
     },
     created () {
-      this.initData()
+//      this.initData()
 //      window.rsqadmg.exec('setTitle', {title: '设置时间'})
 //      window.rsqadmg.exec('setOptionButtons', {hide: true})
 //      this.$store.dispatch('setNav', {isShow: false})
@@ -588,6 +631,7 @@
     mounted () {
 //      console.log('拿到的currentTodo是' + JSON.stringify(this.currentTodo))
       if (this.currentTodo.clock != null && this.currentTodo.clock.alert != null) {
+//        console.log('进来了mounted')
         this.getStartTime = this.currentTodo.clock.startTime
         this.getEndTime = this.currentTodo.clock.endTime
         var alert = this.currentTodo.clock.alert
@@ -604,12 +648,18 @@
             this.clock.alert.push(alert[i])
           }
         }
+      } else if (this.currentTodo.clock != null) {
+        this.getStartTime = this.currentTodo.clock.startTime
+        this.getEndTime = this.currentTodo.clock.startTime
+        this.clock.startTime = this.currentTodo.clock.startTime
+        this.clock.endTime = this.currentTodo.clock.startTime
       }
-      Bus.$on('close', () => {
-        console.log('要想后台发送时间了')
-        this.sendTime()
+      Bus.$on('sendTime', () => {
+//        if ()
+//        console.log('要想后台发送时间了')
+//        this.sendTime()
       })
-    },
+    }
     /**
      * vue-router hook
      * @param to
@@ -617,13 +667,13 @@
      * @param next
      * @returns {*}
      */
-    beforeRouteLeave (to, from, next) {
-      //  做pub区缓存
-      this.saveTodoTimeState()
-      if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
-        return next()
-      }
-      this.beforeSubmitTodo(next)
-    }
+//    beforeRouteLeave (to, from, next) {
+//      //  做pub区缓存
+//      this.saveTodoTimeState()
+//      if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
+//        return next()
+//      }
+//      this.beforeSubmitTodo(next)
+//    }
   }
 </script>
