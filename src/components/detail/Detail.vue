@@ -71,6 +71,7 @@
           @finish-upload="finishUpload"
           @showEditComment="showEditComment"
           @member-changed="getMemberName"
+          @call="showMember"
         >
         </r-upload>
         <div class="wrap-button" v-show="!this.commentState">
@@ -135,6 +136,9 @@
       }
     },
     computed: {
+      loginUser () {
+        return this.$store.getters.loginUser || {}
+      },
       userId () {
         return [this.currentTodo.pUserId]
       },
@@ -162,9 +166,9 @@
       defaultTaskDate () {
         return this.$store.getters.defaultTaskDate
       },
-      loginUser () {
-        return this.$store.getters.loginUser || {}
-      },
+//      loginUser () {
+//        return this.$store.getters.loginUser || {}
+//      },
 //      userId () {
 //        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
 //      },
@@ -177,6 +181,27 @@
       itemTitle: Object
     },
     methods: {
+      showMember () {
+        var that = this
+        var corpId = that.loginUser.authUser.corpId
+        window.rsqadmg.exec('selectDeptMember', {
+          btnText: '确定',  //  选择器按钮文本，pc端需要的参数
+          multiple: true, //  默认false，选择单人
+          maximum: 10,  //  可选择人数的上限，默认-1不限制人数
+          title: that.selectTitle, //  选择器标题，pc端需要的参数
+          corpId: corpId,  //  加密的企业 ID，
+          selectedIds: [],
+          disabledIds: [], //  不能选的人
+          success (res) {
+//            var list = res; //返回选中的成员列表[{openid:'联系人openid',name:'联系人姓名',headImg:'联系人头像url'}]
+//              that.memberList = res
+            if (res.length === 0) {
+              return this.$emit('member-changed', [])
+            }
+            that.commentContent = '@' + res[0].name + ' ' // 先假设选了一个人
+          }
+        })
+      },
       disappear (e) {
         console.log('到父组件detail了' + e.target.classList)
         this.ifShow = !this.ifShow
@@ -351,9 +376,10 @@
     right: 10px;
     box-shadow: 3px 5px 24px #888888;
     z-index:800;
-    padding-left: 20px;
+    padding-left: 0;
   }
   .wrap-repeat-select>li{
+    padding-left: 20px;
     cursor: pointer;
     height: 40px;
     display: flex;

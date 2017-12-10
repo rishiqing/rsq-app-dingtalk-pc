@@ -748,7 +748,9 @@ export default {
     var result = {}
     var cache = state.rsqidCache
     var promise
+    // console.log(p.idArray)
     p.idArray = p.idArray.toString().split(',')
+    // console.log(p.idArray)
     for (var i = 0; i < p.idArray.length; i++) {
       if (cache[p.idArray[i]]) {
         result[p.idArray[i]] = cache[p.idArray[i]]

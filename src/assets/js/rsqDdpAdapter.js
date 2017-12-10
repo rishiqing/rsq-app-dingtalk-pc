@@ -120,6 +120,8 @@ rsqAdapterManager.register({
       "nonceStr": params.nonceStr,
       "signature": params.signature,
       jsApiList: [
+        'device.notification.alert',
+        'device.notification.confirm',
         'runtime.info',
         'biz.chat.pickConversation',
         'biz.customContact.choose',
@@ -132,14 +134,14 @@ rsqAdapterManager.register({
         'biz.ding.create',
         'biz.ding.post']
     });
-    DingTalkPC.config({
-      "agentId": params.agentId,
-      "corpId": rsqadmg.store.app.corpid,
-      "timeStamp": params.timeStamp,
-      "nonceStr": params.nonceStr,
-      "signature": params.signature,
-      jsApiList: ['device.notification.alert', 'device.notification.confirm'] // 必填，需要使用的jsapi列表
-    });
+    // DingTalkPC.config({
+    //   "agentId": params.agentId,
+    //   "corpId": rsqadmg.store.app.corpid,
+    //   "timeStamp": params.timeStamp,
+    //   "nonceStr": params.nonceStr,
+    //   "signature": params.signature,
+    //   jsApiList: ['device.notification.alert', 'device.notification.confirm'] // 必填，需要使用的jsapi列表
+    // });
     DingTalkPC.ready(function(res){
 
       var appdata = rsqadmg.store.app;

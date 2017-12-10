@@ -9,9 +9,13 @@
   </div>
 </template>
 <style>
+  .wrap-member-name{
+    max-width: 500px
+  }
   .add-member{
     width: 22px;
     height: 22px;
+    margin-left: 10px;
   }
   .member-icon{
     font-size: 14px;
@@ -55,9 +59,15 @@
     },
     computed: {
       nameConcat () {
-        return this.selectedLocalList.map(function (o) {
-          return o.name
-        }).join('、')
+        if (this.selectedLocalList.length <= 3) {
+          return this.selectedLocalList.map(function (o) {
+            return o.name
+          }).join('、')
+        } else {
+          return this.selectedLocalList.slice(0, 4).map(function (o) {
+            return o.name
+          }).join('、') + '等' + this.selectedLocalList.length + '人'
+        }
       },
       loginUser () {
         return this.$store.getters.loginUser
@@ -117,7 +127,7 @@
             if (res.length === 0) {
               return this.$emit('member-changed', [])
             }
-//            console.log('返回来的res是' + JSON.stringify(res))
+            console.log('返回来的res是' + JSON.stringify(res))
             var idArray = util.extractProp(res, 'emplId')
 //            console.log('返回来的idarray是' + idArray)
 //            window.rsqadmg.exec('showLoader')
@@ -156,7 +166,7 @@
         })
       },
       fetchUserIds (ids, targetListName) {
-        console.log('ids' + ids + Array.isArray(ids))
+//        console.log('ids' + ids + Array.isArray(ids))
         if (!ids || ids.length === 0) {
           this[targetListName] = []
           return Promise.resolve()
@@ -166,7 +176,7 @@
 //        window.rsqadmg.exec('showLoader')
         return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
           .then(idMap => {
-            console.log('----%o', idMap)
+//            console.log('----%o', idMap)
             this[targetListName] = util.getMapValuePropArray(idMap)
 //            console.log('this.selectedLocalList' + JSON.stringify(this[targetListName]))
 //            window.rsqadmg.exec('hideLoader')

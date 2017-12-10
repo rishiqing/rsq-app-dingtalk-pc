@@ -2,7 +2,7 @@
   <div class="wrap-upload">
     <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
     <i class="icon-attachment upload-icon" v-show="!this.commentState"></i>
-    <!--<i class="icon2-at remind-sb" @click="showNativeMemberEdit"></i>-->
+    <!--<i class="icon2-at remind-sb" @click="call" v-show="!this.commentState"></i>-->
     <ul class="ul-list" v-show="!this.commentState">
       <r-upload-item
         v-for="(task, index) in taskList"
@@ -21,7 +21,7 @@
   }
   .upload-icon{
     font-size: 20px;
-    margin-left: -32px;
+    /*<!--margin-left: -32px;-->*/
     margin-top: -15px;
     color:#b1b1b1
   }
@@ -40,7 +40,7 @@
   }
   .file-input {
     cursor: pointer;
-    width: 30px;
+    width: 10px;
     opacity: 0;
     /*<!--margin-left: -15px;-->*/
     /*position:absolute;*/
@@ -94,6 +94,9 @@
       'r-upload-item': UploadItem
     },
     methods: {
+      call () {
+        this.$emit('call')
+      },
       showNativeMemberEdit () {
         var that = this
         var corpId = that.loginUser.authUser.corpId

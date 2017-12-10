@@ -225,7 +225,7 @@
   }
   @media (max-width: 1000px) and (min-width: 901px) {
     .wrap-calendar{
-      width: 75%;
+      width: 77%;
     }
   }
   @media (max-width: 1100px) and (min-width: 1001px) {

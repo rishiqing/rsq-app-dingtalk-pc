@@ -21,7 +21,7 @@
     color: white;
     /*float:left;*/
     max-width:180px;
-    height:20px;
+    min-height:20px;
     border:1px solid black;
     z-index: 1900;
     /*overflow-y: auto ;*/

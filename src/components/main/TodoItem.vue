@@ -121,6 +121,7 @@
     max-width:180px;
     font-size: 15px;
     min-height: 20px;
+    /*overflow-y: hidden;*/
     /*height:20px;*/
     /*border:1px solid black;*/
     z-index: 1900;
@@ -140,9 +141,9 @@
     border-bottom-color:transparent;
     width:0px;
     height:0px;
-    position:absolute;
-    left:40%;
-    top:19px;
+    /*position:absolute;*/
+    margin-left:10%;
+    margin-top:1px;
     transform: rotate(90deg);
     /*background: rgba(0,0,0,0.86);*/
   }
@@ -290,7 +291,11 @@
       },
       fromName () {
         if (this.item.from != null) {
-          return this.item.from.levelOneName
+          if (this.item.from.levelFourName === null) {
+            return this.item.from.levelOneName
+          } else {
+            return this.item.from.levelOneName + ',' + this.item.from.levelFourName + ',' + this.item.from.levelTwoName
+          }
         }
       },
       isFromKanban () {
@@ -312,7 +317,7 @@
         var mousePos = this.mousePosition(ev)
         console.log(mousePos.x + ':' + mousePos.y)
         this.top = mousePos.y - 63
-        this.left = mousePos.x - 45
+        this.left = mousePos.x - 54
 //        document.getElementById('cssTest').style.top = mousePos.x + 'px'
 //        document.getElementById('cssTest').style.left = mousePos.y + 'px'
       },

@@ -224,7 +224,11 @@
           var date = this.formatTitleDate(this.currentDate)
           var startTime = date.substring(0, 4) + '/' + date.substring(4, 6) + '/' + date.substring(6, 8)
           var endTime = startTime
-          var displayOrder = this.sectionItems[0].pDisplayOrder + 65536
+          if (this.sectionItems && this.sectionItems.length === 0) {
+            var displayOrder = 65535
+          } else {
+            displayOrder = this.sectionItems[0].pDisplayOrder + 65536
+          }
           this.$store.dispatch('submitCreateTodoItem', {'startDate': startTime, 'endDate': endTime, receiverIds: this.userId, pPlanedTime: newdate, pDisplayOrder: displayOrder, createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
             .then(item => {
 //              this.InputState = false
