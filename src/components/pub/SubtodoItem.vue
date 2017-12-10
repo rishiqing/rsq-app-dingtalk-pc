@@ -64,6 +64,18 @@
   }
 </script>
 <style scoped>
+  .hide {
+    display: none;
+  }
+  .todo-checkbox .square-icon{
+    display: block;
+    background-color: white;
+    border:1px solid white;
+    width:4px;
+    height: 4px;
+    margin-left: -5px;
+    margin-top: -8px;
+  }
   .delete-subtodo{
     z-index: 200;
     font-size: 14px;
@@ -97,7 +109,7 @@
     display: flex;
     align-items: center;
     height: 35px;
-    border-bottom: 1px solid #EAEAEA;
+    border-bottom: 0.5px solid #EAEAEA;
   }
   .subtodo-content{
     border: none;
@@ -110,6 +122,7 @@
   }
   .finish-icon{
     display: none;
+    color:#7bbdff
   }
   .isdisplay{
     display: block;

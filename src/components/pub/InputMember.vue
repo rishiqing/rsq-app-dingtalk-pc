@@ -5,9 +5,14 @@
     <div class="wrap-member-name margin-detail font-style">
       {{nameConcat}}
     </div>
+    <img src="../../assets/h.png"  @click="showNativeMemberEdit($event)" class="add-member">
   </div>
 </template>
 <style>
+  .add-member{
+    width: 22px;
+    height: 22px;
+  }
   .member-icon{
     font-size: 14px;
   }
@@ -22,7 +27,7 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid #EAEAEA ;
+    border-bottom:0.5px solid #EAEAEA ;
     cursor: pointer;
   }
 

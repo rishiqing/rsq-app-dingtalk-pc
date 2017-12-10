@@ -326,5 +326,42 @@ export default {
           reject(err)
         })
     })
+  },
+  changeOrder (props) {
+    var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props)
+    // console.log('prps是' + JSON.stringify(props))
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getRecord (props) {
+    return new Promise((resolve, reject) => {
+      var path = mapping.GET_RECORD + '?id=' + props.id
+      Vue.http.get(path)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  copy (props) {
+    return new Promise((resolve, reject) => {
+      var path = mapping.COPY
+      Vue.http.post(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
   }
 }

@@ -1,17 +1,17 @@
 <template>
-  <div class="main">
+  <div class="main" @click="hideSelectDate">
     <div class="header-me">
       <div class="wrap-head-img">
-        <img class="link-to-rsq" src="../../assets/link.png" alt="" @click="openLink">
-        <div class="box" id="box" >打开网页版</div>
+        <img class="link-to-rsq" src="../../assets/c.png" alt="" @click="openLink">
+        <img src="../../assets/a.png" alt="" class="head-pic">
       </div>
-      <avatar v-for="item in selectedLocalList"
-              :key="item.rsqUserId"
-              :src="item.avatar"
-              :username="item.name"></avatar>
+      <!--<avatar v-for="item in selectedLocalList"-->
+              <!--:key="item.rsqUserId"-->
+              <!--:src="item.avatar"-->
+              <!--:username="item.name"></avatar>-->
     </div>
     <div class="calendar">
-      <div  class="wrap-date" @click="showSelectDate">
+      <div  class="wrap-date" @click="showSelectDate($event)">
         <div class="wrap-month">
           <div class="month">{{selectMonth||dateSelect.getMonth()+1}}</div>
           <div class="year">{{selectYear||dateSelect.getFullYear()}}</div>
@@ -33,7 +33,7 @@
         <span class="divide">|</span>
         <div class="wrap-inbox-icon">
           <i class="icon2-filed inbox-icon"></i>
-          <span class="inbox" @click="showInboxState">收纳箱</span>
+          <span class="inbox" @click="showInboxState($event)">收纳箱</span>
         </div>
       </div>
       <r-inbox
@@ -115,12 +115,15 @@
       }
     },
     methods: {
+      hideSelectDate () {
+        this.selectDate = false
+        this.showInbox = false
+      },
       openLink () {
         window.rsqadmg.execute('openLink', {
+          'corpID': this.corpId,
+          'userID': this.userId,
           success () {
-            window.rsqadmg.execute('freeLogin', {
-              corpId: this.corpId
-            })
           }
         })
       },
@@ -154,14 +157,16 @@
         })
       },
       fetchItems (strDate) {
+        console.log('去拿数据了')
 //        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(strDate)})
         this.$store.dispatch('fetchScheduleItems', { strDate })
           .then(() => {
 //            this.updateScroll()
           })
       },
-      showInboxState () {
+      showInboxState (e) {
         this.showInbox = !this.showInbox
+        e.stopPropagation()
       },
       changeMonth (month, year) {
 //        console.log('穿过俩的month和year是' + month + year)
@@ -171,8 +176,9 @@
 //        console.log('穿过俩的month和year是' + month + year)
 //        this.dateSelect = new Date(this.selectYear, this.Month, 1)
       },
-      showSelectDate () {
+      showSelectDate (e) {
         this.selectDate = !this.selectDate
+        e.stopPropagation()
       },
       showDetail (item, itemTitle) {
 //        console.log('进来了')
@@ -195,10 +201,10 @@
         var corpId = this.loginUser.authUser.corpId
         //  暂时去掉loader
 //        window.rsqadmg.exec('showLoader')
-        console.log('this.userId' + this.userId)
+//        console.log('this.userId' + this.userId)
         return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ['2468']})
           .then(idMap => {
-            console.log('idmap' + JSON.stringify(idMap))
+//            console.log('idmap' + JSON.stringify(idMap))
             this[targetListName] = util.getMapValuePropArray(idMap)
 //            window.rsqadmg.exec('hideLoader')
           })
@@ -208,12 +214,19 @@
       this.getAllTodoTitleList()
       this.getInboxTodos()
       this.fetchUserIds('selectedLocalList')
+//      this.openLink()
 //      console.log(this.titleArray.length)
+    },
+    mounted () {
+//      this.openLink()
     }
   }
 </script>
 
 <style>
+  .head-pic{
+    margin-left: 10px;
+  }
   #box {
     width: 150px;
     height: 30px;
@@ -240,70 +253,76 @@
     border-bottom:none;
     background: #3D95EB
   }
- @media (min-width: 1100px) and (max-width: 1200px) {
-   .right-side{
-     width: 18%;
-     margin-left: -3%;
-   }
-    .return-to-today{
-      /*margin-left: -30px;*/
-   }
-   .inbox-icon{
-     /*margin-left: 15px;*/
-   }
-  }
- @media (max-width: 1100px) and (min-width: 1001px) {
-   .right-side{
-     width: 16%;
-   }
-   .return-to-today{
-     /*margin-left: -25px;*/
-   }
-   .inbox-icon{
-     /*margin-left: 20px;*/
-   }
- }
- @media (max-width: 1000px) and (min-width: 901px) {
-   .right-side{
-     width: 20%;
-   }
-   .return-to-today{
-     /*margin-left: -20px;*/
-   }
-   .inbox-icon{
-     /*margin-left: 15px;*/
-   }
- }
- @media (max-width: 900px) and (min-width: 801px){
-   .right-side{
-     width: 19%;
-   }
-   .return-to-today{
-     /*margin-left: -15px;*/
-   }
-   .inbox-icon{
-     /*margin-left:1% ;*/
-   }
- }
- @media (max-width: 800px) {
-   .right-side{
-     width: 22%;
-   }
-   .inbox-icon{
-     /*margin-left: 13px;*/
-   }
-   .return-to-today{
-     /*margin-left: -10px;*/
-   }
- }
+  /*@media (min-width: 1201px) {*/
+    /*.right-side{*/
+      /*width:20%;*/
+    /*}*/
+  /*}*/
+ /*@media (min-width: 1100px) and (max-width: 1200px) {*/
+   /*.right-side{*/
+     /*width: 18%;*/
+     /*margin-left: -3%;*/
+   /*}*/
+    /*.return-to-today{*/
+      /*!*margin-left: -30px;*!*/
+   /*}*/
+   /*.inbox-icon{*/
+     /*!*margin-left: 15px;*!*/
+   /*}*/
+  /*}*/
+ /*@media (max-width: 1100px) and (min-width: 1001px) {*/
+   /*.right-side{*/
+     /*width: 16%;*/
+   /*}*/
+   /*.return-to-today{*/
+     /*!*margin-left: -25px;*!*/
+   /*}*/
+   /*.inbox-icon{*/
+     /*!*margin-left: 20px;*!*/
+   /*}*/
+ /*}*/
+ /*@media (max-width: 1000px) and (min-width: 901px) {*/
+   /*.right-side{*/
+     /*width: 20%;*/
+   /*}*/
+   /*.return-to-today{*/
+     /*!*margin-left: -20px;*!*/
+   /*}*/
+   /*.inbox-icon{*/
+     /*!*margin-left: 15px;*!*/
+   /*}*/
+ /*}*/
+ /*@media (max-width: 900px) and (min-width: 801px){*/
+   /*.right-side{*/
+     /*width: 19%;*/
+   /*}*/
+   /*.return-to-today{*/
+     /*!*margin-left: -15px;*!*/
+   /*}*/
+   /*.inbox-icon{*/
+     /*!*margin-left:1% ;*!*/
+   /*}*/
+ /*}*/
+ /*@media (max-width: 800px) {*/
+   /*.right-side{*/
+     /*width: 22%;*/
+   /*}*/
+   /*.inbox-icon{*/
+     /*!*margin-left: 13px;*!*/
+   /*}*/
+   /*.return-to-today{*/
+     /*!*margin-left: -10px;*!*/
+   /*}*/
+ /*}*/
  .wrap-head-img{
    position: relative;
    display: flex;
    align-items: center;
    width: 95%;
+   padding-left: 12px;
  }
  .wrap-inbox-icon{
-   flex:2;
+   flex:3;
    display: flex;
    align-items: center;
    margin-right: 10px;
@@ -313,7 +332,10 @@
    display: flex;
    align-items: center;
    /*margin-left: -1%;*/
-   /*width: 18%;*/
+   width: 150px;
+   position: absolute;
+   top:15px;
+   right:12px
  }
  .link-wrap-img{
    width: 96%;
@@ -322,12 +344,12 @@
    display: flex;
    align-items: center;
    background-color: white;
-   height: 39px;
+   height: 50px;
  }
  .link-to-rsq{
    /*width: 96%;*/
    cursor: pointer;
-   height: 30px;
+   height: 24px;
  }
  .inbox-icon{
    font-size: 14px;
@@ -353,7 +375,7 @@
  }
  .return-to-today{
    /*margin-left: -30px;*/
-   flex:2;
+   flex:3;
    font-family: PingFangSC-Regular;
    font-size: 12px;
    color: #8C8C8C;
@@ -374,7 +396,7 @@
   }
   .inbox{
     /*top: 35%;*/
-    font-size: 14px;
+    font-size: 12px;
     margin-left: 5px;
     /*margin-left: 70px;*/
     /*position: absolute;*/
@@ -410,8 +432,8 @@
     height: 83%;
     background-color: #F0F0F0;
     padding-bottom: 8%;
-    display: flex;
-    flex-wrap: wrap;
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
     /*position: absolute;*/
   }
   #sche-wrap:after{

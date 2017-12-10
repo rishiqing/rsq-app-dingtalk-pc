@@ -311,10 +311,16 @@ export default {
    */
   TD_TODO_DELETED (state, p) {
     let items = p.item.pContainer === 'inbox' ? state.inbox.items : state.schedule.items
-    let index = items.indexOf(p.item)
-    if (index > -1) {
-      items.splice(index, 1)
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        items.splice(i, 1)
+      }
     }
+    // let index = items.indexOf(p.item)
+    // console.log(index)
+    // if (index > -1) {
+    //   console.log('删除了')
+    // }
   },
   TD_COMMENT_DELETE (state, p) {
     let items = state.todo.currentTodo.comments
@@ -425,29 +431,28 @@ export default {
   },
   CHANGE_SCHE_TITLE (state, p) {
     var titleArray = state.schedule.titleArray
-    // console.log(p.title)
+    var id = p.id
     for (var i = 0; i < titleArray.length; i++) {
-      if (titleArray[i][p.name]) {
-        // console.log('进来了')
-        titleArray[i][p.name] = p.title
+      if (titleArray[i].id === id) {
+        titleArray[i].title = p.title
+        // console.log(titleArray[i].title)
       }
     }
   },
   CHANGE_PRIORITY (state, p) {
-    var id = state.todo.currentTodo.id || ''
-    if (id) {
-      state.todo.currentTodo.pContainer = p.pContainer
-    } else {
-      console.log('进来了else')
-      var items = state.schedule.items
-      for (var i = 0; i < items.length; i++) {
-        if (items[i].id === p.id) {
-          items[i].pContainer = p.pContainer
-          items[i].pDisplayOrder = p.pDisplayOrder
-          console.log('变了')
-        }
+    // var id = state.todo.currentTodo.id || ''
+    // if (id) {
+    state.todo.currentTodo.pContainer = p.pContainer
+  // } else {
+    var items = state.schedule.items
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.id) {
+        // console.log('已经改变')
+        items[i].pContainer = p.pContainer
+        items[i].pDisplayOrder = p.pDisplayOrder
       }
     }
+    // }
   },
   PUB_SCHE_DATE_UPDATE (state, p) {
     state.pub.year = p.year
@@ -458,9 +463,9 @@ export default {
     var items = p.items
     state.schedule.titleArray = []
     var initItems = [
-      {id: '1', pContainer: 'IE', title: '重要紧急'},
-      {id: '2', pContainer: 'IU', title: '重要不紧急'},
-      {id: '3', pContainer: 'UE', title: '不重要紧急'},
+      {id: '1', pContainer: 'IE', title: '重要且紧急'},
+      {id: '2', pContainer: 'IU', title: '重要但不紧急'},
+      {id: '3', pContainer: 'UE', title: '紧急但不重要'},
       {id: '4', pContainer: 'UU', title: '不重要不紧急'}
     ]
     if (items.length === 0) {
@@ -523,5 +528,39 @@ export default {
     state.inputPriorityState = false
     state.inputDateState = false
     state.inputTimeState = false
+  },
+  SAVE_FOCUS_DATE (state, date) {
+    state.focusDate = date
+  },
+  CHANGE_INBOX (state, p) {
+    var inboxItems = state.inbox.items
+    for (var i = 0; i < inboxItems.length; i++) {
+      if (inboxItems[i].id === p.id) {
+        inboxItems[i].pContainer = p.pContainer
+        inboxItems[i].pDisplayOrder = p.order
+        state.schedule.items.push(inboxItems[i])
+        inboxItems.splice(i, 1)
+      }
+    }
+  },
+  SAVE_RECORD (state, p) {
+    state.record = p.item
+  },
+  COPY_CURRENT_TODO (state, p) {
+    var todo = state.todo.currentTodo
+    state.schedule.items.push(todo)
+  },
+  CHANGE_ITEM (state, p) {
+    var todo = state.todo.currentTodo
+    todo.isFrom = p.item.isFrom
+    todo.from = p.item.from
+    // var items = state.schedule.items
+    // for (var i = 0; i < items.length; i++) {
+    //   if (items[i].id === p.item.id) {
+    //     console.log('进来了')
+    //     items[i].from = p.item.from
+    //     items[i].isFrom = p.item.isFrom
+    //   }
+    // }
   }
 }

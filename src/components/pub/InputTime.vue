@@ -6,7 +6,9 @@
       <span class="showTime font-style">{{timeValue}}</span>
     </div>
     <r-todo-edit-time
-      v-show="this.editTime"
+      v-show="this.editTime && this.showEditTime"
+      :ifshow="ifshow"
+      :editTime="editTime"
       @close-time="hideEditTime"
     >
     </r-todo-edit-time>
@@ -35,7 +37,7 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid #EAEAEA ;
+    border-bottom:0.5px solid #EAEAEA ;
   }
 </style>
 <script>
@@ -44,7 +46,8 @@
   export default {
     data () {
       return {
-        editTime: false
+        editTime: false,
+        showEditTime: ''
       }
     },
     computed: {
@@ -63,10 +66,21 @@
     },
     props: {
       currentTodo: Object,
-      showTime: Boolean
+//      showTime: Boolean,
+      ifshow: Boolean
 //      editTime: Boolean,
 //      disabled: Boolean,
 //      newItem: Boolean
+    },
+    watch: {
+      ifshow () {
+        console.log('inputtime监听到变化了')
+        this.showEditTime = this.ifshow
+        if (this.editTime) {
+          this.editTime = false
+          Bus.$emit('sendtime')
+        }
+      }
     },
     methods: {
       hideEditTime () {
@@ -75,6 +89,9 @@
       changeEditTime (e) {
 //        console.log('进来了')
         this.editTime = !this.editTime
+        if (!this.showEditTime) {
+          this.showEditTime = !this.showEditTime
+        }
         e.stopPropagation()
       },
       gotoTodoTime () {
@@ -91,18 +108,23 @@
 //        console.log(JSON.stringify(timeObj))
 //        this.$store.commit('PUB_TODO_TIME_UPDATE', {data: timeObj})
 //        this.$router.push('/todoEdit/time')
+      },
+      init () {
+        this.showEditTime = this.ifshow
       }
     },
-    created () {},
+    created () {
+      this.init()
+    },
     mounted () {
-      Bus.$on('close', () => {
-        console.log('进inputtime了')
-        if (this.editTime) {
-          this.editTime = false
-          Bus.$emit('sendTime')
-//          console.log('编辑时间要关闭了')
-        }
-      })
+//      Bus.$on('close', () => {
+//        console.log('进inputtime了')
+//        if (this.editTime) {
+//          this.editTime = false
+//          Bus.$emit('sendTime')
+//         console.log('编辑时间要关闭了')
+//        }
+//      })
     }
   }
 </script>

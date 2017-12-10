@@ -26,11 +26,13 @@
           <r-description></r-description>
         </div>
         <r-input-date
+          :ifshow="ifShow"
           :currentTodo="currentTodo"
           :showTime="showTime"
         >
         </r-input-date>
         <r-input-time
+          :ifshow="ifShow"
           :currentTodo="currentTodo"
           :showDate="showDate"
         >
@@ -41,6 +43,7 @@
         >
         </r-input-member>
         <r-input-priority
+          :ifshow="ifShow"
           :item="currentTodo"
           :itemTitle="itemTitle"
         >
@@ -50,6 +53,7 @@
         ></r-input-sub-todo>
         <r-comment-list
           :items="commentList"
+          :id="this.item.id"
           @reply="reply"
         >
         </r-comment-list>
@@ -58,7 +62,7 @@
         <div v-show="this.commentState" class="bottom-comment" @click="changeCommentState">
           输入的讨论内容或发送文件
         </div>
-        <textarea  ref="textareaComment" autofocus v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
+        <textarea  :class="{}" ref="textareaComment" autofocus v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
         <r-upload
           :commentState="this.commentState"
           @get-file-id="setFileId"
@@ -113,6 +117,7 @@
     },
     data () {
       return {
+        ifShow: true,
         showTime: false,
         showDate: false,
         joinUserRsqIds: [],
@@ -174,8 +179,9 @@
     methods: {
       disappear (e) {
         console.log('到父组件detail了' + e.target.classList)
-        this.$store.commit('HIDE_POP')
-//        Bus.$emit('close')
+        this.ifShow = !this.ifShow
+//        this.$store.commit('HIDE_POP')
+        Bus.$emit('close')
       },
       getMemberName () {
 
@@ -241,6 +247,9 @@
       reply (item) {
         this.commentState = !this.commentState
         this.commentContent = '@' + item.authorName + ' '
+        this.$nextTick(() => {
+          this.$refs.textareaComment.focus()
+        }) // 为什么不起作用
       },
       hideButton () {
         this.commentState = true
@@ -323,7 +332,7 @@
         this.$emit('close-detail')
       }
     },
-    created () {
+    mounted () {
       this.joinUserRsqIds = [this.currentTodo.receiverIds]
 //      console.log('现在的currenttode是' + JSON.stringify(this.currentTodo))
 //      console.log('拿到的item' + JSON.stringify(this.item))
@@ -433,10 +442,21 @@
     margin-bottom: 10px;
   }
   ::-webkit-scrollbar{width:4px;}
-  ::-webkit-scrollbar-track{background-color:#bee1eb;}
-  ::-webkit-scrollbar-thumb{background-color:gray;}
+  ::-webkit-scrollbar-track{
+    /*background-color:#d3d7d9;*/
+    background: hsla(210,7%,84%,.39)
+  }
+  ::-webkit-scrollbar-thumb{
+    /*background-color:gray;*/
+    background: #d4d7da;
+  }
   ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
   ::-webkit-scrollbar-thumb:active {background-color:#00aff0}
+  /*::-webkit-scrollbar{width:4px;}*/
+  /*::-webkit-scrollbar-track{background-color:#bee1eb;}*/
+  /*::-webkit-scrollbar-thumb{background-color:gray;}*/
+  /*::-webkit-scrollbar-thumb:hover {background-color:lightgray}*/
+  /*::-webkit-scrollbar-thumb:active {background-color:#00aff0}*/
   .detail-content{
     margin-top: 10px;
     /*max-height:60%;*/

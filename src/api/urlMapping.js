@@ -34,5 +34,8 @@ export default {
   'GET_PLANS': 'task/v2/kanban/getAuthorityKanbanList',
   'GET_SUBPLAN': 'task/v2/kanbans/:id',
   'GET_CARD': 'task/v2/kanbans/ck/:id',
-  'MOVE_TO_KANBAN': 'task/mainTodo/moveToKanbanCard'
+  'MOVE_TO_KANBAN': 'task/mainTodo/moveToKanbanCard',
+  'FREE_LOGIN': 'task/dingtalkOauth/tokenDirectSignIn',
+  'GET_RECORD': 'task/v2/todo/getTodoActions',
+  'COPY': 'task/v2/todo/copy'
 }

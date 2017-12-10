@@ -9,13 +9,35 @@
     console.log(document.documentElement.clientWidth + ':' + document.documentElement.clientHeight)
   }
   export default {
-    name: 'app'
+    name: 'app',
+    computed: {
+      loginUser () {
+        return this.$store.getters.loginUser || {}
+      },
+      userId () {
+        return this.loginUser.authUser.userId
+      },
+      corpId () {
+        return this.loginUser.authUser.corpId
+      }
+    },
+    mounted () {
+//      window.rsqadmg.execute('openLink', {
+//        'corpID': this.corpId,
+//        'userID': this.userId,
+//        success () {
+//        }
+//      })
+    }
   }
 </script>
 
 <style>
   ::-webkit-scrollbar{width:4px;}
-  ::-webkit-scrollbar-track{background-color:#D3D7D9;}
+  ::-webkit-scrollbar-track{
+    /*background-color:#d3d7d9;*/
+    background: hsla(210,7%,84%,.39);
+  }
   ::-webkit-scrollbar-thumb{background-color:gray;}
   ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
   ::-webkit-scrollbar-thumb:active {background-color:#00aff0}

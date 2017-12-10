@@ -19,7 +19,11 @@
     },
     methods: {
       changeTime (time, e) {
-        this.$emit('changeTime', time, this.startFlag, e)
+        if (this.startFlag) {
+          this.$emit('changeStartTime', time, this.startFlag, e)
+        } else {
+          this.$emit('changeEndTime', time, this.startFlag, e)
+        }
       },
       initData () {
         for (var i = 0; i < 290; i++) {
@@ -52,15 +56,18 @@
     box-shadow: 0 4px 20px 0 rgba(90,152,212,.32);
     z-index: 500;
     position: absolute;
-    top: 40px;
+    top: 50px;
     height: 300px;
     overflow: auto;
     width: 85px;
     list-style: none;
     padding: 0;
   }
+  .edit-time-wrap>li:hover{
+    background: #EEF7FF;
+  }
   .wrap-time{
-    height: 50px;
+    height: 20px;
     text-align: center;
   }
 </style>

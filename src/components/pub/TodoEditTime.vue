@@ -5,8 +5,14 @@
     <TimePicker
       :getScrollTime="getScrollTime"
       :startFlag = "startFlag"
-      @changeTime="changeTime"
-      v-show="this.showTimePicker">
+      @changeStartTime="changeStartTime"
+      v-show="this.showStartTimePicker">
+    </TimePicker>
+    <TimePicker
+      :getScrollTime="getScrollTime"
+      :startFlag = "startFlag"
+      @changeEndTime="changeEndTime"
+      v-show="this.showEndTimePicker">
     </TimePicker>
     <ul class="alert-list">
       <div tag="li" @click="selectAlert(alertContent)" v-for="(alertContent, index) in displayedRuleList" :key="index">
@@ -20,41 +26,152 @@
     </ul>
     <div v-show="this.userDefine" class="userDefine">
       <p class="remind">自定义提醒</p>
-      <div>
-        <select name="" id="selectTask">
-          <option value="任务开始前">任务开始前</option>
-          <option value="任务开始后">任务开始后</option>
-          <option value="任务结束前">任务结束前</option>
-          <option value="任务结束后">任务结束后</option>
-        </select>
-        <select name="" id="selectTime" @focus="mySelect">
-        </select>
-        <select name="" id="selectKind">
-          <option value="">分钟</option>
-          <option value="">小时</option>
-        </select>
+      <div class="wrap-remind">
+        <div class="show-kind">
+          <div @click="showfirst" class="show-kind-first">
+            <span>{{this.firstOption}}</span>
+            <i class="icon2-arrow-down2 arrow-down"></i>
+          </div>
+          <div @click="showsecond" class="show-kind-first">
+            <span>{{this.secondOption}}</span>
+            <i class="icon2-arrow-down2 arrow-down"></i>
+          </div>
+          <div @click="showthird" class="show-kind-first">
+            <span>{{this.thirdOption}}</span>
+            <i class="icon2-arrow-down2 arrow-down"></i>
+          </div>
+        </div>
+        <ul class="firstOptionlist" v-show="this.showSecondOption">
+          <li v-for="time in times" @click="showTime(time)">{{time}}</li>
+        </ul>
+        <ul @click="showKind($event)" class="secondOptionlist" v-show="this.showThirdOption">
+          <li>分钟</li>
+          <li>小时</li>
+        </ul>
+        <ul @click="showIndex($event)" class="thirdOptionlist" v-show="this.showFirstOption">
+          <li>任务开始前</li>
+          <li>任务开始后</li>
+          <li>任务结束前</li>
+          <li>任务结束后</li>
+        </ul>
+        <!--<select name="" id="selectTask">-->
+          <!--<option value="任务开始前">任务开始前</option>-->
+          <!--<option value="任务开始后">任务开始后</option>-->
+          <!--<option value="任务结束前">任务结束前</option>-->
+          <!--<option value="任务结束后">任务结束后</option>-->
+        <!--</select>-->
+        <!--<select name="" id="selectTime" @focus="mySelect">-->
+        <!--</select>-->
+        <!--<select name="" id="selectKind">-->
+          <!--<option value="">分钟</option>-->
+          <!--<option value="">小时</option>-->
+        <!--</select>-->
       </div>
       <button class="save-user-define" @click="saveUserDefine">确定</button>
     </div>
     <div class="clear-time" @click="clearTime">清除时间</div>
-    <button style="font-size: 14px" @click="sendTime">确定</button>
+    <!--<button style="font-size: 14px" @click="sendTime">确定</button>-->
   </div>
 </template>
 <style lang="scss">
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{
+    /*background-color:#d3d7d9;*/
+    background: hsla(210,7%,84%,.39)
+  }
+  ::-webkit-scrollbar-thumb{
+    /*background-color:gray;*/
+    background: #d4d7da;
+  }
+  ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
+  ::-webkit-scrollbar-thumb:active {background-color:#00aff0}
+  .wrap-remind{
+    position: relative;
+  }
+  .show-kind-first{
+    border: 1px solid #ECECEC;
+    border-radius: 2px;
+    padding: 2px 5px;
+  }
+  .show-kind{
+    display: flex;
+    justify-content: space-around;
+    margin-left: -15px;
+  }
+  .firstOptionlist{
+    position: absolute;
+    bottom: 30px;
+    left:125px;
+    list-style: none;
+    height: 150px;
+    overflow-y: auto;
+    padding-left: 0;
+    width: 50px;
+    overflow-x: hidden;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.18);
+  }
+  .firstOptionlist>li{
+    padding-left: 15px;
+  }
+  .secondOptionlist{
+    position: absolute;
+    bottom: 25px;
+    left:197px;
+    list-style: none;
+    padding-left: 0;
+    width: 60px;
+  }
+  .secondOptionlist>li{
+    padding: 10px;
+  }
+  .thirdOptionlist{
+    position: absolute;
+    bottom: 30px;
+    left:0px;
+    list-style: none;
+    padding-left: 0px;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.18);
+  }
+  .thirdOptionlist>li{
+    width: 110px;
+    height: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+  .arrow-down{
+    font-size: 14px;
+  }
   .save-user-define{
     background: #5EADFD;
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.18);
     border-radius: 2px;
     margin-top: 20px;
     border: none;
-    width: 250px;
+    width: 260px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color:white;
+    margin-left: -3px;
   }
   #selectTask{
     width: 120px;
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: 1px solid #ECECEC;
+    border-radius: 2px;
+
+    /*很关键：将默认的select选择框样式清除*/
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+
+    /*在选择框的最右侧中间显示小箭头图片*/
+    background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;
+
+
+    /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+    padding-right: 14px;
   }
   #selectTime{
     width: 50px;
@@ -63,6 +180,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height:40px
   }
   .alert-list >div{
     margin-top: 15px;
@@ -87,10 +205,10 @@
   .userDefine{
     z-index:200;
     position: absolute;
-    top: 50px;
+    top: 80px;
     left: -30px;
     width: 270px;
-    padding-left: 30px;
+    padding-left: 20px;
     height: 150px;
     background-color: white;
     box-shadow: 3px 5px 24px #888888
@@ -199,8 +317,8 @@
     }
     li{
       position: relative;
-      line-height:1.2rem ;
-      height: 1.2rem;
+      /*line-height:1.2rem ;*/
+      /*height: 1.2rem;*/
       box-sizing: border-box;
     }
     .sec{
@@ -224,6 +342,17 @@
       max-width:7rem;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;}
     .sec span{}
     .last span{}
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{
+      /*background-color:#d3d7d9;*/
+      background: hsla(210,7%,84%,.39)
+    }
+    ::-webkit-scrollbar-thumb{
+      /*background-color:gray;*/
+      background: #d4d7da;
+    }
+    ::-webkit-scrollbar-thumb:hover {background-color:lightgray}
+    ::-webkit-scrollbar-thumb:active {background-color:#00aff0}
   }
 
 </style>
@@ -232,17 +361,26 @@
   import jsUtil from 'ut/jsUtil'
   import TimePicker from './TimePicker'
   import Bus from 'com/bus'
+  import dateUtil from 'ut/dateUtil'
 //  document.getElementsByClassName('edit-time')[0].onblur = function () {
 //    console.log('触发了')
 //  }
   export default {
     data () {
       return {
+        showFirstOption: false,
+        showSecondOption: false,
+        showThirdOption: false,
+        times: [],
+        firstOption: '任务开始前',
+        secondOption: 0,
+        thirdOption: '分钟',
         scrollTime: '',
         startFlag: false,
         getStartTime: '',
         getEndTime: '',
-        showTimePicker: false,
+        showStartTimePicker: false,
+        showEndTimePicker: false,
         userDefine: false,
         autoStart: true,
         autoEnd: true,
@@ -269,7 +407,32 @@
     components: {
       TimePicker: TimePicker
     },
+    props: {
+      ifshow: Boolean,
+      editTime: Boolean
+    },
+    watch: {
+//      ifshow () {
+//        if (!this.editTime) {
+//          console.log('todoeditTime监听到变化了')
+//        }
+//      }
+      editTime () {
+        if (!this.editTime) {
+          this.userDefine = false
+        }
+      }
+    },
     computed: {
+      selectYear () {
+        return this.$store.state.pub.year
+      },
+      selectMonth () {
+        return this.$store.state.pub.month
+      },
+      createTaskDate () {
+        return !this.selectMonth ? new Date(this.selectYear, this.selectMonth) : new Date()
+      },
       getScrollTime () {
         var minute = new Date().getMinutes() < 10 ? '00' : (parseInt(new Date().getMinutes() / 10) + '0')
         var initTime = new Date().getHours() + ':' + minute
@@ -312,7 +475,41 @@
       }
     },
     methods: {
+      showfirst () {
+        this.showFirstOption = !this.showFirstOption
+        this.showSecondOption = false
+        this.showThirdOption = false
+      },
+      showsecond () {
+        this.showSecondOption = !this.showSecondOption
+        this.showThirdOption = false
+        this.showFirstOption = false
+      },
+      showthird () {
+        this.showThirdOption = !this.showThirdOption
+        this.showFirstOption = false
+        this.showSecondOption = false
+      },
+      showKind (e) {
+        this.thirdOption = e.target.innerText
+        this.showThirdOption = false
+      },
+      showTime (time) {
+        this.secondOption = time
+        this.showSecondOption = false
+      },
+      initTimes () {
+        for (var i = 1; i < 90; i++) {
+          this.times.push(i)
+        }
+      },
+      showIndex (e) {
+        this.firstOption = e.target.innerText
+        this.showFirstOption = false
+      },
       stopTime (e) {
+        this.showStartTimePicker = false
+        this.showEndTimePicker = false
         e.stopPropagation()
       },
       blurEvent () {
@@ -321,82 +518,132 @@
         })
       },
       clearTime () {
+        console.log('拿到的displaylist是' + JSON.stringify(this.displayedRuleList))
+        this.displayedRuleList = this.displayedRuleList.slice(0, 5)
+        this.displayedRuleList.forEach((item) => { item.selected = false })
         this.getStartTime = null
         this.getEndTime = null
         this.clock.endTime = ''
         this.clock.startTime = ''
+        this.clock.alert = []
         this.$store.dispatch('clearTime', {clock: {}})
       },
-      changeTime (time, flag, e) {
-        if (flag) {
-          console.log('this.getEndTime是' + this.getEndTime)
-          if (this.getEndTime && time > this.getEndTime) {
-            window.rsqadmg.execute('alert', {message: '开始时间不能晚于结束时间'})
-          } else {
-            this.getStartTime = time
-//            console.log('结束时间' + this.clock.endTime)
-            if (this.clock.endTime === '') {
-//              console.log('进来了结束时间为空')
-              this.clock.endTime = this.getStartTime + 5 // (延后5分钟)
-              this.getEndTime = this.getStartTime + 5
-            }
-            this.showTimePicker = false
-            this.clock.startTime = time
-          }
+      changeStartTime (time, flag, e) {
+        console.log('this.getEndTime是' + this.getEndTime)
+        if (this.getEndTime && (time > this.getEndTime)) {
+          window.rsqadmg.execute('alert', {message: '开始时间不能晚于结束时间'})
         } else {
-          console.log('开始时间' + this.getStartTime)
-          if (time > this.getStartTime) {
-            this.getEndTime = time
-            if (this.clock.startTime === '') {
-              this.clock.startTime = this.getEndTime - 5 // (延后5分钟)
-              this.getStartTime = this.getEndTime - 5
+          this.getStartTime = time
+//            console.log('结束时间' + this.clock.endTime)
+          if (this.clock.endTime === '') {
+            console.log('进来了结束时间为空')
+            var hour = parseInt(this.getStartTime.split(':')[0])
+            var minute = this.getStartTime.split(':')[1]
+            var newMinute = parseInt(minute) + 5
+            if (newMinute < 60) {
+              var newhour = (hour + 1) < 10 ? ('0' + hour) : hour
+              this.clock.endTime = newhour + ':' + newMinute
+              this.getEndTime = newhour + ':' + newMinute
+            } else {
+              newhour = (hour + 1) < 10 ? ('0' + (hour + 1)) : hour
+              console.log('newhour是' + newhour)
+              this.clock.endTime = newhour + ':00'
+              this.getEndTime = newhour + ':00'
             }
-            this.showTimePicker = false
-            this.clock.endTime = time
-          } else {
-            window.rsqadmg.execute('alert', {message: '结束时间不能早于开始时间'})
           }
+          this.showTimePicker = false
+          this.clock.startTime = time
         }
+        this.showStartTimePicker = false
+        e.stopPropagation()
+      },
+      changeEndTime (time, flag, e) {
+        console.log('开始时间' + this.getStartTime + (time > this.getStartTime))
+        if (!this.getStartTime || (this.getStartTime && (time > this.getStartTime))) {
+          this.getEndTime = time
+          if (this.clock.startTime === '') {
+            var hour = parseInt(this.getEndTime.split(':')[0])
+            var minute = this.getEndTime.split(':')[1]
+            var newMinute = parseInt(minute) - 5
+            if (newMinute < 0) {
+              var newHour = hour - 1
+              hour = newHour < 10 ? '0' + newHour : newHour
+              this.clock.startTime = newHour + ':55'
+              this.getStartTime = newHour + ':55'
+            } else {
+              var newhour = hour
+              newhour = newhour < 10 ? '0' + newhour : newhour
+              newMinute = newMinute < 10 ? '0' + newMinute : newMinute
+              this.clock.startTime = newhour + ':' + newMinute
+              this.getStartTime = newhour + ':' + newMinute
+            }
+          }
+          this.showTimePicker = false
+          this.clock.endTime = time
+        } else {
+          window.rsqadmg.execute('alert', {message: '结束时间不能早于开始时间'})
+        }
+        this.showEndTimePicker = false
         e.stopPropagation()
       },
       sendTime () {
         console.log('this.clock是' + JSON.stringify(this.clock))
         if ((this.clock.startTime === '') && (this.clock.alert.length > 0)) {
+          console.log('进来了')
           window.rsqadmg.execute('alert', {'message': '请先设置时间'})
-        } else {
+          this.clock.alert = []
+        } else if ((this.clock.startTime !== '') && (this.clock.endTime !== '')) {
           var clockObject = JSON.parse(JSON.stringify(this.clock || {}))
-          return this.$store.dispatch('updateTodoTime', {clock: this.clock})
+          return this.$store.dispatch('updateTodoTime', {clock: this.clock, createTaskDate: dateUtil.getStandardTime(this.createTaskDate)})
               .then(item => {
                 this.$emit('close-time')
                 jsUtil.extendObject(item.clock, clockObject)
+                this.clock.alert = []
+                this.clock.startTime = ''
+                this.clock.endTime = ''
 //                return this.$store.dispatch('handleRemind', {item})
               })
         }
       },
       saveUserDefine () {
-        var selectTask = document.getElementById('selectTask')
-        var selectTaskIndex = selectTask.selectedIndex
-//        var selectTaskLongStr = selectTask.value
-        if ((selectTaskIndex === 0) || (selectTaskIndex === 1)) {
+        if (this.firstOption === '任务开始前' || this.firstOption === '任务结束前') {
           var selectTaskStr = 'begin'
         } else {
           selectTaskStr = 'end'
         }
-        var selectTime = document.getElementById('selectTime')
-        selectTime = selectTime.options[selectTime.selectedIndex].value
-//        console.log('时间是' + selectTime)
-        if ((selectTaskIndex === 0) || (selectTaskIndex === 2)) {
-          var selectTimeStr = '-' + selectTime
+        if (selectTaskStr === 'begin') {
+          var selectTimeStr = '-' + this.secondOption
         } else {
-          selectTimeStr = selectTime
+          selectTimeStr = this.secondOption
         }
-        var selectKind = document.getElementById('selectKind')
-        selectKind = selectKind.options[selectKind.selectedIndex].innerText
-        if (selectKind === '分钟') {
+        if (this.thirdOption === '分钟') {
           var selectKindStr = 'min'
         } else {
           selectKindStr = 'hour'
         }
+//        var selectTask = document.getElementById('selectTask')
+//        var selectTaskIndex = selectTask.selectedIndex
+//        var selectTaskLongStr = selectTask.value
+//        if ((selectTaskIndex === 0) || (selectTaskIndex === 1)) {
+//          var selectTaskStr = 'begin'
+//        } else {
+//          selectTaskStr = 'end'
+//        }
+//        var selectTime = document.getElementById('selectTime')
+//        selectTime = selectTime.options[selectTime.selectedIndex].value
+//        console.log('时间是' + selectTime)
+//        if ((selectTaskIndex === 0) || (selectTaskIndex === 2)) {
+//          var selectTimeStr = '-' + selectTime
+//        } else {
+//          selectTimeStr = selectTime
+//        }
+//        var selectKind = document.getElementById('selectKind')
+//        selectKind = selectKind.options[selectKind.selectedIndex].innerText
+//        if (selectKind === '分钟') {
+//          var selectKindStr = 'min'
+//        } else {
+//          selectKindStr = 'hour'
+//        }
         this.clock.alert.push({
           id: null,
           schedule: selectTaskStr + '_' + selectTimeStr + '_' + selectKindStr,
@@ -493,15 +740,16 @@
        * 设置开始时间
        */
       setStartTime (e) {
-        this.showTimePicker = true
+        this.showStartTimePicker = !this.showStartTimePicker
+        this.showEndTimePicker = false
         this.startFlag = true
         this.scrollTime = this.getStartTime
         e.preventDefault()
         e.stopPropagation()
 //        this.clock.startTime = '12:00'
-        if (this.clock.endTime === '') {
-          this.clock.endTime = this.clock.startTime + 5 // (延后5分钟)
-        }
+//        if (this.clock.endTime === '') {
+//          this.clock.endTime = this.clock.startTime + 5 // (延后5分钟)
+//        }
 //        if (this.isAllDay) return
 //        var that = this
 //        window.rsqadmg.exec('timePicker', {
@@ -520,10 +768,12 @@
       /**
        * 设置结束时间
        */
-      setEndTime () {
-        this.showTimePicker = true
+      setEndTime (e) {
+        this.showEndTimePicker = !this.showEndTimePicker
+        this.showStartTimePicker = false
         this.startFlag = false
         this.scrollTime = this.getEndTime
+        e.stopPropagation()
 //        this.clock.endTime = '12:45'
 //        if (this.isAllDay) return
 //        var that = this
@@ -623,6 +873,7 @@
       }
     },
     created () {
+      this.initTimes()
 //      this.initData()
 //      window.rsqadmg.exec('setTitle', {title: '设置时间'})
 //      window.rsqadmg.exec('setOptionButtons', {hide: true})
@@ -654,10 +905,11 @@
         this.clock.startTime = this.currentTodo.clock.startTime
         this.clock.endTime = this.currentTodo.clock.startTime
       }
-      Bus.$on('sendTime', () => {
+      Bus.$on('sendtime', () => {
 //        if ()
 //        console.log('要想后台发送时间了')
-//        this.sendTime()
+        this.sendTime()
+        this.showTimePicker = false
       })
     }
     /**

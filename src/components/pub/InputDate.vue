@@ -6,7 +6,8 @@
       <span class="now margin-detail font-style" >{{dateString}}</span>
     </div>
     <r-todo-edit-date
-      v-show="this.editDate"
+      v-show="this.editDate && this.showEditDate"
+      :ifshow="ifshow"
       @close-edit-date="closeEditDate"
     >
     </r-todo-edit-date>
@@ -35,8 +36,9 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid #EAEAEA ;
+    border-bottom:0.5px solid #EAEAEA ;
     cursor: pointer;
+    padding-left: 15px;
   }
 
 
@@ -48,7 +50,8 @@
   export default {
     data () {
       return {
-        editDate: false
+        editDate: false,
+        showEditDate: ''
       }
     },
     computed: {
@@ -69,16 +72,31 @@
       }
     },
     props: {
-      currentTodo: Object
+      currentTodo: Object,
+      ifshow: Boolean
     },
     components: {
       'r-todo-edit-date': TodoEditDate
     },
+    watch: {
+      ifshow () {
+        console.log('inputdate监听到变化了')
+        this.showEditDate = this.ifshow
+        if (this.editDate) {
+          this.editDate = false
+          Bus.$emit('senddate')
+        }
+      }
+    },
     methods: {
       changeEditDate (e) {
-        e.stopPropagation()
+//        e.stopPropagation()
         this.editDate = !this.editDate
-        this.$store.commit('SHOW_DATE')
+        if (!this.showEditDate) {
+          this.showEditDate = !this.showEditDate
+        }
+        e.stopPropagation()
+//        this.$store.commit('SHOW_DATE')
       },
       closeEditDate () {
         this.editDate = false
@@ -96,11 +114,12 @@
         isCloseRepeat: c.isCloseRepeat
       }
       this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
+      this.showEditDate = this.ifshow
     },
     mounted () {
-      Bus.$on('close', () => {
-        this.editDate = false
-      })
+//      Bus.$on('close', () => {
+//        this.editDate = false
+//      })
     }
   }
 </script>

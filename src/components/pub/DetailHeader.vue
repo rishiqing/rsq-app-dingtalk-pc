@@ -2,15 +2,21 @@
   <div id="detail-header">
     <div class="wrap-header" :class="{'no-edit-desp':editDesp}">
       <div class="left-add">
-        <i class="icon2-plan plan"></i>
-        <span class="add-to-plan" @click="addToPlan">{{isFromkanban}}</span>
+        <!--<i class="icon2-plan plan"></i>-->
+        <img src="../../assets/plan.png" alt="" class="plan-img">
+        <span class="add-to-plan" @click="addToPlan($event)">{{isFromkanban}}</span>
       </div>
       <div class="close-icon">
-        <i class="icon2-other other" @click="showOption"></i>
+        <i class="icon2-other other" @click="showOption($event)"></i>
         <i class="icon2-cancel cancel" @click="closeDetail"></i>
       </div>
-      <div class="delete-task" v-show="this.deleteState" @click="deleteTask(item)">删除任务</div>
-      <ul class="wrap-repeat" v-show="this.deleteOptionState">
+      <ul v-show="this.deleteState" class="delete-task">
+        <li>移动任务</li>
+        <li @click="copyTask">复制任务</li>
+        <li v-show="fromPlan">前往计划</li>
+        <li @click="deleteTask(item)">删除任务</li>
+      </ul>
+      <ul class="wrap-repeat-delete" v-show="this.deleteOptionState">
         <li v-for="item in this.deleteOption" @click="deleteRepeat(item)">
           {{item}}
         </li>
@@ -62,6 +68,7 @@
 </template>
 <script>
   import dateUtil from 'ut/dateUtil'
+  import Bus from 'com/bus'
   export default {
     name: 'app',
     components: {
@@ -84,6 +91,16 @@
       }
     },
     computed: {
+      currentTodo () {
+        return this.$store.state.todo.currentTodo
+      },
+      fromPlan () {
+        return this.currentTodo.from != null
+      },
+      currentdate () {
+        var date = this.$store.state.focusDate
+        return date || new Date()
+      },
       planName () {
         if (this.plans && this.plans.length > 0) {
           return this.item.isFrom === 'kanban' ? this.item.from.levelOneName : this.plans[0].name
@@ -119,11 +136,19 @@
       item: Object
     },
     methods: {
+      copyTask () {
+        var time = dateUtil.getStandardTime(this.currentdate)
+        this.$store.dispatch('copy', {id: this.item.id, createTaskDate: time, pDisplayOrder: this.item.pDisplayOrder}).then(() => {
+          this.deleteState = false
+        })
+      },
       moveToPlan () {
         var todoId = this.item.id
         var cardId = this.cards[0].id
         var createTaskDate = dateUtil.getStandardTime(new Date())
-        this.$store.dispatch('moveToPlan', {todoId: todoId, cardId: cardId, createTaskDate: createTaskDate})
+        this.$store.dispatch('moveToPlan', {todoId: todoId, cardId: cardId, createTaskDate: createTaskDate}).then(() => {
+          this.showPlan = false
+        })
       },
       changeSubPlan (subplan) {
         this.$store.commit('CHANGE_PLAN_ORDER', {subplan: subplan, id: 2})
@@ -152,14 +177,16 @@
       showCard () {
         this.cardState = !this.cardState
       },
-      addToPlan () {
+      addToPlan (e) {
         this.showPlan = !this.showPlan
+        e.stopPropagation()
       },
       closeDetail () {
         this.$emit('close-detail')
       },
-      showOption () {
+      showOption (e) {
         this.deleteState = !this.deleteState
+        e.stopPropagation()
       },
       deleteTask (item) {
         if (item.isCloseRepeat) {
@@ -186,6 +213,7 @@
         }
         promise.then(() => {
           this.repeatState = false
+          this.deleteOptionState = false
           this.$emit('close-detail') // 放在then方法里面
         })
       }
@@ -205,11 +233,41 @@
                 })
             })
         })
+    },
+    mounted () {
+      Bus.$on('close', () => {
+        console.log('detailhead收到消息了')
+        this.deleteState = false
+        this.showPlan = false
+      })
     }
   }
 </script>
 
 <style>
+  .plan-img{
+    width: 20px;
+    height: 20px;
+  }
+  .wrap-repeat-delete{
+    list-style: none;
+    height: 100px;
+    width: 210px;
+    padding-top: 10px;
+    background-color: white;
+    z-index: 900;
+    padding-left: 10px;
+    position: absolute;
+    top: 20px;
+    right: 110px;
+    box-shadow:3px 5px 24px #888888 ;
+  }
+  .wrap-repeat-delete>li{
+    height: 20px;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
   .left-add{
     display: flex;
     align-items: center;
@@ -285,21 +343,40 @@
     background-color: white;
     padding-left: 15px;
   }
-  .delete-task{
-    position: absolute;
-    right: 0;
-    top: 40px;
-    width: 100px;
-    height: 30px;
+  .delete-task>li{
+    height: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 20px;
+    padding-left: 10px;
+  }
+  .delete-task>li:hover{
+    background: rgba(0,0,0,0.04);
+  }
+  .delete-task{
+    padding-left: 0;
+    position: fixed;
+    background-color: white;
+    right: 0;
+    top: 50px;
+    width: 100px;
+    list-style: none;
+    /*height: 30px;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #666666;
     cursor: pointer;
     box-shadow:3px 5px 24px #888888 ;
+    z-index:2000
   }
   .plan,.other,.cancel{
     font-size: 16px;
+  }
+  .plan{
+    /*color:white;*/
+    /*background-color:#55A8FD*/
   }
   .other{
     margin-right: 10px;
@@ -313,9 +390,10 @@
     cursor: pointer;
   }
   .add-to-plan{
-    font-size: 13px;
+    font-size: 15px;
     margin-left: 10px;
     cursor: pointer;
+    color:#8C8C8C
   }
   .no-edit-desp{
     display: none;

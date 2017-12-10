@@ -66,7 +66,7 @@
   .sche-list{
     /*background-color: white;*/
     /*border-bottom:1px solid #E0E0E0 ;*/
-    border-top:1px solid #DADADA ;
+    /*border-top:1px solid #DADADA ;*/
     padding-left: 2%;
     margin:0;
     /*height: 220px;*/
@@ -135,13 +135,17 @@
         console.log('拖动前的索引 :' + evt.oldIndex)
         console.log('拖动后的索引 :' + evt.newIndex)
         if (this.dragItem.pContainer === this.itemTitle.pContainer) {
+          console.log('自己范围拖动')
           if (evt.newIndex === 0) {
+//            console.log('进来了')
+//            console.log(this.sectionItems[0].pDisplayOrder)
             var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
-          } else if (evt.newIndex === this.sectionItems.length) {
+          } else if (evt.newIndex === (this.sectionItems.length - 1)) {
             displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
           } else {
             var prepDisplayOrder = this.sectionItems[evt.newIndex - 1].pDisplayOrder
             var backpDisplayOrder = this.sectionItems[evt.newIndex + 1].pDisplayOrder
+//            console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
             displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
           }
           console.log('displkayOrder是' + displayOrder)
@@ -159,7 +163,7 @@
 //        console.log('穿够来的item是' + JSON.stringify(item))
         this.$store.dispatch('getItem', item).then(
           (item) => {
-            console.log('返回来的item是' + JSON.stringify(item))
+//            console.log('返回来的item是' + JSON.stringify(item))
             this.$store.dispatch('setCurrentTodo', item).then(
               () => {
 //                console.log('发动前')

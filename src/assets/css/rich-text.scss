@@ -306,9 +306,10 @@
 
   p, div {
     word-wrap: break-word;
-    margin: 0 0 0 0;
+    //margin: 0 0 0 0;
     //color: $common-color-2;
     word-wrap: break-word;
+    margin-top: -15px;
   }
   p {
     margin-bottom: 0px;

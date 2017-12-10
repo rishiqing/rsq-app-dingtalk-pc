@@ -44,6 +44,7 @@ export default {
     //  收纳箱日程列表
     items: null
   },
+  record: [],
   /**
    * 日程页面基础数据结构
    */
@@ -56,6 +57,7 @@ export default {
     dragItemId: null,
     dragItem: null
   },
+  focusDate: '',
   plan: [],
   subplan: [],
   card: [],

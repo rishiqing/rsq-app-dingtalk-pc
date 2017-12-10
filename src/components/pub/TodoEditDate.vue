@@ -76,7 +76,7 @@
           <!--<div class="dp-title-tag u-pull-right" @click="tapBackToday($event)">今</div>-->
           <div tag="i" class="icon icon-keyboard_arrow_left"
                    @click="tapChangeMonth($event, -1)"></div>
-          <div class="dp-title-text">
+          <div class="dp-title-text-date">
             {{focusDate.getFullYear()}}年{{focusDate.getMonth() + 1}}月
           </div>
           <div tag="i" class="icon icon-keyboard_arrow_right"
@@ -113,7 +113,7 @@
           </div>
         </div>
       </div>
-      <button @click="changeDate">确定</button>
+      <!--<button @click="changeDate">确定</button>-->
     </div>
     <!--<div class="date-repeat" @click="gotoRepeat">-->
       <!--<span class="list-key u-pull-left">重复</span>-->
@@ -135,10 +135,11 @@
   .repeat-border{
     cursor: pointer;
     border: 1px solid #D5D5D5;
-    padding: 0 4px;
+    padding: 4px;
     margin-left: 10px;
     display: flex;
     align-items: center;
+    font-size: 14px;
   }
   .wrap-repeat-style{
     margin-top: 20px;
@@ -162,6 +163,7 @@
     border-radius: 2px;
     margin-left: 20px;
     background-color: white;
+    cursor: pointer;
   }
   .repeat-style-wrap-deadline{
     width: 100px;
@@ -180,7 +182,8 @@
     margin-left: 15px;
     align-items: center;
     position: relative;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
+    height: 40px;
   }
   .every-day{
     margin: 10px 0;
@@ -195,7 +198,7 @@
     left:50px;
     padding: 0;
     background-color: white;
-    top:80px;
+    top:90px;
     box-shadow: 0 4px 20px 0 rgba(90,152,212,.32);
   }
   .repeat-style-wrap-show{
@@ -232,11 +235,14 @@
   .dp-content .dp-table .is-today{
     color:#67B2FE
   }
+  .dp-content{
+    padding-bottom: 20px;
+  }
   .edit-date {
-    position: absolute;
-    top: 40px;
+    position: fixed;
+    top: 200px;
     left:10px;
-    z-index: 10;
+    z-index: 1000;
     background-color: white;
     box-shadow: 3px 5px 24px #888888;
   }
@@ -252,11 +258,14 @@
       height: 30px;
       display: flex;
       align-items: center;
+      justify-content: center;
+      margin-top: 15px;
+      margin-bottom: 15px;
     }
-    .dp-title-text {
+    .dp-title-text-date {
       text-align: center;
       /*font-family: PingFangSC-Regular;*/
-      width: 90%;
+      width: 70%;
       font-size: 14px;
       /*color: #3D3D3D;*/
     }
@@ -267,6 +276,10 @@
     /*.dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}*/
     .dp-table {width:100%;height:8rem;text-align: center;}
     .dp-grey {color: #a8a8a8;}
+    .dp-table>tbody {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
     .dp-table .dp-selected {
       background: #55A8FD;
       color:white;}
@@ -275,6 +288,7 @@
     .dp-btn {
       color:#8C8C8C;
       cursor: pointer;
+      /*border-right: 1px solid #F0F0F0;*/
       float: left;
       width: 23%;
       text-align: center;
@@ -283,18 +297,19 @@
       /*color: #666666;*/
       line-height: 40px;}
     .dp-v-line {
-      float: left;
-      position: relative;
-      width: 2%;
-      color: #979797;
-      text-align: center;
-      height: 100%;
+      /*float: left;*/
+      /*position: relative;*/
+      /*!*width: 2%;*!*/
+      /*border: 1px solid #F0F0F0;*/
+      /*text-align: center;*/
+      /*height: 100%;*/
       /*font-size: 2.8rem;}*/
     }
     .dp-v-sep {
       width: 1px;
       height: 90%;
-      background: #979797;
+      /*background: #979797;*/
+      border: 1px solid #F0F0F0;
       margin-top: 2px;
     }
     .week{
@@ -320,16 +335,17 @@
     .week-six{
       font-family: PingFangSC-Regular;
       font-size: 11px;
-      color: #FF7A7A;
+      /*color: #FF7A7A;*/
     }
     .week-ri{
       font-family: PingFangSC-Regular;
       font-size: 11px;
-      color: #FF7A7A;
+      /*color: #FF7A7A;*/
     }
     .arrow{
       font-size:17px;
       color: #999999;
+      margin-left: 5px;
     }
     .date-repeat{
       position: relative;
@@ -460,6 +476,9 @@
         return (text || '不') + '重复'
       }
     },
+    props: {
+      ifshow: Boolean
+    },
     methods: {
       stop (e) {
         e.stopPropagation()
@@ -533,6 +552,10 @@
             if (this.repeatStyle[i].title !== '每月') {
               this.repeatStyle[i].selected = false
             }
+          }
+          if (this.selectRepeatDate.indexOf(dateUtil.getStandardTime(new Date()) === -1)) {
+            console.log('进来了')
+            this.selectRepeatDate.push(dateUtil.getStandardTime(new Date()))
           }
           this.repeatOption = false
           this.everyDay = false
@@ -682,6 +705,7 @@
             var day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
             var date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
             this.selectRepeatDate.push(date)
+            console.log('this.selectRepeatDate' + this.selectRepeatDate.length)
           } else {
             day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
             date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
@@ -838,7 +862,7 @@
         } else {
           if (this.everyDay) {
             resObj['repeatType'] = 'everyDay'
-            resObj['repeatBaseTime'] = this.selectNumDate.toString().split('/').join('')
+            resObj['repeatBaseTime'] = dateUtil.getStandardTime(new Date(this.selectNumDate[0]))
             resObj['repeatOverDate'] = this.repeatOverDate
           } else if (this.everyWeek) {
             console.log('每周进来了')
@@ -864,23 +888,7 @@
                 }
               }
             } else {
-              console.log('进来this.selectNumDate.length=0')
-//              startWeek = new Date().getDay()
-//              startDate = new Date().getDate()
-//              year = new Date().getFullYear()
-//              month = new Date().getMonth() + 1
-//              weekArray = this.weekDate
-//              for (i = 0; i < weekArray.length; i++) {
-//                if (weekArray[i] > startWeek) {
-//                  day = startDate + weekArray[i] - startWeek
-//                  day = day < 10 ? ('0' + day) : day
-//                  this.repeatWeek.push('' + year + month + day)
-//                } else {
-//                  bigday = startDate + weekArray[i] + 7 - startWeek
-//                  bigday = bigday < 10 ? ('0' + bigday) : bigday
-//                  this.repeatWeek.push('' + year + month + bigday)
-//                }
-//              }
+//              console.log('进来this.selectNumDate.length=0')
             }
             console.log('每周内容是' + JSON.stringify(this.repeatWeekState))
             resObj['repeatBaseTime'] = this.repeatWeekState.toString()
@@ -892,8 +900,9 @@
             resObj['repeatOverDate'] = this.repeatOverDate
           } else {
             resObj['repeatType'] = 'everyYear'
+            console.log('-----' + JSON.stringify(this.selectNumDate))
 //            console.log('this.selectRepeatDate 是' + JSON.stringify(this.selectRepeatDate))
-            resObj['repeatBaseTime'] = this.selectNumDate.toString().split('/').join('')
+            resObj['repeatBaseTime'] = dateUtil.getStandardTime(new Date(this.selectNumDate[0]))
             resObj['repeatOverDate'] = this.repeatOverDate
           }
           resObj['isCloseRepeat'] = false
@@ -938,7 +947,7 @@
         return this.$store.dispatch('updateTodoDate', {editItem: editItem})
           .then(() => {
             this.$store.commit('PUB_TODO_DATE_DELETE') // 提交之后就删除了？？？
-            this.selectRepeatDate = []
+//            this.selectRepeatDate = []
             this.repeatWeekState = []
             this.$store.commit('PUB_WEEK_DATE_DELETE')
           })
@@ -953,8 +962,9 @@
       this.initData()
     },
     mounted () {
-      Bus.$on('close', () => {
-//        this.changeDate()
+      Bus.$on('senddate', () => {
+//        console.log('要发送日期了')
+        this.changeDate()
       })
     }
 //    beforeRouteLeave (to, from, next) {

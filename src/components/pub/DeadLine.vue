@@ -71,12 +71,12 @@
   .dp-content .dp-table .is-today{
     color:#67B2FE
   }
-  .edit-date {
-    position: absolute;
-    top: 40px;
-    z-index: 10;
-    background-color: white;
-  }
+  /*.edit-date {*/
+    /*position: absolute;*/
+    /*top: 40px;*/
+    /*z-index: 10;*/
+    /*background-color: white;*/
+  /*}*/
   .edit-date {
   .light-color {color: #999999;}
   .date-picker {
@@ -145,9 +145,6 @@
     font-family: PingFangSC-Medium;
     font-size: 17px;
     color: #666666;
-  }
-  .edit-date div{
-
   }
   .week-six{
     font-family: PingFangSC-Regular;

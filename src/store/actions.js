@@ -565,23 +565,23 @@ export default {
     //  如果this.currentTodo.id存在，则更新currentTodo
     if (todo.id) {
       if (todo.startDate != null) {
-        var taskDate = todo.startDate.split('/').join('')
+        // var taskDate = todo.startDate.split('/').join('')
         // console.log('taskDate' + taskDate)
       } else {
         // console.log('todo.dates[0]' + todo.dates.split(',')[0])
-        taskDate = todo.dates.split(',')[0]
+        // taskDate = todo.dates.split(',')[0]
       }
       if (p.clock.alert.length === 0) {
         p.clock = {
           startTime: p.clock.startTime,
           endTime: p.clock.endTime,
-          alwaysAlert: false
+          alwaysAlert: true
         }
       }
       // var taskDate = todo.createTaskDate || getters.defaultTaskDate
       promise = dispatch('updateTodo', {
         editItem: {
-          createTaskDate: taskDate,
+          createTaskDate: p.createTaskDate,
           clock: p.clock
         }
       })
@@ -607,10 +607,11 @@ export default {
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
   deleteTodo ({commit, state, dispatch, getters}, p) {
+    var date = dateUtil.getStandardTime(new Date())
     var todo = p.todo || state.todo.currentTodo
     var promise
     if (p.isRepeat) {
-      var params = {id: todo.id, createTaskDate: getters.defaultTaskDate, type: p.type}
+      var params = {id: todo.id, createTaskDate: date, type: p.type}
       promise = api.todo.deleteRepeatTodo(params)
     } else {
       promise = api.todo.deleteTodo(todo)
@@ -977,7 +978,8 @@ export default {
   changeScheTitle ({commit, state}, p) {
     return api.todo.changeScheTitle(p)
       .then(() => {
-        commit('CHANGE_SCHE_TITLE', {title: p.title, name: p.sectionname})
+        // console.log('title' + p.title + 'name' + p.sectionname)
+        commit('CHANGE_SCHE_TITLE', {title: p.title, id: p.id})
       })
   },
   changePriority ({commit, state}, p) {
@@ -986,6 +988,12 @@ export default {
         commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
       })
     // commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
+  },
+  changeInbox ({commit, state}, p) {
+    return api.todo.changePriority(p)
+      .then(() => {
+        commit('CHANGE_INBOX', {id: p.id, pContainer: p.pContainer, order: p.pDisplayOrder})
+      })
   },
   getAllTodoTitleList ({commit, state}, item) {
     return api.todo.getAllTodoTitleList()
@@ -1057,8 +1065,35 @@ export default {
     return api.todo.moveToPlan(p)
       .then((item) => {
         // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('CHANGE_ITEM', {item: item})
+        return item
+      })
+  },
+  changeOrder ({commit, state}, p) {
+    p['isCloseRepeat'] = true
+    p['dates'] = ''
+    p['startDate'] = ''
+    p['endDate'] = ''
+    return api.todo.changeOrder(p)
+      .then((item) => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
         // commit('GET_CARD', {item: item})
         return item
+      })
+  },
+  getRecord ({commit, state}, p) {
+    return api.todo.getRecord(p)
+      .then((item) => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('SAVE_RECORD', {item: item})
+        return item
+      })
+  },
+  copy ({commit, state}, p) {
+    return api.todo.copy(p)
+      .then(() => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('COPY_CURRENT_TODO')
       })
   }
 }

@@ -71,6 +71,9 @@
         params['oldPTitle'] = this.title
         params['subtodo'] = this.subtodos
         this.$store.dispatch('postdesp', params).then(() => {
+          if (!noteElement) {
+            document.getElementById('noteEditable').innerHTML = '添加任务描述...'
+          }
           this.despState = false
           this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
         })

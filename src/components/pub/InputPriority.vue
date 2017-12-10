@@ -3,9 +3,9 @@
     <i class="icon2-four-quadrant priority-icon"></i>
     <span class="priority margin-detail">优先级</span>
     <span class="section-name margin-detail font-style">{{sectionName}}</span>
-    <ul class="priority-menu" v-show="this.menuState">
+    <ul class="priority-menu" v-show="this.menuState && this.editPriority">
       <li class="priority-name" @click="changeSection(titleItem, $event)" v-for="titleItem in this.titleArray">
-        <span class="section-name">{{titleItem.title}}</span>
+        <span class="section-name-list">{{titleItem.title}}</span>
         <i class="icon2-selected select" v-show="item.pContainer === titleItem.pContainer"></i>
       </li>
     </ul>
@@ -43,6 +43,18 @@
   .section-name {
     font-size: 12px;
     margin-left: 15px;
+    width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .section-name-list{
+    font-size: 12px;
+    margin-left: 15px;
+    width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
   .select,.priority-icon{
     font-size: 14px;
@@ -50,6 +62,9 @@
   }
   .select{
     margin-left: 20px;
+    color: #1ba4ff;
+    position: absolute;
+    right:10px
   }
   .priority{
     font-size: 12px;
@@ -63,7 +78,7 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid #EAEAEA ;
+    border-bottom:0.5px solid #EAEAEA ;
     cursor: pointer;
   }
 
@@ -73,7 +88,8 @@
   export default {
     data () {
       return {
-        menuState: false
+        menuState: false,
+        editPriority: ''
       }
     },
     computed: {
@@ -91,7 +107,8 @@
     props: {
       disabled: Boolean,
       item: Object,
-      itemTitle: Object
+      itemTitle: Object,
+      ifshow: Boolean
     },
     methods: {
       changeSection (titleItem, e) {
@@ -114,12 +131,27 @@
       },
       changeMenuState (e) {
         this.menuState = !this.menuState
+        if (!this.editPriority) {
+          this.editPriority = true
+        }
         e.stopPropagation()
       },
       IsDisabled (e) {
         if (this.disabled) {
           e.target.blur()
           window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+        }
+      }
+    },
+    created () {
+      this.editPriority = this.ifshow
+    },
+    watch: {
+      ifshow () {
+//        console.log('inputpriority监听到变化了')
+        this.editPriority = this.ifshow
+        if (this.menuState) {
+          this.menuState = false
         }
       }
     },

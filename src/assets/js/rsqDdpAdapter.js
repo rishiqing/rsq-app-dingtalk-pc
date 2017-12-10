@@ -592,7 +592,7 @@ rsqAdapterManager.register({
   openLink: function (params) {
     console.log('进来链接了')
     DingTalkPC.biz.util.openLink({
-      url: "https://www.rishiqing.com/",//要打开链接的地址
+      url: "http://beta.rishiqing.com/task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID,//要打开链接的地址
       onSuccess : function(res) {
         rsqChk(params.success, [res]);
       },
@@ -600,16 +600,23 @@ rsqAdapterManager.register({
     })
   },
   freeLogin: function (params) {
-    DingTalkPC.runtime.permission.requestAuthCode({
-      corpId: params.corpId, //企业ID
-      onSuccess: function(result) {
-        /*{
-            code: 'hYLK98jkf0m' //string authCode
-        }*/
-      },
-      onFail : function(err) {}
-
-    })
+    // DingTalkPC.biz.util.openLink({
+    //   url: "http://beta.rishiqing.com/task/dingtalkOauth/tokenDirectSignIn" + ,//要打开链接的地址
+    //   onSuccess : function(result) {
+    //     /**/
+    //   },
+    //   onFail : function() {}
+    // })
+    // DingTalkPC.runtime.permission.requestAuthCode({
+    //   corpId: params.corpId, //企业ID
+    //   onSuccess: function(result) {
+    //     /*{
+    //         code: 'hYLK98jkf0m' //string authCode
+    //     }*/
+    //   },
+    //   onFail : function(err) {}
+    //
+    // })
   },
   /**
    * 从localStorage中获取值

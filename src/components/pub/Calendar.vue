@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-calendar">
-    <i class="icon2-arrow-left arrow-left" @click="onMoveLeft"></i>
+    <i class="icon2-arrow-left arrow-left-head" @click="onMoveLeft"></i>
     <div class="cal-inner" id="hMoveBar"
          :style="{'transform': translateX}"
          :class="{'animate': easeTrans }">
@@ -14,7 +14,7 @@
         @click-cal-bar-day="triggerSelectDate"
       ></r-cal-bar>
     </div>
-    <i class="icon2-arrow-right arrow-right" @click="onMoveRight"></i>
+    <i class="icon2-arrow-right arrow-right-head" @click="onMoveRight"></i>
   </div>
 </template>
 <script>
@@ -175,6 +175,7 @@
       })
       Bus.$on('returnToday', (date) => {
         this.focusDate = date
+        this.selectDate = date
         this.resetBar()
       })
 //      console.log('calendar界面传进来的' + this.selectYear + this.selectMonth)
@@ -192,9 +193,29 @@
   }
 </script>
 <style lang="scss" scope>
+  .arrow-left-head{
+    /*position: absolute;*/
+    font-size: 14px;
+    color: #CFCFCF;
+    /*margin-top: 8px;*/
+    /*top: 15px;*/
+    /*left:2.5%;*/
+  }
+  .arrow-right-head {
+    /*position: absolute;*/
+    font-size: 14px;
+    color: #CFCFCF;
+    /*margin-top: 8px;*/
+    /*top: 15px;*/
+    /*right:30px*/
+  }
   @media (max-width: 800px) {
     .wrap-calendar{
-      width: 70%;
+      width: 71%;
+      margin-left: 5px;
+    }
+    .arrow-right-head{
+      margin-left: 3px;
     }
   }
   @media (max-width: 900px) and (min-width: 801px){
@@ -209,15 +230,22 @@
   }
   @media (max-width: 1100px) and (min-width: 1001px) {
     .wrap-calendar{
-      width: 77.5%;
+      width: 80%;
     }
   }
   @media (min-width: 1101px) and (max-width: 1200px) {
     .wrap-calendar{
-      width: 80%;
+      width: 82%;
+    }
+  }
+  @media (min-width: 1201px) {
+    .wrap-calendar{
+      width: 83%;
     }
   }
   .wrap-calendar{
+    /*padding-left: 50px;*/
+    justify-content: center;
     /*margin: 0 auto;*/
     display: flex;
     align-items: center;
@@ -226,7 +254,7 @@
     position: relative;
     /*overflow: hidden;*/
     /*white-space: nowrap;*/
-    margin-left: 2%;
+    /*margin-left: 10px;*/
     padding: 0;
   }
   .arrow-right, .arrow-left{
@@ -282,6 +310,9 @@
     overflow: hidden;
     /*height: 30px;*/
     white-space: nowrap;
+    /*margin-top: 5px;*/
+    display: flex;
+    justify-content: center;
   }
   .animate {
     transition: transform 0.3s ease;

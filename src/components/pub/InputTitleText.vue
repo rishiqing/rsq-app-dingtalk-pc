@@ -1,6 +1,6 @@
 <template>
   <div class="input-title-wrap">
-      <div class="wrap-icon"
+      <div class="wrap-icon-title"
                v-if="!isInbox"
                @click="clickCheckOut">
         <i class="icon2-check-box select-title"
@@ -19,7 +19,7 @@
   </div>
 </template>
 <style scoped>
-  .square-icon{
+  .wrap-icon-title .square-icon{
     display: block;
     background-color: white;
     border:1px solid white;
@@ -28,15 +28,15 @@
     margin-left: -6px;
     margin-top: -9px;
   }
-  .wrap-icon .isdisplay{
+  .wrap-icon-title .isdisplay{
     display: block;
     font-size: 14px;
-    margin-left: -13px;
-    margin-top: -10px;
+    margin-left: -11px;
+    margin-top: -8px;
     /*position: absolute;*/
     /*top:2px*/
   }
-  .wrap-icon{
+  .wrap-icon-title{
     height: 39px;
     display: flex;
     align-items: center;
@@ -52,6 +52,7 @@
   }
   .finish-icon{
     display: none;
+    color:#7bbdff
   }
   .input-title-wrap{
     display: flex;
@@ -59,18 +60,21 @@
     align-items: center;
     height: 38px;
     margin-left: 15px;
-    border-bottom: 1px solid #EAEAEA;
+    border-bottom: 0.5px solid #EAEAEA;
   }
   .input-title{
     font-family: PingFangSC-Regular;
     font-size: 15px;
     color: #3D3D3D;
     border: none;
-    height: 37px;
+    height: 35px;
     width: 80%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+  .input-title:focus {
+    border: 0 solid white;
   }
 </style>
 <script>
@@ -116,7 +120,7 @@
         this.$emit('text-change', value)
       },
       clickCheckOut () {
-        console.log('进来了吗' + !this.item.pIsDone)
+//        console.log('进来了吗' + !this.item.pIsDone)
 //        if (this.disabled) {
 //          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
 //          return

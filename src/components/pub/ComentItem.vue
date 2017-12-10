@@ -35,36 +35,36 @@
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
-              <span class="file-size" @click="filePreview(file)">预览</span>
-              <span class="file-size" @click="fileDownload(file)">下载</span>
+              <span class="file-preview" @click="filePreview(file)">预览</span>
+              <span class="file-preview" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'ZIP'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
-              <span class="file-size" @click="filePreview(file)">预览</span>
-              <span class="file-size" @click="fileDownload(file)">下载</span>
+              <span class="file-preview" @click="filePreview(file)">预览</span>
+              <span class="file-preview" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'DOC' || file.contentType.toUpperCase() === 'DOC'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
-              <span class="file-size" @click="filePreview(file)">预览</span>
-              <span class="file-size" @click="fileDownload(file)">下载</span>
+              <span class="file-preview" @click="filePreview(file)">预览</span>
+              <span class="file-preview" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'PPT' || file.contentType.toUpperCase() === 'PPTX'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
-              <span class="file-size" @click="filePreview(file)">预览</span>
-              <span class="file-size" @click="fileDownload(file)">下载</span>
+              <span class="file-preview" @click="filePreview(file)">预览</span>
+              <span class="file-preview" @click="fileDownload(file)">下载</span>
             </template>
             <template v-else>
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
               <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
-              <span class="file-size" @click="filePreview(file)">预览</span>
-              <span class="file-size" @click="fileDownload(file)">下载</span>
+              <span class="file-preview" @click="filePreview(file)">预览</span>
+              <span class="file-preview" @click="fileDownload(file)">下载</span>
             </template>
           </div>
         </div>
@@ -73,7 +73,7 @@
   </div>
 </template>
 <style scoped>
-  input.toolbox-atSpan {
+  .toolbox-atSpan {
     background: rgba(0,0,0,.1);
     padding: 2px;
     margin: 4px;
@@ -103,7 +103,6 @@
   }
   .reply-comment{
     font-size: 12px;
-    color: blue;
     cursor: pointer;
     color:#FF7A7A
   }
@@ -115,7 +114,7 @@
     margin-top:20px;
     list-style: none;
     /*margin-bottom: 10px;*/
-    line-height: 0.7rem;
+    /*line-height: 0.7rem;*/
     border-bottom: none;
   }
   .comment:last-child{
@@ -133,7 +132,7 @@
     cursor: pointer;
     font-family: PingFangSC-Regular;
     font-size: 13px;
-    color: #BFBFBF;
+    color: #5799db;
     margin-left: 30px;
   }
   .file-size{

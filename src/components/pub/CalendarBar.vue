@@ -6,13 +6,15 @@
             v-for="day in days"
             :key="day.date.getTime()"
             >
-          <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
-          <div class="cal-day" @click="calDayClick(day.date)"
-                   >
-            <div class="wrap-show-week">
-              <span class="showDate" :class="{'cal-day--focus': isHighLight(day.date)}">{{dateText(day)}}</span>
-              <span class="showWeek">{{week[day.date.getDay()]}}</span>
+          <div>
+            <div class="cal-day" :class="{'has-tag': !(day.showTag&&!isHighLight(day.date))}" @click="calDayClick(day.date)"
+                     >
+              <div class="wrap-show-week">
+                <span class="showDate" :class="{'cal-day--focus': isHighLight(day.date)}">{{dateText(day)}}</span>
+                <span class="showWeek">{{week[day.date.getDay()]}}</span>
+              </div>
             </div>
+            <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
           </div>
         </td>
         <!--<td><i class="icon2-arrow-right-small arrow"></i></td>-->
@@ -35,6 +37,14 @@
       highlightDay: Date,
       todayValue: Number
     },
+    watch: {
+      highlightDay (date) {
+        if (date.getDate() === new Date().getDate()) {
+          console.log('highlightDay变化了')
+          this.calDayClick(date)
+        }
+      }
+    },
     computed: {
       barOffsetStyle () {
         return (this.barIndex * 100) + '%'
@@ -43,15 +53,23 @@
     components: {},
     methods: {
       dateText (day) {
-        return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
+        if (day.month) {
+          console.log('进来了月份')
+          return day.month
+        } else {
+          return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
+        }
       },
       isHighLight (date) {
+//        if (!day.month) {
         return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
       },
       calDayClick (date) {
-        if (date.getTime() !== this.highlightDay.getTime()) {
-          this.$emit('click-cal-bar-day', date)
-        }
+//        console.log('进来calDayClick')
+        this.$store.commit('SAVE_FOCUS_DATE', date)
+//        if (date.getTime() !== this.highlightDay.getTime()) {
+        this.$emit('click-cal-bar-day', date)
+//        }
       }
     },
     mounted () {
@@ -60,32 +78,43 @@
   }
 </script>
 <style lang="scss" scope>
-  /*@media (max-width: 800px) {*/
-    /*.cal-bar{*/
-      /*!*width: 47%;*!*/
-      /*width: 270px;*/
-    /*}*/
-  /*}*/
-  /*@media (max-width: 900px) and (min-width: 801px){*/
-    /*.cal-bar{*/
-      /*width: 270px;*/
-    /*}*/
-  /*}*/
-  /*@media (max-width: 1000px) and (min-width: 901px) {*/
-    /*.cal-bar{*/
-      /*width: 270px;*/
-    /*}*/
-  /*}*/
-  /*@media (max-width: 1100px) and (min-width: 1001px) {*/
-    /*.cal-bar{*/
-      /*width: 270px;*/
-    /*}*/
-  /*}*/
-  /*@media (min-width: 1101px) and (max-width: 1200px) {*/
-    /*.cal-bar{*/
-      /*width: 278px;*/
-    /*}*/
-  /*}*/
+  @media (max-width: 800px) {
+    .cal-day {
+      width: 30px;
+    }
+  }
+  @media (max-width: 900px) and (min-width: 801px){
+    .cal-day {
+      width: 30px;
+    }
+  }
+  @media (max-width: 1000px) and (min-width: 901px) {
+    .cal-day {
+      width: 30px;
+    }
+  }
+  @media (max-width: 1100px) and (min-width: 1001px) {
+    .cal-day {
+      width: 30px;
+    }
+  }
+  @media (min-width: 1101px) and (max-width: 1200px) {
+    .cal-day {
+      width: 30px;
+    }
+  }
+  @media (min-width: 1201px){
+    .cal-day {
+      width: 30px;
+    }
+  }
+  .has-tag{
+    margin-bottom: 3px;
+  }
+  .cal-day:hover {
+    background-color: #EBEEF1 ;
+    border-radius: 50%;
+  }
   .wrap-show-week:hover .showDate{
     display: none;
   }
@@ -117,7 +146,7 @@
     font-size: 12px;
   }
   .cal-bar {
-    width: 278px;
+    /*width: 278px;*/
     /*width: 47%;*/
     height: 100%;
     display: inline-block;
@@ -152,6 +181,8 @@
     color: #FFFFFF;
     line-height: 12px;
     text-align: center;
+    /*display: flex;*/
+    /*justify-content: center;*/
   }
   .cal-day-tag {
     /*margin: 0 auto;*/
@@ -164,7 +195,7 @@
     font-size: 12px;
     color: #3D3D3D;
     letter-spacing: -0.29px;
-    width: 30px;
+    /*width: 30px;*/
     /*margin:0 auto;*/
     /*width:30px;*/
     /*height:30px;*/

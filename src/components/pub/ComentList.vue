@@ -63,7 +63,7 @@
   .noComentContent{
     font-family: PingFangSC-Regular;
     font-size: 15px;
-    color: #55A8FD;
+    color: #8c8c8c;
     letter-spacing: 0;
   }
   .isDisplay{
@@ -104,7 +104,8 @@
     props: {
       disabled: Boolean,
       items: Array,
-      commentContent: String
+      commentContent: String,
+      id: Number
     },
     components: {
       'r-todo-coment': ComentItem,
@@ -112,11 +113,12 @@
     },
     computed: {
       recordItems () {
-        if (this.items) {
-          return this.items.filter(i => {
-            return i.type !== 0
-          })
-        }
+        return this.$store.state.record
+//        if (this.items) {
+//          return this.items.filter(i => {
+//            return i.type !== 0
+//          })
+//        }
       },
       commentItems () {
         if (this.items) {
@@ -147,6 +149,7 @@
         return arr[arr.length - 1].substr(14)
       },
       changeState () {
+        this.$store.dispatch('getRecord', {id: this.id})
         this.more = !this.more
       },
       fileDownload (f) {

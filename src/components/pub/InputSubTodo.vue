@@ -9,7 +9,10 @@
       :isCheckable="true"
     >
     </r-subtodo-item-list>
-    <input autofocus ref="subtodoInput" type="text" class="subtodo-input" v-show="InputState" @keypress="createSubtodo($event.target.value,$event)" @blur="hideInput">
+    <div class="wrap-subtodo-input" v-show="InputState">
+      <i class="icon2-check-box select"></i>
+      <input autofocus ref="subtodoInput" type="text" class="subtodo-input"  @keypress="createSubtodo($event.target.value,$event)" @blur="hideInput">
+    </div>
     <div class="subtodo-create" @click="showSubTodoInput">
       <i class="icon2-add-circle add-icon"></i>
       <span class="subplan-add margin-detail">添加子任务</span>
@@ -17,6 +20,11 @@
   </div>
 </template>
 <style lang="" scoped>
+  .wrap-subtodo-input{
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+  }
   .subplan-add{
     font-family: PingFangSC-Regular;
     font-size: 12px;
@@ -28,7 +36,7 @@
     margin-bottom: 10px;
   }
   .subtodo-head{
-    border-bottom: 1px solid #EAEAEA;
+    border-bottom: 0.5px solid #EAEAEA;
   }
   .subtodo-head,.subtodo-create,.subtodo-input{
     padding-left: 15px;
@@ -37,7 +45,8 @@
     height: 35px;
   }
   .subtodo-input{
-    margin-left: 15px;
+    /*margin-left: 15px;*/
+    border: 0;
     /*border: none;*/
   }
   .subtodo-create{

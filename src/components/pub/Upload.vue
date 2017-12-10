@@ -23,6 +23,7 @@
     font-size: 20px;
     margin-left: -32px;
     margin-top: -15px;
+    color:#b1b1b1
   }
   .wrap-upload {
     /*position: absolute;*/
