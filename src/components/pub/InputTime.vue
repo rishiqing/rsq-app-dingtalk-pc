@@ -1,22 +1,34 @@
 <template>
-  <div class="wrap-edit-time">
-    <div class="wrap-time" @click="changeEditTime">
+  <div class="wrap-edit-time" @click="changeEditTime($event)">
+    <div class="wrap-time" @click="changeEditTime($event)">
       <i class="icon2-alarm time-icon"></i>
-      <span class="time">时间</span>
+      <span class="time margin-detail">时间</span>
+      <span class="showTime font-style">{{timeValue}}</span>
     </div>
-    <r-todo-edit-time v-show="this.editTime">
+    <r-todo-edit-time
+      v-show="this.editTime && this.showEditTime"
+      :ifshow="ifshow"
+      :editTime="editTime"
+      @close-time="hideEditTime"
+    >
     </r-todo-edit-time>
   </div>
 </template>
 <style lang="" scoped>
   .wrap-edit-time{
     position: relative;
+    cursor: pointer;
   }
   .time-icon{
     font-size: 14px;
   }
   .time{
     font-size: 12px;
+    font-family: PingFangSC-Regular;
+    color: #B1B1B1;
+  }
+  .showTime {
+    margin-left: 10px;
   }
   .wrap-time{
     position: relative;
@@ -25,41 +37,62 @@
     height: 36px;
     background-color: white;
     padding-left: 15px;
-    border-bottom:1px solid gray ;
+    border-bottom:0.5px solid #EAEAEA ;
   }
 </style>
 <script>
   import TodoEditTime from 'com/pub/TodoEditTime'
+  import Bus from 'com/bus'
   export default {
     data () {
       return {
-        editTime: false
+        editTime: false,
+        showEditTime: ''
       }
     },
     computed: {
-//      itemClock () {
-//        return this.item.clock || {}
-//      },
-//      isAllDay () {
-//        return !this.itemClock.startTime
-//      },
-//      timeValue () {
-//        return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
-//      }
+      itemClock () {
+        return this.currentTodo.clock || {}
+      },
+      isAllDay () {
+        return !this.itemClock.startTime
+      },
+      timeValue () {
+        return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
+      }
     },
     components: {
       'r-todo-edit-time': TodoEditTime
     },
     props: {
-//      item: Object,
+      currentTodo: Object,
+//      showTime: Boolean,
+      ifshow: Boolean
 //      editTime: Boolean,
 //      disabled: Boolean,
 //      newItem: Boolean
     },
+    watch: {
+      ifshow () {
+        console.log('inputtime监听到变化了')
+        this.showEditTime = this.ifshow
+        if (this.editTime) {
+          this.editTime = false
+          Bus.$emit('sendtime')
+        }
+      }
+    },
     methods: {
-      changeEditTime () {
-        console.log('进来了')
+      hideEditTime () {
+//        this.editTime = !this.editTime
+      },
+      changeEditTime (e) {
+//        console.log('进来了')
         this.editTime = !this.editTime
+        if (!this.showEditTime) {
+          this.showEditTime = !this.showEditTime
+        }
+        e.stopPropagation()
       },
       gotoTodoTime () {
 //        console.log('进来了')
@@ -75,8 +108,23 @@
 //        console.log(JSON.stringify(timeObj))
 //        this.$store.commit('PUB_TODO_TIME_UPDATE', {data: timeObj})
 //        this.$router.push('/todoEdit/time')
+      },
+      init () {
+        this.showEditTime = this.ifshow
       }
     },
-    created () {}
+    created () {
+      this.init()
+    },
+    mounted () {
+//      Bus.$on('close', () => {
+//        console.log('进inputtime了')
+//        if (this.editTime) {
+//          this.editTime = false
+//          Bus.$emit('sendTime')
+//         console.log('编辑时间要关闭了')
+//        }
+//      })
+    }
   }
 </script>

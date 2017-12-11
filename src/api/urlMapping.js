@@ -13,7 +13,7 @@ export default {
   'GET_LOGOUT': 'task/j_spring_security_logout',
   'GET_INBOX_TODOS': 'task/mainTodoList/getInboxTodos',
   'POST_SUB_TODO': 'task/v2/subTodo',
-  'POST_SUBTODO_PROP': 'task/v2/subTodo',
+  'POST_SUBTODO_PROP': 'task/v2/subTodo/:id',
   'POST_NEW_TODO': 'task/v2/todo',
   'PUT_TODO_PROP': 'task/v2/todo/:id',
   'DELETE_TODO': 'task/v2/todo/:id',
@@ -28,5 +28,14 @@ export default {
   'GET_TODO_TITLE': 'task/rsqTodoTitle/getAllTodoTitleList',
   'POST_TODO_COMMENT': 'task/v2/todoComment',
   'POST_RECORD_COMMENT': 'task/rsqTodoAction/saveTodoAction',
-  'GET_FILE_FROM_AlI': 'task/v2/folders/file/getFileFromAli'
+  'GET_FILE_FROM_AlI': 'task/v2/folders/file/getFileFromAli',
+  'CHANGE_SCHE_TITLE': 'task/rsqTodoTitle/:id',
+  'CREATE_SCHE_TITLE': 'task/rsqTodoTitle',
+  'GET_PLANS': 'task/v2/kanban/getAuthorityKanbanList',
+  'GET_SUBPLAN': 'task/v2/kanbans/:id',
+  'GET_CARD': 'task/v2/kanbans/ck/:id',
+  'MOVE_TO_KANBAN': 'task/mainTodo/moveToKanbanCard',
+  'FREE_LOGIN': 'task/dingtalkOauth/tokenDirectSignIn',
+  'GET_RECORD': 'task/v2/todo/getTodoActions',
+  'COPY': 'task/v2/todo/copy'
 }

@@ -6,8 +6,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
   <meta http-equiv="content-type" content="text/html;charset=utf8"/>
   <meta name="format-detection" content="telephone=no" />
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.16/vue.js"></script>-->
+  <script src="https://unpkg.com/sortablejs@1.4.2"></script>
+  <!-- VueSortable -->
+  <script src="https://unpkg.com/vue-sortable@0.1.3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+  <script src="https://g.alicdn.com/dingding/dingtalk-pc-api/2.7.0/index.js"></script>
   <script type="text/javascript" src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
-  <script src="https://g.alicdn.com/dingding/open-develop/1.6.9/dingtalk.js"></script>
+  <!--<script src="https://g.alicdn.com/dingding/open-develop/1.6.9/dingtalk.js"></script>-->
   <script type='text/javascript' src='https://assets.growingio.com/sdk/wx/vds-wx-plugin.js'></script>
   <script>
     var rsqConfig = {
@@ -22,16 +28,23 @@
     }
   </script>
   <script>
-    (function () {
-      var width = document.documentElement.clientWidth
-      var style = document.createElement('style')
-      style.type = 'text/css'
-      style.innerHTML = 'html{ font-size:' + width / 10 + 'px; }'
-      var head = document.getElementsByTagName('head')[0]
-      head.appendChild(style)
-    })()
+//    (function () {
+//      var width = document.documentElement.clientWidth
+//      var style = document.createElement('style')
+//      style.type = 'text/css'
+//      style.innerHTML = 'html{ font-size:' + width / 10 + 'px; }'
+//      var head = document.getElementsByTagName('head')[0]
+//      head.appendChild(style)
+//    })()
   </script>
   <style>
+    html{
+      height: 100%;
+      overflow: hidden;
+    }
+    body{
+      height: 100%;
+    }
     #app{
       background-color: lightgray;
       display: flex;

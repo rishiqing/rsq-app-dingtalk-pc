@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-calendar">
-    <i class="icon2-arrow-left arrow-right" @click="onMoveLeft"></i>
+    <i class="icon2-arrow-left arrow-left-head" @click="onMoveLeft"></i>
     <div class="cal-inner" id="hMoveBar"
          :style="{'transform': translateX}"
          :class="{'animate': easeTrans }">
@@ -14,7 +14,7 @@
         @click-cal-bar-day="triggerSelectDate"
       ></r-cal-bar>
     </div>
-    <i class="icon2-arrow-right arrow-right" @click="onMoveRight"></i>
+    <i class="icon2-arrow-right arrow-right-head" @click="onMoveRight"></i>
   </div>
 </template>
 <script>
@@ -30,7 +30,7 @@
         selectDate: null,  //  当前选中（高亮显示）的日期
         easeTrans: false,
         count: 0,
-        translateX: 'translateX(-800px)',
+        translateX: 'translateX(-700px)',
         weeks: ['日', '一', '二', '三', '四', '五', '六'],
         months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
       }
@@ -86,7 +86,7 @@
         ]
       }, // 这个是靠getWeekDays和firstDayOfWeek一起完成的
       clearTime (date) {
-        console.log('date是' + date)
+//        console.log('date是' + date)
         return new Date(date.setHours(0, 0, 0, 0))
       },
       getWeekDays (focusDate) {
@@ -102,6 +102,7 @@
         if (this.easeTrans) {
           return
         }
+//        console.log('jinlai左边')
 //        if (this.count === 800) {
 //          this.count = 0
 //        } else {
@@ -109,7 +110,7 @@
 //        }
 //        this.translateX = 'translateX(' + this.count + 'px)'
         this.focusDate = this.firstDayOfWeek(this.focusDate, -1)
-        console.log('this.focusDate是' + this.focusDate)
+//        console.log('this.focusDate是' + this.focusDate)
         this.resetBar()
       },
       onMoveRight () {
@@ -125,7 +126,7 @@
 //        console.log('onPanMove的delta是' + delta)
 //        this.translateX = 'translateX(' + (this.count) + 'px)'
         this.focusDate = this.firstDayOfWeek(this.focusDate, 1)
-        console.log('this.focusDate是' + this.focusDate)
+//        console.log('this.focusDate是' + this.focusDate)
         this.resetBar()
       },
       onPanEnd (ev) {
@@ -142,7 +143,7 @@
           this.translateX = 'translateX(' + (direction * 100) + '%)'
         } else {
           direction = 0
-          this.translateX = 'translateX(0)'
+          this.translateX = 'translateX(-550px)'
         }
 
         this.focusDate = this.firstDayOfWeek(this.focusDate, -direction)// 这个是根据方向改变focusdate
@@ -152,17 +153,29 @@
         this.daysArray = this.resetDays(this.focusDate)
 //        console.log('改变后的daysArray是' + JSON.stringify(this.daysArray)) // 正好是三周的数据
         this.easeTrans = false
-        this.translateX = 'translateX(-800px)' // 这个是控制左右滑动的位移吗
-//        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
+        this.translateX = 'translateX(0px)' // 这个是控制左右滑动的位移吗
+        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
       }
     },
     mounted () {
       //  初始化工作
       Bus.$on('changeCalendar', (month, year) => {
+//        console.log('进来changeCalendar')
 //        console.log(month + year)
-        var newDate = new Date(year, month, 1)
-        console.log(newDate)
-        this.focusDate = newDate
+        var newDate = new Date(year, month - 1, 1)
+        var secondDate = new Date(year, month - 1, 8)
+        var thirdDate = new Date(year, month - 1, 15)
+        this.daysArray = [
+          dateUtil.getMonthSevenDays(newDate),
+          dateUtil.getMonthSevenDays(secondDate),
+          dateUtil.getMonthSevenDays(thirdDate)
+        ]
+        this.focusDate = new Date(year, month - 1, 10)
+        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
+      })
+      Bus.$on('returnToday', (date) => {
+        this.focusDate = date
+        this.selectDate = date
         this.resetBar()
       })
 //      console.log('calendar界面传进来的' + this.selectYear + this.selectMonth)
@@ -171,7 +184,7 @@
 //      }
       this.focusDate = this.defaultSelectDate
       this.resetBar()
-      console.log('resetBar走完了')
+//      console.log('resetBar走完了')
       this.triggerSelectDate(this.defaultSelectDate) // 去拿后台数据去了
 //      var ele = document.getElementById('hMoveBar')
 //      ele.addEventListener('transitionend', this.resetBar)
@@ -180,20 +193,84 @@
   }
 </script>
 <style lang="scss" scope>
+  .arrow-left-head{
+    /*position: absolute;*/
+    font-size: 14px;
+    color: #CFCFCF;
+    /*margin-top: 8px;*/
+    /*top: 15px;*/
+    /*left:2.5%;*/
+  }
+  .arrow-right-head {
+    /*position: absolute;*/
+    font-size: 14px;
+    color: #CFCFCF;
+    /*margin-top: 8px;*/
+    /*top: 15px;*/
+    /*right:30px*/
+  }
+  @media (max-width: 800px) {
+    .wrap-calendar{
+      width: 71%;
+      margin-left: 5px;
+    }
+    .arrow-right-head{
+      margin-left: 3px;
+    }
+  }
+  @media (max-width: 900px) and (min-width: 801px){
+    .wrap-calendar{
+      width: 72.5%;
+    }
+  }
+  @media (max-width: 1000px) and (min-width: 901px) {
+    .wrap-calendar{
+      width: 75%;
+    }
+  }
+  @media (max-width: 1100px) and (min-width: 1001px) {
+    .wrap-calendar{
+      width: 80%;
+    }
+  }
+  @media (min-width: 1101px) and (max-width: 1200px) {
+    .wrap-calendar{
+      width: 82%;
+    }
+  }
+  @media (min-width: 1201px) {
+    .wrap-calendar{
+      width: 83%;
+    }
+  }
   .wrap-calendar{
+    /*padding-left: 50px;*/
+    justify-content: center;
+    /*margin: 0 auto;*/
     display: flex;
     align-items: center;
-    width: 80%;
+    /*width: 75%;*/
     height: 50px;
     position: relative;
-    overflow: hidden;
-    white-space: nowrap;
+    /*overflow: hidden;*/
+    /*white-space: nowrap;*/
+    /*margin-left: 10px;*/
+    padding: 0;
+  }
+  .arrow-right, .arrow-left{
+    font-size: 14px;
+    color: #CFCFCF;
+  }
+  .arrow-left{
+    /*margin-right: 30px;*/
+    cursor: pointer;
   }
   .arrow-right{
-    font-size: 14px;
+    cursor: pointer;
+    /*margin-left: 20px;*/
   }
   .c-cal-main {
-    position: fixed;color:white;font-size: 1.4rem;
+    position: fixed;color:white;font-size: 15px;
     top:0;left:0;right:0;height: 81px;background: #458CDA;
     border-bottom: 0.5px solid #E4E4E4;z-index:99;
     -webkit-transform: translate3d(0px,0px,0px);
@@ -204,11 +281,11 @@
     margin-bottom: -1px;
   }
   .cal-title-today {position:absolute;top:0;height:100%;left:50%;margin-left:65px;
-    font-size: 1.8rem;font-weight: bold;}
+    font-size: 15px;font-weight: bold;}
   .cal-week-title {
     position: fixed;top: 0px;left: 0;right: 0;width: 100%;
     padding: 0;height: 31px;line-height: 30px;
-    margin-bottom: -1px;color:white;background: #458CDA;font-size:1.2rem;
+    margin-bottom: -1px;color:white;background: #458CDA;font-size:15px;
     -webkit-transform: translate3d(0px,0px,0px);
   }
   .c-cal-main table {
@@ -217,7 +294,9 @@
   }
   .c-cal-main td {}
   .cal-weekday {
-    font-size: 0.293rem;
+    margin-right: 30px;
+    width:50px;
+    font-size: 15px;
     font-family: PingFangSC-Medium;
   }
   .cal-content {
@@ -227,7 +306,13 @@
   }
   .cal-outer {position:relative;width:100%;height:100%;overflow:hidden;}
   .cal-inner {
-   width:100%;
+   width:90%;
+    overflow: hidden;
+    /*height: 30px;*/
+    white-space: nowrap;
+    /*margin-top: 5px;*/
+    display: flex;
+    justify-content: center;
   }
   .animate {
     transition: transform 0.3s ease;

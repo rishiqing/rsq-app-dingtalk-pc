@@ -201,8 +201,8 @@ export default {
     p.item.pIsDone = p.status
   },
   SCH_LIST_SUBTODO_CHECKED (state, p) {
-    console.log('p.item是' + JSON.stringify(p.item))
-    p.item.pIsDone = p.status
+    // console.log('p.item是' + JSON.stringify(p.item))
+    p.item.isDone = p.status
   },
   /* --------------------------------- */
 
@@ -238,9 +238,23 @@ export default {
     // console.log('p.pTitle')
     if (p.pTitle) {
       state.todo.currentTodoRepeat.pTitle = p.pTitle
+      state.todo.currentTodoRepeat.id = p.id
+      state.todo.currentTodoRepeat.oldPTitle = p.oldPTitle
+      state.todo.currentTodoRepeat.oldPNote = p.oldPNote
+      state.todo.currentTodoRepeat.oldSubTodos = p.oldSubTodos
     }
     if (p.pNote) {
       state.todo.currentTodoRepeat.pNote = p.pNote
+      state.todo.currentTodoRepeat.id = p.id
+      state.todo.currentTodoRepeat.oldPTitle = p.oldPTitle
+      state.todo.currentTodoRepeat.oldSubTodos = p.subtodo
+      state.todo.currentTodoRepeat.oldPNote = p.oldPNote
+    }
+    if (p.subtodo) {
+      state.todo.currentTodoRepeat.oldSubTodos = p.subtodo
+      state.todo.currentTodoRepeat.id = p.id
+      state.todo.currentTodoRepeat.oldPTitle = p.oldPTitle
+      state.todo.currentTodoRepeat.oldPNote = p.oldPNote
     }
     // console.log('执行完毕')
   },
@@ -250,6 +264,9 @@ export default {
    * @param p
    * @constructor
    */
+  NO_REPEAT (state) {
+    state.todo.isRepeatFieldEdit = false
+  },
   TD_CURRENT_TODO_UPDATE (state, p) {
     util.extendObject(state.todo.currentTodo, p.item)
   },
@@ -271,10 +288,10 @@ export default {
    * @constructor
    */
   TD_TODO_UPDATED (state, p) {
-    console.log('state.todo.currentTodo是' + JSON.stringify(state.todo.currentTodo))
+    // console.log('state.todo.currentTodo是' + JSON.stringify(state.todo.currentTodo))
     // console.log('p.todo是' + JSON.stringify(p.todo))
-    util.extendObject(state.todo.currentTodo, p.todo) // 直接改标题不行吗
-    console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
+    util.extendObject(state.todo.currentTodo, p.todo)
+    // console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
   },
   TD_SUBTODO_UPDATED (state, p) {
     let items = state.todo.currentTodo.subTodos
@@ -294,10 +311,16 @@ export default {
    */
   TD_TODO_DELETED (state, p) {
     let items = p.item.pContainer === 'inbox' ? state.inbox.items : state.schedule.items
-    let index = items.indexOf(p.item)
-    if (index > -1) {
-      items.splice(index, 1)
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        items.splice(i, 1)
+      }
     }
+    // let index = items.indexOf(p.item)
+    // console.log(index)
+    // if (index > -1) {
+    //   console.log('删除了')
+    // }
   },
   TD_COMMENT_DELETE (state, p) {
     let items = state.todo.currentTodo.comments
@@ -358,6 +381,8 @@ export default {
    * @constructor
    */
   TD_COMMENT_CREATED (state, p) {
+    // 为什么state.todo.currentTodo也就是当前item没有comments这个选项呢
+    // console.log(JSON.stringify(state.todo.currentTodo.comments) + '---' + JSON.stringify(p.comment))
     state.todo.currentTodo.comments.push(p.comment)
   },
   /**
@@ -388,6 +413,12 @@ export default {
     }
     util.extendObject(state.pub.currentTodoDate, p.data)
   },
+  PUB_WEEK_DATE_UPDATE (state, p) {
+    state.weekDate = p.data
+  },
+  PUB_WEEK_DATE_DELETE (state, p) {
+    state.weekDate = null
+  },
   PUB_TODO_DATE_DELETE (state, p) {
     state.pub.currentTodoDate = null
   },
@@ -400,20 +431,136 @@ export default {
   },
   CHANGE_SCHE_TITLE (state, p) {
     var titleArray = state.schedule.titleArray
-    // console.log(p.title)
+    var id = p.id
     for (var i = 0; i < titleArray.length; i++) {
-      if (titleArray[i][p.name]) {
-        // console.log('进来了')
-        titleArray[i][p.name] = p.title
+      if (titleArray[i].id === id) {
+        titleArray[i].title = p.title
+        // console.log(titleArray[i].title)
       }
     }
-    // console.log('改变之后的ｔｉｔｌｅａｒｒａｙ' + JSON.stringify(titleArray))
   },
   CHANGE_PRIORITY (state, p) {
+    // var id = state.todo.currentTodo.id || ''
+    // if (id) {
     state.todo.currentTodo.pContainer = p.pContainer
+  // } else {
+    var items = state.schedule.items
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.id) {
+        // console.log('已经改变')
+        items[i].pContainer = p.pContainer
+        items[i].pDisplayOrder = p.pDisplayOrder
+      }
+    }
+    // }
   },
   PUB_SCHE_DATE_UPDATE (state, p) {
     state.pub.year = p.year
     state.pub.month = p.month
+  },
+  GET_TODO_TITLE (state, p) {
+    // console.log('进来mutationle ' + JSON.stringify(p.items))
+    var items = p.items
+    state.schedule.titleArray = []
+    var initItems = [
+      {id: '1', pContainer: 'IE', title: '重要且紧急'},
+      {id: '2', pContainer: 'IU', title: '重要但不紧急'},
+      {id: '3', pContainer: 'UE', title: '紧急但不重要'},
+      {id: '4', pContainer: 'UU', title: '不重要不紧急'}
+    ]
+    if (items.length === 0) {
+      for (var i = 0; i < initItems.length; i++) {
+        state.schedule.titleArray.push(initItems[i])
+      }
+    } else { // 这里可能item就有一个，所以要循环遍历下看看哪些需要替换哪些不需要替换
+      for (i = 0; i < initItems.length; i++) {
+        state.schedule.titleArray.push(initItems[i])
+      }
+      for (i = 0; i < items.length; i++) {
+        for (var j = 0; j < state.schedule.titleArray.length; j++) {
+          if (state.schedule.titleArray[j].pContainer === items[i].pContainer) {
+            state.schedule.titleArray[j] = items[i]
+          }
+        }
+      }
+    }
+  },
+  SAVE_DRAG_ITEM (state, p) {
+    state.schedule.dragItemId = p.item.id
+    state.schedule.dragItem = p.item
+    // console.log('state.schedule.dragItem是' + JSON.stringify(state.schedule.dragItemId))
+  },
+  CREATE_SCHE_TITLE (state, p) {
+    state.schedule.titleArray.push(p)
+  },
+  GET_PlAN (state, p) {
+    state.plan = p.item
+    // console.log('state.plan是' + JSON.stringify(state.plan))
+  },
+  GET_SUB_PlAN (state, p) {
+    state.subplan = p.item.childKanbanList
+    // console.log('state.subplan' + JSON.stringify(state.plan))
+  },
+  GET_CARD (state, p) {
+    state.card = p.item.kanbanCardList
+    // console.log('state.card' + JSON.stringify(state.plan))
+  },
+  CHANGE_PLAN_ORDER (state, p) {
+    console.log('进来CHANGE_PLAN_ORDER')
+    if (p.id === 1) {
+      var index = state.plan.indexOf(p.plan)
+      console.log('index是' + index)
+      state.plan.splice(index, 1)
+      state.plan.unshift(p.plan)
+    } else if (p.id === 2) {
+      index = state.subplan.indexOf(p.subplan)
+      // console.log('index是' + index)
+      state.subplan.splice(index, 1)
+      state.subplan.unshift(p.subplan)
+    } else {
+      index = state.card.indexOf(p.card)
+      // console.log('index是' + index)
+      state.card.splice(index, 1)
+      state.card.unshift(p.card)
+    }
+  },
+  HIDE_POP (state) {
+    state.inputPriorityState = false
+    state.inputDateState = false
+    state.inputTimeState = false
+  },
+  SAVE_FOCUS_DATE (state, date) {
+    state.focusDate = date
+  },
+  CHANGE_INBOX (state, p) {
+    var inboxItems = state.inbox.items
+    for (var i = 0; i < inboxItems.length; i++) {
+      if (inboxItems[i].id === p.id) {
+        inboxItems[i].pContainer = p.pContainer
+        inboxItems[i].pDisplayOrder = p.order
+        state.schedule.items.push(inboxItems[i])
+        inboxItems.splice(i, 1)
+      }
+    }
+  },
+  SAVE_RECORD (state, p) {
+    state.record = p.item
+  },
+  COPY_CURRENT_TODO (state, p) {
+    var todo = state.todo.currentTodo
+    state.schedule.items.push(todo)
+  },
+  CHANGE_ITEM (state, p) {
+    var todo = state.todo.currentTodo
+    todo.isFrom = p.item.isFrom
+    todo.from = p.item.from
+    // var items = state.schedule.items
+    // for (var i = 0; i < items.length; i++) {
+    //   if (items[i].id === p.item.id) {
+    //     console.log('进来了')
+    //     items[i].from = p.item.from
+    //     items[i].isFrom = p.item.isFrom
+    //   }
+    // }
   }
 }

@@ -1,19 +1,19 @@
 <template>
-  <div class="edit-date">
+  <div class="edit-date-month" @click="stop($event)">
     <div class="date-picker">
       <div class="dp-title">
         <!--<div class="dp-title-tag u-pull-left" @click="tapEmpty($event)">空</div>-->
         <!--<div class="dp-title-tag u-pull-right" @click="tapBackToday($event)">今</div>-->
-        <div tag="i" class="icon icon-keyboard_arrow_left"
+        <div tag="i" class="icon-left icon-keyboard_arrow_left"
              @click="tapChangeMonth(-1)"></div>
         <div class="dp-title-text">
           {{selectYear}}年
         </div>
-        <div tag="i" class="icon icon-keyboard_arrow_right"
+        <div tag="i" class="icon-right icon-keyboard_arrow_right"
              @click="tapChangeMonth(1)"></div>
       </div>
-      <div class="dp-content">
-        <table class="dp-table">
+      <div class="dp-content-month">
+        <table class="dp-table-month">
           <tbody>
             <tr v-for="month in months">
               <td v-for="monthday in month">
@@ -29,19 +29,35 @@
   </div>
 </template>
 <style lang="scss">
-  .isBlue{
-    color: blue
+  .dp-content-month .dp-table-month .isBlue{
+    background-color: #4A90E2;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    border-radius: 50%;
   }
   .dp-content .dp-table .is-today{
     color:#67B2FE
   }
-  .edit-date {
-    position: absolute;
-    top: 0;
-    z-index: 10;
-    background-color: lightgray;
+  .dp-content-month{
+    margin-top: 20px;
+    height: 270px;
   }
-  .edit-date {
+  .dp-table tr{
+    margin-top: 40px;
+  }
+  .edit-date-month {
+    padding: 20px;
+    position: absolute;
+    top: 55px;
+    left: 0px;
+    background-color: white;
+    z-index: 200;
+    width: 276px;
+    height: 309px;
+    box-shadow: 2px 2px 3px 0 rgba(186,215,225,0.45);
+  }
+  .edit-date-month {
     .light-color {color: #999999;}
     .date-picker {
       /*box-sizing: border-box;margin-top: 0.25rem;background: #fff;*/
@@ -53,12 +69,24 @@
       height: 30px;
       display: flex;
       align-items: center;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .icon-left{
+      margin-left: 20px;
+      color: #8C8C8C;
+      cursor: pointer;
+    }
+    .icon-right{
+      margin-right: 20px;
+      color: #8C8C8C;
+      cursor: pointer;
     }
     .dp-title-text {
-      /*text-align: center;*/
+      text-align: center;
       /*font-family: PingFangSC-Regular;*/
-      width: 90%;
-      font-size: 14px;
+      /*width: 10%;*/
+      font-size: 16px;
       /*color: #3D3D3D;*/
     }
     .dp-title .icon {
@@ -67,7 +95,11 @@
       cursor: pointer;
     }
     /*.dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}*/
-    .dp-table {width:100%;height:8rem;text-align: center;}
+    .dp-table-month {
+      width:100%;
+      height: 270px;
+      /*height:8rem;*/
+      text-align: center;}
     .dp-grey {color: #a8a8a8;}
     .dp-table .dp-selected {
       background: #55A8FD;
@@ -92,7 +124,7 @@
       /*font-size: 2.8rem;}*/
     }
     .dp-v-sep {
-      width: 1px; height: 0.64rem;background: #979797;
+      width: 1px; height: 90%;background: #979797;
     }
     .week{
       font-family: PingFangSC-Regular;
@@ -101,7 +133,7 @@
     }
     .dp-day {
       margin:0 auto;
-      width:30px;
+      width:40px;
       height:30px;
       line-height:30px;
       text-align: center;
@@ -109,6 +141,8 @@
       font-family: PingFangSC-Medium;
       font-size: 17px;
       cursor: pointer;
+      font-size: 14px;
+      color: #3D3D3D;
       /*color: #666666;*/
     }
     .edit-date div{
@@ -180,7 +214,7 @@
         compId: 'SYSTEM_SELECT_DATE',
         weeks: ['日', '一', '二', '三', '四', '五', '六'],
         months: [['1月', '2月', '3月', '4月'], ['5月', '6月', '7月', '8月'], ['9月', '10月', '11月', '12月']],
-        focusDate: new Date(),  //  表示当前显示的月份，决定了当前显示哪个月份的日历
+        focusDate: '', //  表示当前显示的月份，决定了当前显示哪个月份的日历
         days: [],
         //  重复功能相关
         dateType: '',  //  single单日期, range起止日期, discrete, 离散间隔日期，repeat:使用重复，none表示dateType被清空
@@ -201,6 +235,9 @@
       currentTodoDate () {
         return this.$store.state.pub.currentTodoDate
       },
+//      currentMonth () {
+//        return this.$store.state.pub.month
+//      },
       repeatText () {
         var text
         var c = this.currentTodoDate
@@ -215,14 +252,19 @@
       }
     },
     methods: {
+      stop (e) {
+        e.stopPropagation()
+      },
       changeMonth (month) {
         month = month.substring(0, month.length - 1)
+        this.focusDate = new Date(this.selectYear, (month - 1))
         this.$store.commit('PUB_SCHE_DATE_UPDATE', {month: month, year: this.selectYear})
         this.$emit('changeMonth')
+//        console.log('进来changeMonth')
         Bus.$emit('changeCalendar', month, this.selectYear)
       },
       thisMonth (month) {
-        return ((this.focusDate.getMonth() + 1) + '月') === month
+        return (this.focusDate.getMonth() + 1 + '月') === month
       },
       isToday (day) {
         return day.date.getTime() === this.numToday
@@ -409,71 +451,9 @@
 
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: resObj})
       }
-//      getSubmitResult () {
-//        var c = this.currentTodoDate
-//        var o = {
-//          startDate: c.startDate,
-//          endDate: c.endDate,
-//          dates: c.dates
-//        }
-//        //  如果重复相关属性存在，那么处理重复相关的其他属性
-//        if (c.repeatType) {
-//          o.repeatType = c.repeatType
-//          o.repeatBaseTime = c.repeatBaseTime
-//          o.alwaysRepeat = c.alwaysRepeat
-//          o.isCloseRepeat = false
-//          o.isLastDate = c.isLastDate
-//          o.repeatOverDate = c.repeatOverDate
-//        } else {
-//          o.isCloseRepeat = true
-//        }
-//        var actParamse = JSON.parse(JSON.stringify(o))
-//        o.createActive = {
-//          name: 'saveDate',
-//          params: actParamse
-//        }
-//        return o
-//      },
-//      submitTodo (next) {
-//        if (this.isModified()) {
-//          if (this.isEdit) {
-//            window.rsqadmg.exec('showLoader', {text: '保存中...'})
-//          }
-//          var editItem = this.getSubmitResult()
-//          console.log('submitTodo的editItem是' + editItem)
-//          //  如果日期均为空，则容器为收纳箱
-//          if (!editItem.startDate && !editItem.endDate && !editItem.dates) {
-//            editItem['pContainer'] = 'inbox'
-//          } else {
-//            editItem['pContainer'] = 'IE'
-//          }
-//          return this.$store.dispatch('updateTodoDate', {editItem: editItem})
-//            .then(() => {
-//              this.$store.commit('PUB_TODO_DATE_DELETE')
-//              if (this.isEdit) {
-//                window.rsqadmg.exec('hideLoader')
-//                window.rsqadmg.execute('toast', {message: '保存成功'})
-//              }
-//              next()
-//            })
-//        } else {
-//          next()
-//        }
-//      }
     },
     created () {
       this.initData()
-//      var that = this
-//      window.rsqadmg.exec('setTitle', {title: '日期选择'})
-//      window.rsqadmg.exec('setOptionButtons', {
-//        btns: [{key: 'backToday', name: '今天'}],
-//        success (res) {
-//          if (res.key === 'backToday') {
-//            that.tapBackToday()
-//          }
-//        }
-//      })
-//      this.$store.dispatch('setNav', {isShow: false})
     },
     beforeRouteLeave (to, from, next) {
       //  做pub区缓存

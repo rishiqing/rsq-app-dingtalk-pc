@@ -32,8 +32,13 @@ export default {
     return new Promise((resolve, reject) => {
       var request = url.resolve(window.rsqConfig.authServer, mapping.AUTH_TO_USERID) + '?corpid=' + props.corpId
       var params = props.idArray
+      if (params.length > 2) {
+        params = params.split(',')
+      }
+      console.log('=======' + JSON.stringify(params))
       Vue.http.post(request, JSON.stringify(params))
         .then(res => {
+          console.log('getRsqidMap' + JSON.stringify(res))
           resolve(res.json())
         }, err => {
           window.rsqadmg.log(JSON.stringify(err))

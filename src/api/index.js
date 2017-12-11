@@ -9,7 +9,7 @@ Vue.use(VueResource)
 
 // Vue.http设置的太恶心。。。不启用root配置
 // 恶心链接：http://stackoverflow.com/questions/34945562/vue-resource-root-options-not-used
-// Vue.http.options.root = window.rsqConfig.apiServer
+Vue.http.options.root = window.rsqConfig.apiServer
 
 export default {
   todo,

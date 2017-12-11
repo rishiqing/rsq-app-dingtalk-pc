@@ -2,6 +2,7 @@ import { Promise } from 'es6-promise'
 import Vue from 'vue'
 import mapping from './urlMapping'
 import util from 'ut/jsUtil'
+import dateutil from 'ut/dateUtil'
 export default {
   /**
    * 获取收纳箱中的任务
@@ -63,9 +64,11 @@ export default {
     })
   },
   postNewTodo (props) {
+    console.log('props是' + JSON.stringify(props))
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_NEW_TODO, props)
         .then(res => {
+          console.log('返回来的resshi ' + (res))
           resolve(res.json())
         }, err => {
           window.rsqadmg.log(JSON.stringify(err))
@@ -207,6 +210,152 @@ export default {
   putRecordProps (props) {
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_RECORD_COMMENT, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  changeScheTitle (props) {
+    var path = util.replaceUrlParams(mapping.CHANGE_SCHE_TITLE, props)
+    // console.log('prps是' + JSON.stringify(props))
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  createScheTitle (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.CREATE_SCHE_TITLE, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  changePriority (props) {
+    var path = util.replaceUrlParams(mapping.POST_DESP, props)
+    // console.log('prps是' + JSON.stringify(props))
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getAllTodoTitleList () {
+    return new Promise((resolve, reject) => {
+      Vue.http.get(mapping.GET_TODO_TITLE + '?_=' + new Date().getTime())
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getItem (item) {
+    // console.log('id是' + item.id)
+    var time = dateutil.getStandardTime(new Date())
+    var path = util.replaceUrlParams(mapping.POST_DESP, item) + '?createTaskDate=' + time
+    return new Promise((resolve, reject) => {
+      Vue.http.get(path, item)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getPlans () {
+    return new Promise((resolve, reject) => {
+      Vue.http.get(mapping.GET_PLANS)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getSubPlans (item) {
+    return new Promise((resolve, reject) => {
+      var path = util.replaceUrlParams(mapping.GET_SUBPLAN, item.defaultItem) // 注意虽然要在最后加ID，可是传的仍然是整个item,有机会看下replaceUrlParams实现
+      // console.log('路径是' + path)
+      Vue.http.get(path, item.defaultItem)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getCard (item) {
+    return new Promise((resolve, reject) => {
+      var path = util.replaceUrlParams(mapping.GET_CARD, item)
+      Vue.http.get(path, item)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  moveToPlan (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.MOVE_TO_KANBAN, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  changeOrder (props) {
+    var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props)
+    // console.log('prps是' + JSON.stringify(props))
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  getRecord (props) {
+    return new Promise((resolve, reject) => {
+      var path = mapping.GET_RECORD + '?id=' + props.id
+      Vue.http.get(path)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  copy (props) {
+    return new Promise((resolve, reject) => {
+      var path = mapping.COPY
+      Vue.http.post(path, props)
         .then(res => {
           resolve(res.json())
         }, err => {

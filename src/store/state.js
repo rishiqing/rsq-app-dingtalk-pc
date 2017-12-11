@@ -44,87 +44,26 @@ export default {
     //  收纳箱日程列表
     items: null
   },
+  record: [],
   /**
    * 日程页面基础数据结构
    */
   schedule: {
     //  当前日历选中的日期
-    strCurrentDate: new Date(),
+    strCurrentDate: null,
     //  当前的日程列表
-    items: [
-      { id: 1,
-        pTitle: '哈哈',
-        pIsDone: false,
-        pContainer: 'UE',
-        date: 26,
-        pNote: '',
-        subTodos: [
-        {id: 11, name: '妇女我发呢我', pIsDone: false},
-        {id: 12, name: '黑丰富', pIsDone: false},
-        {id: 13, name: '粉丝分his', pIsDone: true},
-        {id: 17, name: '突然好痛', pIsDone: true}
-        ],
-        comments: [
-          {id: 1212, commentContent: '尔特人', type: 0},
-          {id: 1232, commentContent: '覠', type: 0}
-        ]
-      },
-      {id: 2,
-        pTitle: '我的',
-        pIsDone: false,
-        pContainer: 'UE',
-        date: 26,
-        pNote: '',
-        subTodos: [
-          {id: 11, name: '请问', pIsDone: false},
-          {id: 12, name: '让他', pIsDone: false},
-          {id: 13, name: 'ui', pIsDone: true},
-          {id: 17, name: '不能', pIsDone: true}
-        ]},
-      {id: 3,
-        pTitle: '哈哈佛山市',
-        pIsDone: false,
-        pContainer: 'UE',
-        date: 26,
-        pNote: '',
-        subTodos: [
-          {id: 12, name: '健康', pIsDone: false},
-          {id: 13, name: '哦怕', pIsDone: true},
-          {id: 17, name: '阿三', pIsDone: true}
-        ],
-        comments: [
-          {id: 122, commentContent: '健康', type: 0},
-          {id: 122, commentContent: '健康范文芳', type: 0}
-        ]
-      },
-      {id: 4,
-        pTitle: '哈哈佛山市',
-        pIsDone: false,
-        pContainer: 'UE',
-        date: 26,
-        pNote: '',
-        subTodos: [
-          {id: 12, name: '付个首付是健康', pIsDone: false},
-          {id: 13, name: '额为哦怕', pIsDone: true}
-        ],
-        comments: [
-          {id: 1212, commentContent: '粉色发', type: 0},
-          {id: 1232, commentContent: '废物', type: 0}
-        ]
-      },
-      {id: 6, pTitle: '还是ffdd啥', pIsDone: true, pContainer: 'IU', date: 21, subTodos: [{id: 13, name: '执行', pIsDone: true}]},
-      {id: 7, pTitle: '还是ffdd啥', pIsDone: false, pContainer: 'IE', date: 26, subTodos: [{id: 13, name: '的v', pIsDone: true}]},
-      {id: 8, pTitle: '还范德萨vddsffsrgsfds是ffdd啥', pIsDone: true, pContainer: 'IE', date: 26, subTodos: []},
-      {id: 4, pTitle: '还是发送方式ffdd啥', pIsDone: false, pContainer: 'UU', date: 26, subTodos: []},
-      {id: 4, pTitle: '还是郭德纲的啥', pIsDone: false, pContainer: 'UU', date: 26, subTodos: []}
-    ],
-    titleArray: [
-      {重要紧急: '重要紧急'},
-      {重要不紧急: '重要不紧急'},
-      {不重要紧急: '不重要紧急'},
-      {不重要不紧急: '不重要不紧急'}
-    ]
+    items: null,
+    titleArray: [],
+    dragItemId: null,
+    dragItem: null
   },
+  focusDate: '',
+  plan: [],
+  subplan: [],
+  card: [],
+  inputDateState: false,
+  inputTimeState: false,
+  inputPriorityState: false,
   /**
    * 日程与收纳箱公共的数据对象
    */
@@ -165,10 +104,11 @@ export default {
      *   repeatBaseTime: null
      * }
      */
-    currentTodoDate: new Date(),
+    currentTodoDate: {},
     month: '',
     year: ''
   },
+  weekDate: [],
   //  --------缓存相关--------
   /**
    * 日程缓存的列表，以日期作为key值

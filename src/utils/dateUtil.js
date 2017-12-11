@@ -13,7 +13,7 @@ export default {
     date = this.clearTime(date)
     // console.log('clearTime之后的date是' + date)
     var day = date.getDay()
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset * 7 - day)
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset * 7 - day + 3)
   },
   /**
    * date的月份偏移offset之后所在月的第一天。如果需要返回date所在月份，则offset可以不传值。
@@ -73,11 +73,29 @@ export default {
     var month = firstDay.getMonth()
     var startDate = firstDay.getDate()
     var days = []
-
+    var months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
     for (var j = 0; j < 7; j++) {
+      var newDate = new Date(fullYear, month, startDate + j)
+      if (newDate.getDate() === 1) {
+        days.push({month: months[newDate.getMonth()], date: new Date(2035)})
+      }
+      days.push({date: newDate})
+    }
+    return days
+  },
+  getMonthSevenDays (firstDay) {
+    // var firstDay = this.firstDayOfWeek(focusDate, 0)
+    // console.log('进来1次')
+    var fullYear = firstDay.getFullYear()
+    var month = firstDay.getMonth()
+    var startDate = firstDay.getDate()
+    var days = []
+
+    for (var j = 0; j <= 6; j++) {
       var newDate = new Date(fullYear, month, startDate + j)
       days.push({date: newDate})
     }
+    // console.log('days是' + JSON.stringify(days))
     return days
   },
   /**
@@ -102,7 +120,8 @@ export default {
           date: thisDate,
           isFocused: this.isSameDate(focusDate, thisDate),
           isSelected: false,
-          isInMonth: thisDate.getMonth() === focusDate.getMonth()
+          isInMonth: thisDate.getMonth() === focusDate.getMonth(),
+          showWeek: false
         }
 
         weekArr.push(obj)
@@ -147,7 +166,7 @@ export default {
     var year = parseInt(text.substr(0, 4))
     var month = parseInt(text.substr(4, 2)) - 1
     var day = parseInt(text.substr(6, 2))
-
+    // return '' + year + month + day
     var date = new Date(year, month, day)
     return date.getTime()
   },
@@ -231,10 +250,18 @@ export default {
     sep = sep || '/'
     var result
     switch (dateType) {
-      case 'repeat':  //  repeat类型，默认startDate和endDate与single相同
-      case 'single':
-        var dateText = this.dateNum2Text(dateResult[0], sep)
+      case 'repeat'://  repeat类型，默认startDate和endDate与single相同
+        // console.log(dateResult.length)
+        if (dateResult.length === 0) {
+          var dateText = this.dateNum2Text(new Date().getTime(), sep)
+        } else {
+          dateText = this.dateNum2Text(dateResult[0], sep)
+        }
         result = {dates: null, startDate: dateText, endDate: dateText}
+        break
+      case 'single':
+        var singleText = this.dateNum2Text(dateResult[0], sep)
+        result = {dates: null, startDate: singleText, endDate: singleText}
         break
       case 'discrete':
         var that = this
@@ -256,14 +283,14 @@ export default {
     var array = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
     return array[date.getMonth()]
   },
-  // dayName (date) {
-  //   var index = date
-  //   if (date instanceof Date) {
-  //     index = date.getDay()
-  //   }
-  //   var array = ['日', '一', '二', '三', '四', '五', '六']
-  //   return array[index]
-  // },
+  dayName (date) {
+    var index = date
+    if (date instanceof Date) {
+      index = date.getDay()
+    }
+    var array = ['日', '一', '二', '三', '四', '五', '六']
+    return array[index]
+  },
   repeatCycleName (code) {
     var map = {
       noRepeat: '不重复',
@@ -327,6 +354,7 @@ export default {
       repeatBaseTime: t.repeatBaseTime
     })
     var result
+    console.log('parsed是' + JSON.stringify(t.repeatBaseTime))
     if (parsed.dateType === 'repeat') {
       result = this.repeatDayText(t.repeatType, t.repeatBaseTime.split(','))
       if (t.isLastDate) {
@@ -387,6 +415,8 @@ export default {
     }
   },
   getStandardTime (date) {
+    // console.log('进来DATe是' + date)
+    var str = ''
     var year = date.getFullYear()
     if (date.getMonth() + 1 >= 10) {
       var month = date.getMonth() + 1
@@ -397,6 +427,28 @@ export default {
     if (day < 10) {
       day = '0' + day
     }
-    return year + month + day
+    // console.log('出来DATe是' + year + month + day)
+    return str + year + month + day
+  },
+  getZeroTime (initDate) {
+    var year = initDate.getFullYear()
+    var month = initDate.getMonth()
+    var date = initDate.getDate()
+    return new Date(year, month, date)
+  },
+  createStandardTime (date) {
+    // console.log('进来DATe是' + date)
+    var year = date.getFullYear()
+    if (date.getMonth() + 1 >= 10) {
+      var month = date.getMonth() + 1
+    } else {
+      month = '0' + (date.getMonth() + 1)
+    }
+    var day = date.getDate()
+    if (day < 10) {
+      day = '0' + day
+    }
+    // console.log('出来DATe是' + year + month + day)
+    return year + '-' + month + '-' + day + ' 00:00:00'
   }
 }

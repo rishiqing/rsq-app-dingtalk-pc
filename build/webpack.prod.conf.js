@@ -54,6 +54,15 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      env: 'prod',
+      authServer: config.build.authServer,
+      stsServer: config.build.stsServer,
+      ossRegion: config.build.aliOSS.region,
+      ossBucket: config.build.aliOSS.bucket,
+      ossRoot: config.build.aliOSS.root,
+      version: config.build.version,
+      apiServer: config.build.apiServer,
+      frontServer: config.build.frontServer,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.build.index,

@@ -1,5 +1,5 @@
 <template>
-  <li class="todoItem" @click="clickItem">
+  <li class="todoItem handle" @click="clickItem" draggable='true' @dragstart="drag(item)" :class="{'large-width': bigger}">
     <!--<v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">-->
     <div class="todo-checkbox" v-if="isCheckable" @click="clickCheckOut">
       <i class="icon2-check-box select"
@@ -9,52 +9,181 @@
     </div>
     <div class="title-todo" >
         <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'delay-width':isDelay, 'no-delay-width': !isDelay}">{{ item.pTitle }}</span>
-        <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
-        <span v-if="!isCheckable" v-show="isFromSche" class="receive">我收到的</span>
-        <span v-if="!isCheckable" v-show="isFromKanban" class="receive">来自计划</span>
-        <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
-          <i class="icon2-plan plan"></i>
-          <div class="displayName" v-show="this.IsNameShow">李永州</div>
+        <span class="delayer" :class="{'is-alert': isDelay, 'ifMax': bigger}" v-show="isDelay">延期{{delayDays}}天</span>
+        <!--<span>{{item.pDisplayOrder}}</span>-->
+        <div  ref="wrapIcon" class="wrap-icon" @mouseover="showName(item)" @mouseout="hideName">
+          <i ref="plan-icon" class="icon2-receive plan" v-show="isFromSche"></i>
+          <i ref="receive-icon" v-show="isFromKanban" class="icon2-plan receive"></i>
+          <p v-show="IsNameShow" ref="dialog" id="cssTest" class="displayName" :style="{top: top + 'px', left: left + 'px'}">{{fromName}}</p>
         </div>
-        <i v-show="isFromKanban" class="icon2-receive receive"></i>
+    <!--<i class="handle"></i>-->
         <!--<div  v-show="this.IsNameShow">{{item.kanbanOrCreatorName}}</div>-->
     </div>
     <!--</v-touch>-->
   </li>
 </template>
 <style lang="scss" scoped>
+  li.large-width{
+    width: 96.5%;
+  }
+  .displayName{
+
+  }
+  .plan{
+    color:#A8CCEF
+  }
+  .receive{
+    color:#A8CCEF
+  }
+  @media (min-width: 1201px){
+    .title-todo {
+      width:90%;
+    }
+    .todo-content-sche {
+      max-width: 83%;
+    }
+    /*.delay-width {*/
+      /*width: 85%;*/
+    /*}*/
+  }
+  @media (max-width: 1200px) and (min-width: 1101px){
+    .title-todo {
+      width:90%;
+    }
+    .todo-content-sche {
+      max-width:81% ;
+    }
+    /*.delay-width {*/
+      /*width: 85%;*/
+    /*}*/
+  }
+  @media (max-width: 1100px) and (min-width: 1001px) {
+    .title-todo {
+      width:88.5%;
+    }
+    .todo-content-sche {
+      max-width:79% ;
+    }
+    /*.delay-width {*/
+      /*width: 83%;*/
+    /*}*/
+  }
+  @media (max-width: 1000px) and (min-width: 901px) {
+    .title-todo {
+      width:87.5%;
+    }
+    .todo-content-sche {
+      max-width: 77%;
+    }
+    /*.delay-width {*/
+      /*width: 81%;*/
+    /*}*/
+  }
+  @media (max-width: 900px) and (min-width: 801px){
+    .title-todo {
+      width:86.5%;
+    }
+    .todo-content-sche {
+      max-width: 75%;
+    }
+    /*.delay-width {*/
+      /*width: 78%;*/
+    /*}*/
+  }
+  @media (max-width: 800px) {
+    .title-todo {
+      width:85%;
+    }
+    .todo-content-sche {
+      max-width:73% ;
+    }
+    /*.delay-width {*/
+      /*width: 75%;*/
+    /*}*/
+  }
+  /*.ifMax{*/
+    /*position: absolute;*/
+    /*right: 35px;*/
+    /*top: 12px;*/
+  /*}*/
+  #cssTest{
+    position: fixed;
+    /*bottom: 20px;*/
+    /*right:100px;*/
+    /*<!--left: -20px;-->*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    text-align: center;
+    /*background-color: black;*/
+    color: white;
+    /*float:left;*/
+    max-width:180px;
+    font-size: 15px;
+    min-height: 20px;
+    /*height:20px;*/
+    /*border:1px solid black;*/
+    z-index: 1900;
+    background: rgba(0,0,0,0.86);
+    border-radius: 3px;
+    /*overflow-y: auto ;*/
+    /*position:relative;*/
+    /*left:10px;*/
+    /*top:10px;*/
+  }
+  #cssTest:before{
+    content:"";
+    border:9px solid rgba(0,0,0,0.86);
+    border-left-color:rgba(0,0,0,0.86) ;
+    border-top-color:transparent;
+    border-right-color:transparent;
+    border-bottom-color:transparent;
+    width:0px;
+    height:0px;
+    position:absolute;
+    left:40%;
+    top:19px;
+    transform: rotate(90deg);
+    /*background: rgba(0,0,0,0.86);*/
+  }
   .text-grey{
     color: gray;
   }
   .text-mid-line{
     text-decoration: line-through;
   }
-  .displayName{
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    background-color: lightgray;
-    z-index: 2;
-  }
   .delay-width{
-    width: 70%;
+    /*width: 80%;*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .no-delay-width{
-    width: 100%;
+    width: 90%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .wrap-icon{
     position: absolute;
-    right: 5px;
+    right: 15px;
+    top: 13px;
     /*border: 1px solid red;*/
   }
   .delayer{
-    margin-left: 5px;
+    /*width: 20%;*/
+    /*margin-left: 5px;*/
+    /*margin-right: 5px;*/
+    /*display: flex;*/
+    /*justify-content: flex-end;*/
+    margin-left: 11px;
     font-family: PingFangSC-Regular;
     font-size: 14px;
     color: #E91010;
   }
   .finish-icon{
     display: none;
+    color:#7bbdff
   }
   .isdisplay{
     display: block;
@@ -87,20 +216,22 @@
     display: none;
   }
   .title-todo{
+    /*position: relative;*/
     height: 42px;
     font-size: 14px;
     display: flex;
     align-items: center;
-    width: 90%;
+    /*width: 87%;*/
     background: #FFFFFF;
-    border: 1px solid #ECECEC;
+    /*border: 1px solid #ECECEC;*/
     border-radius: 2px;
   }
   .todo-content-sche{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    display: flex;
+    /*display: flex;*/
+    /*max-width:70%;*/
     margin-left:10px;
     font-family: PingFangSC-Regular;
     font-size: 14px;
@@ -113,22 +244,33 @@
     background-color: #FFFFFF;
     border: 1px solid #ECECEC;
     margin-top: 3px;
+    padding-left: 21px;
+    cursor: pointer;
+    width: 94%;
+  }
+  li:hover{
+     background-color: #f9f9f9;
+  }
+  .title-todo:hover{
+    background-color: #f9f9f9;
   }
 </style>
 <script>
-//  import dateUtil from 'ut/dateUtil'
-
+  import dateUtil from 'ut/dateUtil'
   export default {
     name: 'TodoItem',
     data () {
       return {
-        IsNameShow: false
+        IsNameShow: false,
+        top: '',
+        left: ''
       }
     },
     props: {
       item: Object,
       isCheckable: Boolean,
-      sectionName: String
+      itemTitle: Object,
+      bigger: Boolean
     },
     computed: {
       currentDate () { return this.$store.getters.defaultTaskDate },
@@ -137,8 +279,8 @@
       isUE () { return this.item.pContainer === 'UE' },
       isUU () { return this.item.pContainer === 'UU' },
       delayDays () {
-//        return dateUtil.getDelayDays(this.item, this.currentDate, false)
-        return (new Date().getDate() - this.item.date)
+        return dateUtil.getDelayDays(this.item, this.currentDate, false)
+//        return (new Date().getDate() - this.item.date)
       },
       isDelay () {
         return this.delayDays > 0
@@ -146,11 +288,38 @@
       isFromSche () {
         return this.item.isFrom === 'receive'
       },
+      fromName () {
+        if (this.item.from != null) {
+          return this.item.from.levelOneName
+        }
+      },
       isFromKanban () {
         return this.item.isFrom === 'kanban'
       }
     },
     methods: {
+      mousePosition (ev) {
+        if (ev.pageX || ev.pageY) { // firefox、chrome等浏览器
+          return {x: ev.pageX, y: ev.pageY}
+        }
+        return {// IE浏览器
+          x: ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+          y: ev.clientY + document.body.scrollTop - document.body.clientTop
+        }
+      },
+      mouseMove (ev) {
+        ev = ev || window.event
+        var mousePos = this.mousePosition(ev)
+        console.log(mousePos.x + ':' + mousePos.y)
+        this.top = mousePos.y - 63
+        this.left = mousePos.x - 45
+//        document.getElementById('cssTest').style.top = mousePos.x + 'px'
+//        document.getElementById('cssTest').style.left = mousePos.y + 'px'
+      },
+      drag (item) {
+//        console.log('drag的item是' + JSON.stringify(item))
+        this.$store.dispatch('setDragItem', item)
+      },
       isMaxlength (item) {
         return item.pTitle.length > 10
       },
@@ -166,8 +335,13 @@
         e.stopPropagation()
         e.preventDefault()
       },
-      showName () {
+      showName (item) {
         this.IsNameShow = true
+        this.mouseMove()
+//        console.log('item是' + JSON.stringify(item))
+//        console.log(item.offsetTop + ':' + item.offsetLeft)
+//        this.$refs.dialog.offsetTop = item.offsetTop
+//        this.$refs.dialog.offsetLeft = item.offsetLeft
       },
       hideName () {
         this.IsNameShow = false

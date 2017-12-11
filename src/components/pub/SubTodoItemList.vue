@@ -20,7 +20,7 @@
 
   }
   li:last-child{
-    border-bottom: none;
+    /*border-bottom: none;*/
   }
 </style>
 <script>

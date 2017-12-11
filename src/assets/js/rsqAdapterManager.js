@@ -12,7 +12,7 @@
       'prompt',
       'showLoader',
       'hideLoader',
-      'actionsheet',
+      'actionsheet','openLink',
       'toast', 'picker', 'datePicker', 'timePicker', 'deleteUserCache',
       'notify','pickConversation', 'getItem', 'setItem', 'deleteItem',
       'checkVersion', 'upgradeVersion'

@@ -74,9 +74,10 @@ export default {
    * @param p.todoType
    */
   createInboxItem ({commit, state, dispatch}, p) {
+    console.log('进了来inbox了')
     var inbox = state.inbox
-    var newItem = p.newItem
-    newItem['pContainer'] = 'inbox'
+    // var newItem = p.newItem
+    // newItem['pContainer'] = 'inbox'
     var promise
     //  如果inbox.items不存在，则从服务器先获取到inbox，然后获取inbox中任务的顺序，然后再保存
     if (!inbox.items) {
@@ -85,9 +86,10 @@ export default {
       promise = Promise.resolve()
     }
     return promise.then(items => {
-      newItem['pDisplayOrder'] = util.getNextOrder(items, 'pDisplayOrder')
-      return api.todo.postNewTodo(newItem)
+      p['pDisplayOrder'] = util.getNextOrder(items, 'pDisplayOrder')
+      return api.todo.postNewTodo(p)
         .then(item => {
+          // console.log('api回来了' + JSON.stringify(item))
           commit('INB_TODO_CREATED', {item: item})
         })
     }).catch(err => {
@@ -106,28 +108,28 @@ export default {
    * @param strDate
    */
   fetchScheduleItems ({commit, state}, {strDate}) {
-    // if (strDate instanceof Date) {
-    //   strDate = moment(strDate).format('YYYY-MM-DD')
-    // }
-    // let strCurrentDate = strDate || moment().format('YYYY-MM-DD')
-    // let dateItems = state.dateTodosCache
-    // if (dateItems[strCurrentDate]) {
-    //   return Promise.resolve().then(() => {
-    //     commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
-    //   })
-    // } else {
-    //   return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
-    //     .then(todos => {
-    //       let reverseTodo = todos.reverse()
-    //       //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
-    //       var compareDate = moment(strDate).format('YYYYMMDD')
-    //       reverseTodo = reverseTodo.filter(t => {
-    //         return t.deletedDate !== compareDate
-    //       })
-    //       commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
-    //       commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
-    //     })
-    // }
+    if (strDate instanceof Date) {
+      strDate = moment(strDate).format('YYYY-MM-DD')
+    }
+    let strCurrentDate = strDate || moment().format('YYYY-MM-DD')
+    let dateItems = state.dateTodosCache
+    if (dateItems[strCurrentDate]) {
+      return Promise.resolve().then(() => {
+        commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
+      })
+    } else {
+      return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
+        .then(todos => {
+          let reverseTodo = todos.reverse()
+          //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
+          var compareDate = moment(strDate).format('YYYYMMDD')
+          reverseTodo = reverseTodo.filter(t => {
+            return t.deletedDate !== compareDate
+          })
+          commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
+          commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
+        })
+    }
   },
   /**
    * 提交新建的todo item
@@ -158,7 +160,8 @@ export default {
     //  暂时这么处理----日程任务默认为重要紧急，后面加上选择优先级功能之后再修改
     // var newItem = p.newItem
     // p['pContainer'] = 'IE'
-    // var dateStruct = dateUtil.backend2frontend(newItem)
+    // var dateStruct = dateUtil.backend2frontend(p)
+    // // console.log('dateStruct是' + JSON.stringify(dateStruct))
     // p['dateStruct'] = dateStruct
     return dispatch('createSingleScheduleItem', p)
   },
@@ -193,34 +196,40 @@ export default {
    * @param newItem
    * @param dateStruct
    */
-  createSingleScheduleItem ({commit, state, dispatch}, newItem) {
-    // var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
-    commit('SCH_TODO_CREATED', {item: newItem})
+  createSingleScheduleItem ({commit, state, dispatch}, p) {
+    // var strDate = moment(p.dateStruct.dateResult[0]).format('YYYY-MM-DD')
+    var strDate = p.createTaskDate
+    strDate = strDate.substring(0, 4) + '-' + strDate.substring(4, 6) + '-' + strDate.substring(6, 8)
+    // console.log('strdate是' + strDate)
     // var itemCache = state.dateTodosCache
-    // //  读取顺序号
-    // var strDate = newItem.createTaskDate
-    // console.log('传过来的strdate是' + strDate)
-    // return dispatch('fetchScheduleItems', {strDate})
-    //   .then(() => {
-    //     newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
-    //     // return api.todo.postNewTodo(newItem)
-    //     //   .then(item => {
-    //     commit('SCH_TODO_CREATED', {item: newItem, list: itemCache[strDate]})
-    //     // return item
-    //       // })
-    //   }).catch(err => {
-    //     alert(JSON.stringify(err))
-    //   })
+    // 读取顺序号
+    p['checkAuthority'] = 'public'
+    p['pNote'] = ''
+    return dispatch('fetchScheduleItems', {strDate})
+      .then(() => {
+        console.log('传过去' + JSON.stringify(p))
+        // p['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
+        // p['pDisplayOrder'] = p.displayOrder
+        // console.log('p.displayorder是' + p.pDisplayOrder)
+        return api.todo.postNewTodo(p)
+          .then(item => {
+            // console.log('回来了sce' + JSON.stringify(item))
+            commit('SCH_TODO_CREATED', {item: item})
+            return item
+          }).catch(err => {
+            alert(JSON.stringify(err))
+          })
+      })
   },
   createSubTodo ({commit, state, dispatch}, p) {
-    commit('CHILDTASK_TODO_CREATED', {item: p})
-    // return api.todo.postSubTodo({name: name, todoId: p.todoId})
-    //   .then(item => {
-    //     commit('CHILDTASK_TODO_CREATED', {item: item})
-    //   })
-    //   .catch(err => {
-    //     alert(JSON.stringify(err))
-    //   })
+    // commit('CHILDTASK_TODO_CREATED', {item: p})
+    return api.todo.postSubTodo({name: p.name, todoId: p.id})
+      .then(item => {
+        commit('CHILDTASK_TODO_CREATED', {item: item})
+      })
+      .catch(err => {
+        alert(JSON.stringify(err))
+      })
   },
   /**
    * 多日逻辑：
@@ -294,18 +303,17 @@ export default {
    * @param p.item
    */
   submitTodoFinish ({commit}, p) {
-    // return api.todo.putTodoProps({id: p.item.id, pIsDone: p.status})
-    //   .then(() => {
-    //     commit('SCH_LIST_TODO_CHECKED', {item: p.item, status: p.status})
-    //   })
-    commit('SCH_LIST_TODO_CHECKED', {item: p.item, status: p.status})
+    return api.todo.putTodoProps({id: p.item.id, pIsDone: p.status})
+      .then(() => {
+        console.log('api完成了' + p.status)
+        commit('SCH_LIST_TODO_CHECKED', {item: p.item, status: p.status})
+      })
   },
   submitSubTodoFinish ({commit}, p) {
-    commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: !p.status})
-    // return api.todo.putSubTodoProps({id: p.item.id, isDone: p.status})
-    //   .then(() => {
-    //     commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: p.status})
-    //   })
+    return api.todo.putSubTodoProps({id: p.item.id, isDone: p.status})
+      .then(() => {
+        commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: p.status})
+      })
   },
   /**
    * 设置inbox页面当前处于选中状态的item，该item将会被显示在edit子页面中
@@ -461,13 +469,12 @@ export default {
     //  如果id存在，则ajax更新
     var editItem = p.editItem
     editItem['id'] = todo.id
-    console.log(JSON.stringify(editItem))
-    commit('TD_TODO_UPDATED', {todo: editItem})
-    // return api.todo.putTodoProps(editItem)
-    //   .then(todo => {
-    //     commit('TD_TODO_UPDATED', {todo: todo})
-    //     return todo
-    //   })
+    // console.log(JSON.stringify(editItem))
+    return api.todo.putTodoProps(editItem)
+      .then(todo => {
+        commit('TD_TODO_UPDATED', {todo: todo})
+        return todo
+      })
   },
   //  判断是否需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
   updateRepeatTodo ({commit, state, getters}, p) {
@@ -475,12 +482,14 @@ export default {
     util.extendObject(repeat, p)
     repeat.createTaskDate = getters.defaultTaskDate
     //  如果id存在，则ajax更新
+    console.log('repeat是' + JSON.stringify(repeat))
     return api.todo.putTodoProps(repeat)
       .then(todo => {
         // commit('TD_TODO_UPDATED', {todo: todo})
         //  TODO  让所有缓存都失效，暂时这么处理
         commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
         commit('SCH_TODO_CACHE_DELETE_ALL')
+        commit('NO_REPEAT')
         return todo
       })
   },
@@ -507,7 +516,7 @@ export default {
     }
     return api.todo.putRecordProps(editItem)
       .then(record => {
-        console.log('putRecordProps回来了吗')
+        // console.log('putRecordProps回来了吗')
         commit('TD_COMMENT_CREATED', {comment: record})
       })
   },
@@ -515,8 +524,8 @@ export default {
     //  p.todo不存在，则默认读取currentTod
     // var id = state.todo.currentTodo.subTodos[0].id
     // var id = p.item.id
-    p.item.name = p.name
-    var item = p.item
+    // p.item.name = p.name
+    var item = p.editItem
     //  如果id存在，则ajax更新
     // var editItem = p.editItem
     // console.log('todo的id是' + id)
@@ -555,10 +564,24 @@ export default {
     var promise
     //  如果this.currentTodo.id存在，则更新currentTodo
     if (todo.id) {
-      var taskDate = todo.createTaskDate || getters.defaultTaskDate
+      if (todo.startDate != null) {
+        // var taskDate = todo.startDate.split('/').join('')
+        // console.log('taskDate' + taskDate)
+      } else {
+        // console.log('todo.dates[0]' + todo.dates.split(',')[0])
+        // taskDate = todo.dates.split(',')[0]
+      }
+      if (p.clock.alert.length === 0) {
+        p.clock = {
+          startTime: p.clock.startTime,
+          endTime: p.clock.endTime,
+          alwaysAlert: true
+        }
+      }
+      // var taskDate = todo.createTaskDate || getters.defaultTaskDate
       promise = dispatch('updateTodo', {
         editItem: {
-          createTaskDate: taskDate,
+          createTaskDate: p.createTaskDate,
           clock: p.clock
         }
       })
@@ -584,10 +607,11 @@ export default {
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
   deleteTodo ({commit, state, dispatch, getters}, p) {
+    var date = dateUtil.getStandardTime(new Date())
     var todo = p.todo || state.todo.currentTodo
     var promise
     if (p.isRepeat) {
-      var params = {id: todo.id, createTaskDate: getters.defaultTaskDate, type: p.type}
+      var params = {id: todo.id, createTaskDate: date, type: p.type}
       promise = api.todo.deleteRepeatTodo(params)
     } else {
       promise = api.todo.deleteTodo(todo)
@@ -724,16 +748,27 @@ export default {
     var result = {}
     var cache = state.rsqidCache
     var promise
-    p.idArray.forEach(openid => {
-      if (cache[openid]) {
-        result[openid] = cache[openid]
+    p.idArray = p.idArray.toString().split(',')
+    for (var i = 0; i < p.idArray.length; i++) {
+      if (cache[p.idArray[i]]) {
+        result[p.idArray[i]] = cache[p.idArray[i]]
       } else {
-        idsNotInCache.push(openid)
+        // console.log('openid' + p.idArray[i])
+        idsNotInCache.push(p.idArray[i])
       }
-    })
+    }
+    // p.idArray.forEach(openid => {
+    //   if (cache[openid]) {
+    //     result[openid] = cache[openid]
+    //   } else {
+    //     console.log('openid' + openid)
+    //     idsNotInCache.push(openid)
+    //   }
+    // })
     if (idsNotInCache.length > 0) {
       promise = api.appAuth.getRsqidMap({corpId: p.corpId, idArray: idsNotInCache})
         .then(resp => {
+          // console.log('返回来的resp' + JSON.stringify(resp))
           var mapList = resp.result
           mapList.forEach(idMap => {
             //  双向缓存
@@ -754,27 +789,29 @@ export default {
     var currentItem = state.todo.currentTodo
     props['todoId'] = currentItem.id
     props['type'] = 0
-    commit('TD_COMMENT_CREATED', {comment: props})
+    // commit('TD_COMMENT_CREATED', {comment: props})
     // if (props.commentContent) {
-    //   var currentItem = state.todo.currentTodo
-    //   var replyId = state.replyId
-    //   var replyName = state.replyName
-    //   props['todoId'] = currentItem.id
-    //   props['type'] = 0
-    //   if (replyId !== null) {
-    //     props['atIds'] = replyId
-    //     props.commentContent = '@' + replyName + '&' + props.commentContent
-    //   }
-    //
-    //   return api.todo.postComment(props)
-    //     .then((com) => {
-    //       com.type = 0
-    //       commit('TD_COMMENT_CREATED', {comment: com})
-    //     })
+    currentItem = state.todo.currentTodo
+    var replyId = state.replyId
+    // var replyName = state.replyName
+    props['todoId'] = currentItem.id
+    props['type'] = 0
+    if (replyId !== null) {
+      props['atIds'] = replyId
+      props.commentContent = props.commentContent // 这里可能要去掉前面的@
+    }
+
+    return api.todo.postComment(props)
+      .then((com) => {
+        // console.log('api走完了')
+        com.type = 0
+        commit('TD_COMMENT_CREATED', {comment: com})
+        // console.log('commit走完了')
+      })
+  },
     // } else {
     //   return Promise.resolve()
     // }
-  },
   ReplyCommentItem ({commit, state}, props) {
     commit('REPLY_COMMENT_CREATED', {item: props.item})
   },
@@ -939,9 +976,124 @@ export default {
     })
   },
   changeScheTitle ({commit, state}, p) {
-    commit('CHANGE_SCHE_TITLE', {title: p.title, name: p.sectionname})
+    return api.todo.changeScheTitle(p)
+      .then(() => {
+        // console.log('title' + p.title + 'name' + p.sectionname)
+        commit('CHANGE_SCHE_TITLE', {title: p.title, id: p.id})
+      })
   },
   changePriority ({commit, state}, p) {
-    commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
+    return api.todo.changePriority(p)
+      .then(() => {
+        commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
+      })
+    // commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
+  },
+  changeInbox ({commit, state}, p) {
+    return api.todo.changePriority(p)
+      .then(() => {
+        commit('CHANGE_INBOX', {id: p.id, pContainer: p.pContainer, order: p.pDisplayOrder})
+      })
+  },
+  getAllTodoTitleList ({commit, state}, item) {
+    return api.todo.getAllTodoTitleList()
+      .then((items) => {
+        // console.log('服务器拿回来的title是' + JSON.stringify(items))
+        commit('GET_TODO_TITLE', {items: items})
+      })
+  },
+  getItem ({commit, state}, item) {
+    return api.todo.getItem(item)
+      .then((item) => {
+        return item
+        // commit('GET_TODO_TITLE', {item: item}) 在这里setCurrentTodo跟回去then里面set是一个道理
+      })
+  },
+  setDragItem ({commit, state}, item) {
+    // console.log('setDragItem' + JSON.stringify(item))
+    commit('SAVE_DRAG_ITEM', {item: item})
+  },
+  createScheTitle ({commit, state}, p) {
+    return api.todo.createScheTitle(p)
+      .then((item) => {
+        commit('CREATE_SCHE_TITLE', {title: item.title, id: item.id, pContainer: item.pContainer})
+      })
+  },
+  clearTime ({ commit, state, getters, dispatch }, p) {
+    p = p || {}
+    var todo = state.todo.currentTodo
+    if (todo.startDate != null) {
+      var taskDate = todo.startDate.split('/').join('')
+      // console.log('taskDate' + taskDate)
+    } else {
+      // console.log('todo.dates[0]' + todo.dates.split(',')[0])
+      taskDate = todo.dates.split(',')[0]
+    }
+    // var taskDate = todo.createTaskDate || getters.defaultTaskDate
+    return dispatch('updateTodo', {
+      editItem: {
+        createTaskDate: taskDate,
+        clock: p.clock
+      }
+    })
+  },
+  getPlans ({commit, state}) {
+    return api.todo.getPlans()
+      .then((item) => {
+        // console.log('拿到的plans' + JSON.stringify(item))
+        commit('GET_PlAN', {item: item})
+        return item
+      })
+  },
+  getSubPlans ({commit, state}, item) {
+    return api.todo.getSubPlans(item)
+      .then((item) => {
+        // console.log('拿到的subplans' + JSON.stringify(item))
+        commit('GET_SUB_PlAN', {item: item})
+        return item
+      })
+  },
+  getCard ({commit, state}, p) {
+    return api.todo.getCard(p.item)
+      .then((item) => {
+        // console.log('拿到的card' + JSON.stringify(item))
+        commit('GET_CARD', {item: item})
+        return item
+      })
+  },
+  moveToPlan ({commit, state}, p) {
+    return api.todo.moveToPlan(p)
+      .then((item) => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('CHANGE_ITEM', {item: item})
+        return item
+      })
+  },
+  changeOrder ({commit, state}, p) {
+    p['isCloseRepeat'] = true
+    p['dates'] = ''
+    p['startDate'] = ''
+    p['endDate'] = ''
+    return api.todo.changeOrder(p)
+      .then((item) => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        // commit('GET_CARD', {item: item})
+        return item
+      })
+  },
+  getRecord ({commit, state}, p) {
+    return api.todo.getRecord(p)
+      .then((item) => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('SAVE_RECORD', {item: item})
+        return item
+      })
+  },
+  copy ({commit, state}, p) {
+    return api.todo.copy(p)
+      .then(() => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('COPY_CURRENT_TODO')
+      })
   }
 }
