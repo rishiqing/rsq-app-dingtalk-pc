@@ -12,18 +12,18 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
-  : config.build.env
+  : config.beta.env
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
+      sourceMap: config.beta.productionSourceMap,
       extract: true
     })
   },
-  devtool: config.build.productionSourceMap ? '#source-map' : false,
+  devtool: config.beta.productionSourceMap ? '#source-map' : false,
   output: {
-    path: config.build.assetsRoot,
+    path: config.beta.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
@@ -55,17 +55,17 @@ const webpackConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       env: 'prod',
-      authServer: config.build.authServer,
-      stsServer: config.build.stsServer,
-      ossRegion: config.build.aliOSS.region,
-      ossBucket: config.build.aliOSS.bucket,
-      ossRoot: config.build.aliOSS.root,
-      version: config.build.version,
-      apiServer: config.build.apiServer,
-      frontServer: config.build.frontServer,
+      authServer: config.beta.authServer,
+      stsServer: config.beta.stsServer,
+      ossRegion: config.beta.aliOSS.region,
+      ossBucket: config.beta.aliOSS.bucket,
+      ossRoot: config.beta.aliOSS.root,
+      version: config.beta.version,
+      apiServer: config.beta.apiServer,
+      frontServer: config.beta.frontServer,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
-        : config.build.index,
+        : config.beta.index,
       template: 'index.html',
       inject: true,
       minify: {
@@ -104,14 +104,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
+        to: config.beta.assetsSubDirectory,
         ignore: ['.*']
       }
     ])
   ]
 })
 
-if (config.build.productionGzip) {
+if (config.beta.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
   webpackConfig.plugins.push(
@@ -120,7 +120,7 @@ if (config.build.productionGzip) {
       algorithm: 'gzip',
       test: new RegExp(
         '\\.(' +
-        config.build.productionGzipExtensions.join('|') +
+        config.beta.productionGzipExtensions.join('|') +
         ')$'
       ),
       threshold: 10240,
@@ -129,7 +129,7 @@ if (config.build.productionGzip) {
   )
 }
 
-if (config.build.bundleAnalyzerReport) {
+if (config.beta.bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
