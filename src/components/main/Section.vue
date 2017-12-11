@@ -1,5 +1,5 @@
 <template>
-  <div class="section-wrap" :class="{'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
+  <div class="section-wrap" :class="{'floatDirection': direction, 'reverseDirection': !direction, 'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
     <div class="section-head" @mouseover="showIcon" @mouseout="hideIcon">
       <input ref="itemTitleInput" type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)" @focus="showSave">
       <div class="save-sche-title" v-show="this.showSaveButton" @click="saveTitle">保存</div>
@@ -51,6 +51,9 @@
 //      sectionName: String
     },
     computed: {
+      direction () {
+        return (this.itemTitle.pContainer === 'IE' || this.itemTitle.pContainer === 'UE')
+      },
       loginUser () {
         return this.$store.getters.loginUser || {}
       },
@@ -274,6 +277,12 @@
   }
 </script>
 <style scoped>
+  /*.floatDirection{*/
+    /*float: left*/
+  /*}*/
+  /*.reverseDirection{*/
+    /*float: right;*/
+  /*}*/
   @media (max-height: 600px) and (min-height: 500px) {
     .section-wrap{
       height: 45%;
@@ -325,7 +334,7 @@
     div.UELarge{
       height: 79%;
       left:9px;
-      bottom:3%
+      bottom:2%
     }
   }
   @media (min-height: 650px) {

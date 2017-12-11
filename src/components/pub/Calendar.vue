@@ -212,10 +212,10 @@
   @media (max-width: 800px) {
     .wrap-calendar{
       width: 71%;
-      margin-left: 5px;
+      margin-left: 4px;
     }
     .arrow-right-head{
-      margin-left: 3px;
+      margin-left: 4px;
     }
   }
   @media (max-width: 900px) and (min-width: 801px){

@@ -4,7 +4,7 @@ const utils = require('./utils')
 const url = require('url')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-
+var webpack = require("webpack")
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -28,9 +28,19 @@ module.exports = {
       'api': resolve('src/api'),
       'com': resolve('src/components'),
       'ut': resolve('src/utils'),
-      'as': resolve('src/assets')
+      'as': resolve('src/assets'),
+      'jquery': 'jquery'
     }
   },
+  plugins: [
+    // 3. 配置全局使用 jquery
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      jquery: "jquery",
+      "window.jQuery": "jquery"
+    })
+  ],
   module: {
     rules: [
       {
