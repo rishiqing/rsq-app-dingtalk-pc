@@ -5,10 +5,13 @@
         <img class="link-to-rsq" src="../../assets/c.png" alt="" @click="openLink">
         <img src="../../assets/a.png" alt="" class="head-pic">
       </div>
-      <avatar v-for="item in selectedLocalList"
-              :key="item.rsqUserId"
-              :src="item.avatar"
-              :username="item.name"></avatar>
+      <!--<avatar v-for="item in selectedLocalList"-->
+              <!--:key="item.rsqUserId"-->
+              <!--:src="item.avatar"-->
+              <!--:username="item.name"></avatar>-->
+      <avatar :key="this.loginUser.authUser.rsqUserId"
+              :src="this.loginUser.authUser.avatar"
+              :username="this.loginUser.authUser.name"></avatar>
     </div>
     <div class="calendar">
       <div  class="wrap-date" @click="showSelectDate($event)">

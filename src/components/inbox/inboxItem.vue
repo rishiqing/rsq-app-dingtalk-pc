@@ -1,6 +1,6 @@
 <template>
-  <li class="inbox-list" :key="item.id" @dragstart="drag(this.item)">
-    <span class="inbox-list-item">{{this.item.pTitle}}</span>
+  <li class="inbox-list" :key="item.id" @dragstart="drag(item)">
+    <span class="inbox-list-item">{{item.pTitle}}</span>
     <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
       <i class="icon2-receive plan" v-show="isFromSche" v-tip.dark.transition.top="fromName"></i>
       <i v-show="isFromKanban" class="icon2-plan receive" v-tip.dark.transition.top="fromName"></i>
