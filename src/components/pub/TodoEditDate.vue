@@ -41,17 +41,16 @@
         >
         </r-repeat-week>
         <table class="dp-table" v-show="this.everyMonth">
-          <tr v-for="weekArray in days">
+          <tr v-for="weekArray in repeatNewMonth">
             <td v-for="day in weekArray" :key="day.date.getTime()"
                 @click="tapDay($event, day)">
               <div class="dp-day"
                    :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected,'is-today':isToday(day)}">
-                {{day.date.getTime() === numToday ? '今' : day.date.getDate()}}
+                {{ day.date.getTime() === numToday ? '今' : day.date.getDate()}}
               </div>
             </td>
           </tr>
         </table>
-
       </div>
       <div v-show="this.repeatState" class="repeat-state">
         <span class="repeat-deadline">截止重复直到</span>
@@ -265,13 +264,14 @@
     .dp-title-text-date {
       text-align: center;
       /*font-family: PingFangSC-Regular;*/
-      width: 70%;
+      width: 50%;
       font-size: 14px;
       /*color: #3D3D3D;*/
     }
     .dp-title .icon {
       font-size:14px;
       color: #333333;
+      cursor: pointer;
     }
     /*.dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}*/
     .dp-table {
@@ -328,7 +328,7 @@
       line-height:30px;
       text-align: center;
       border-radius: 50%;
-      font-family: PingFangSC-Medium;
+      font-family: AppleSystemUIFont;
       font-size: 17px;
       color: #666666;
       cursor: pointer;
@@ -403,6 +403,13 @@
     data () {
       return {
         compId: 'SYSTEM_SELECT_DATE',
+        firstCycle: [],
+        secondCycle: [],
+        thirdCycle: [],
+        fourthCycle: [],
+        fiveCycle: [],
+        repeatNewMonth: [],
+        repeatMonthDays: [],
         weeks: ['日', '一', '二', '三', '四', '五', '六'],
         months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
         focusDate: new Date(),  //  表示当前显示的月份，决定了当前显示哪个月份的日历
@@ -484,6 +491,13 @@
       ifshow: Boolean
     },
     methods: {
+      showdate (day) {
+        if (day.text) {
+          return day.text
+        } else {
+          return day.date.getTime() === this.numToday ? '今' : day.date.getDate()
+        }
+      },
       stop (e) {
         this.deadLine = false
         e.stopPropagation()
@@ -587,7 +601,9 @@
         }
       },
       isToday (day) {
-        return day.date.getTime() === this.numToday
+        if (!day.text) {
+          return day.date.getTime() === this.numToday
+        }
       },
       initData () {
 //        debugger
@@ -744,6 +760,15 @@
 //          console.log('之后this.focusdate是' + this.focusDate)
         }
         this.days = dateUtil.getMonthDays(this.focusDate) //  this.days数据结构很有意思
+//        console.log('this.days' + JSON.stringify(this.days))
+//        this.repeatNewMonth.push({
+//          date: new Date(2070),
+//          isFocused: false,
+//          siSelected: false,
+//          isInMonth: true,
+//          showWeek: false,
+//          text: '最后一天'
+//        })
 //        console.log('this.days是' + JSON.stringify(this.days))
         this.selectDays()
       },
@@ -971,10 +996,58 @@
         this.saveTodoDateState()
         this.submitTodo()
         this.$emit('close-edit-date')
+        this.deadLineDate = false
+      },
+      showLastDate () {
+        for (var i = 0; i <= 4; i++) {
+          if (i === 0) {
+            for (var j = 2; j <= 6; j++) {
+              this.repeatMonthDays.push(this.days[0][j])
+            }
+          } else if (i === 4) {
+            for (var k = 0; k <= 4; k++) {
+              this.repeatMonthDays.push(this.days[4][k])
+            }
+          } else {
+            for (var m = 0; m <= 6; m++) {
+              this.repeatMonthDays.push(this.days[i][m])
+            }
+          }
+        }
+        for (i = 0; i <= 6; i++) {
+          this.firstCycle.push(this.repeatMonthDays[i])
+        }
+        for (i = 7; i <= 13; i++) {
+          this.secondCycle.push(this.repeatMonthDays[i])
+        }
+        for (i = 14; i <= 20; i++) {
+          this.thirdCycle.push(this.repeatMonthDays[i])
+        }
+        for (i = 21; i <= 27; i++) {
+          this.fourthCycle.push(this.repeatMonthDays[i])
+        }
+        for (i = 28; i <= 30; i++) {
+          this.fiveCycle.push(this.repeatMonthDays[i])
+        }
+        this.repeatNewMonth.push(this.firstCycle)
+        this.repeatNewMonth.push(this.secondCycle)
+        this.repeatNewMonth.push(this.thirdCycle)
+        this.repeatNewMonth.push(this.fourthCycle)
+        this.repeatNewMonth.push(this.fiveCycle)
+//        this.repeatNewMonth.push({
+//          date: new Date(2060),
+//          isFocused: false,
+//          isSelected: false,
+//          isInMonth: false,
+//          showWeek: false,
+//          text: '最后一天'
+//        })
+        console.log('this.repeatNewMonth' + JSON.stringify(this.repeatNewMonth))
       }
     },
     created () {
       this.initData()
+      this.showLastDate()
     },
     mounted () {
       Bus.$on('senddate', () => {
