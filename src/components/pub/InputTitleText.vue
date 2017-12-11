@@ -45,6 +45,7 @@
   .select-title{
     /*border: 1px solid #666666;*/
     /*border-radius: 1.98px;*/
+    cursor: pointer;
     font-size: 14px;
   }
   .hide{

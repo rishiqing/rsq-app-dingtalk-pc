@@ -417,6 +417,7 @@
       overflow: hidden;
     }
     .create-icon{
+      cursor:pointer;
       width: 20.8px;
       height: 20.8px;
       /*font-size: 13px;*/

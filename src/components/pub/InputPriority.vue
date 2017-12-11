@@ -12,20 +12,47 @@
   </div>
 </template>
 <style scoped>
-  priority-menu>li:before{
-    content: '.';
-    color:red
+  priority-menu>li{
+   list-style: none;
   }
-  .priority-name:before{
+  .priority-name:nth-child(1):before{
     content: "";
     display: block;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background-color: black;
+    background-color: #fd8a8a;
+    margin-top: 4px;
+  }
+  .priority-name:nth-child(2):before{
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #ffd15b;
+    margin-top: 4px;
+  }
+  .priority-name:nth-child(3):before{
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #64a2e1;
+    margin-top: 4px;
+  }
+  .priority-name:nth-child(4):before{
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #6bc859;
     margin-top: 4px;
   }
   .priority-menu{
+    list-style: none;
     position: absolute;
     width: 150px;
     top:40px;
@@ -37,6 +64,7 @@
     background-color: white;
     box-shadow: 3px 5px 24px #888888;
     padding-left: 15px;
+    padding-top: 10px;
   }
   .priority-name{
     display: flex;

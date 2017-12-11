@@ -124,6 +124,7 @@
   }
   .select,.finish-icon{
     font-size: 14px;
+    cursor: pointer;
   }
   .finish-icon{
     display: none;

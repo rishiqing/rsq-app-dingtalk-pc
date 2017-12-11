@@ -197,12 +197,14 @@
     /*position: absolute;*/
     font-size: 14px;
     color: #CFCFCF;
+    cursor: pointer;
     /*margin-top: 8px;*/
     /*top: 15px;*/
     /*left:2.5%;*/
   }
   .arrow-right-head {
     /*position: absolute;*/
+    cursor: pointer;
     font-size: 14px;
     color: #CFCFCF;
     /*margin-top: 8px;*/

@@ -154,6 +154,7 @@
     justify-content: center;
     color:white;
     margin-left: -3px;
+    cursor: pointer;
   }
   #selectTask{
     width: 120px;
