@@ -63,18 +63,39 @@
       }
     },
     created () {
-      if (this.weekDate.length > 0) {
-        for (var i = 0; i < this.weekDate.length; i++) {
-          var week = new Date(this.weekDate[i]).getDay()
-          if (week > 4) {
-            this.weekArraybackward[week - 5].isSelected = true
-            this.selectWeekDate.push(week)
-          } else {
-            this.weekArrayforward[week - 1].isSelected = true
-            this.selectWeekDate.push(week)
-          }
-        }
-      }
+//      if (this.weekDate.length > 0) {
+//        for (var i = 0; i < this.weekDate.length; i++) {
+//          var week = new Date(this.weekDate[i]).getDay()
+//          if (week > 4) {
+//            this.weekArraybackward[week - 5].isSelected = true
+//            this.selectWeekDate.push(week)
+//          } else {
+//            console.log('进来了')
+//            console.log(this.weekArrayforward[week - 1])
+//            this.weekArrayforward[week - 1].isSelected = true
+//            console.log(this.weekArrayforward[week - 1].isSelected)
+//            this.selectWeekDate.push(week)
+//          }
+//        }
+//      }
+    },
+    mounted () {
+//      if (this.weekDate.length > 0) {
+//        for (var i = 0; i < this.weekDate.length; i++) {
+//          var week = new Date(parseFloat(this.weekDate[i])).getDay()
+//          if (week > 4) {
+//            this.weekArraybackward[week - 5].isSelected = true
+//            this.selectWeekDate.push(week)
+//          } else {
+//            console.log('进来了' + week)
+//            console.log(this.weekArrayforward[week - 1])
+//            this.weekArrayforward[week - 1].isSelected = true
+//            console.log(this.weekArrayforward[week - 1].isSelected)
+//            this.selectWeekDate.push(week)
+//          }
+//        }
+//      }
+//    }
     }
   }
 </script>

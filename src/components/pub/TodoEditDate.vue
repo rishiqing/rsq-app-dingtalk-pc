@@ -381,7 +381,7 @@
 </style>
 <script>
   import dateUtil from 'ut/dateUtil'
-  import repeatWeek from 'com/pub/repeatWeek'
+  import repeatWeekCom from 'com/pub/repeatWeekCom'
   import DeadLine from 'com/pub/DeadLine'
   import Bus from 'com/bus'
   /**
@@ -433,7 +433,7 @@
       }
     },
     components: {
-      'r-repeat-week': repeatWeek,
+      'r-repeat-week': repeatWeekCom,
       'r-deadline': DeadLine
     },
     computed: {
@@ -590,6 +590,7 @@
         return day.date.getTime() === this.numToday
       },
       initData () {
+//        debugger
         console.log('this.currentTodoDate是' + JSON.stringify(this.currentTodoDate))
         var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
         console.log('后端转化成前端dateStruct是' + JSON.stringify(dateStruct))
@@ -615,12 +616,16 @@
             }
           } else if (dateStruct.repeatType === 'everyWeek') {
             console.log('进来每周了')
-            this.repeatWeek = this.selectNumDate
-            for (i = 0; i < this.repeatStyle.length; i++) {
-              if (this.repeatStyle[i].title !== '每周') {
-                this.repeatStyle[i].selected = false
+            console.log('this.repeatWeek' + this.repeatWeek.length + 'this.selectNumDate' + JSON.stringify(this.selectNumDate))
+            for (var p = 0; p < this.selectNumDate.length; p++) {
+              this.repeatWeek.push(this.selectNumDate[p].toString())
+            }
+//            this.repeatWeek = this.selectNumDate
+            for (var k = 0; k < this.repeatStyle.length; k++) {
+              if (this.repeatStyle[k].title !== '每周') {
+                this.repeatStyle[k].selected = false
               } else {
-                this.repeatStyle[i].selected = true
+                this.repeatStyle[k].selected = true
               }
             }
             console.log('结束每周了')
@@ -639,19 +644,19 @@
               var date = '' + obj.getFullYear() + (obj.getMonth() + 1) + day
               this.selectRepeatDate.push(date)
             }
-            for (i = 0; i < this.repeatStyle.length; i++) {
-              if (this.repeatStyle[i].title !== '每月') {
-                this.repeatStyle[i].selected = false
+            for (var m = 0; m < this.repeatStyle.length; m++) {
+              if (this.repeatStyle[m].title !== '每月') {
+                this.repeatStyle[m].selected = false
               } else {
-                this.repeatStyle[i].selected = true
+                this.repeatStyle[m].selected = true
               }
             }
           } else {
-            for (i = 0; i < this.repeatStyle.length; i++) {
-              if (this.repeatStyle[i].title !== '每年') {
-                this.repeatStyle[i].selected = false
+            for (var n = 0; n < this.repeatStyle.length; n++) {
+              if (this.repeatStyle[n].title !== '每年') {
+                this.repeatStyle[n].selected = false
               } else {
-                this.repeatStyle[i].selected = true
+                this.repeatStyle[n].selected = true
               }
             }
             this.everyYear = true

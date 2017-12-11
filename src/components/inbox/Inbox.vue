@@ -199,7 +199,7 @@
   .inbox-input{
     /*background: #FFFFFF;*/
     border: 0 solid #979797;
-    width: 264px;
+    width: 244px;
     height: 42px;
     display: flex;
     align-items: center;

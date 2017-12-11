@@ -52,7 +52,7 @@
     },
     computed: {
       direction () {
-        return (this.itemTitle.pContainer === 'IE' || this.itemTitle.pContainer === 'UE')
+        return (this.ieLarge || this.ueLarge)
       },
       loginUser () {
         return this.$store.getters.loginUser || {}
@@ -277,11 +277,11 @@
   }
 </script>
 <style scoped>
-  /*.floatDirection{*/
-    /*float: left*/
+  /*div.floatDirection{*/
+    /*float: right*/
   /*}*/
   /*.reverseDirection{*/
-    /*float: right;*/
+    /*float: left;*/
   /*}*/
   @media (max-height: 600px) and (min-height: 500px) {
     .section-wrap{
@@ -500,7 +500,7 @@
     /*padding-bottom: 2%;*/
     /*margin-bottom: 2%;*/
     width: 48%;
-    /*height: 47%;*/
+    /*!*height: 47%;*!*/
     float: left;
     /*border:1px solid red;*/
     background-color: #FAFAFA;
