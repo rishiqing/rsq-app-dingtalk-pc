@@ -5,10 +5,10 @@
         <img class="link-to-rsq" src="../../assets/c.png" alt="" @click="openLink">
         <img src="../../assets/a.png" alt="" class="head-pic">
       </div>
-      <!--<avatar v-for="item in selectedLocalList"-->
-              <!--:key="item.rsqUserId"-->
-              <!--:src="item.avatar"-->
-              <!--:username="item.name"></avatar>-->
+      <avatar v-for="item in selectedLocalList"
+              :key="item.rsqUserId"
+              :src="item.avatar"
+              :username="item.name"></avatar>
     </div>
     <div class="calendar">
       <div  class="wrap-date" @click="showSelectDate($event)">
@@ -206,6 +206,7 @@
           .then(idMap => {
 //            console.log('idmap' + JSON.stringify(idMap))
             this[targetListName] = util.getMapValuePropArray(idMap)
+            console.log('this.loginUser: %o', this.loginUser.authUser.avatar)
 //            window.rsqadmg.exec('hideLoader')
           })
       }
@@ -218,7 +219,7 @@
 //      console.log(this.titleArray.length)
     },
     mounted () {
-//      this.openLink()
+      console.log('this.loginUser: %o', this.loginUser)
     }
   }
 </script>

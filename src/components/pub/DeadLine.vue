@@ -1,11 +1,11 @@
 <template>
   <div class="select-date-deadline">
-    <div class="dp-title">
+    <div class="dp-title-deadline">
       <!--<div class="dp-title-tag u-pull-left" @click="tapEmpty($event)">空</div>-->
       <!--<div class="dp-title-tag u-pull-right" @click="tapBackToday($event)">今</div>-->
       <div tag="i" class="icon icon-keyboard_arrow_left"
            @click="tapChangeMonth($event, -1)"></div>
-      <div class="dp-title-text">
+      <div class="dp-title-text-deadline">
         {{focusDate.getFullYear()}}年{{focusDate.getMonth() + 1}}月
       </div>
       <div tag="i" class="icon icon-keyboard_arrow_right"
@@ -36,10 +36,41 @@
         </tr>
         </tbody>
       </table>
+      <div class="wrap-button-date">
+        <button class="today" @click="backToToday">今天</button>
+        <button class="clear-date" @click="clear">清除</button>
+      </div>
     </div>
   </div>
 </template>
 <style lang="scss">
+  .dp-day:hover{
+    cursor: pointer;
+  }
+  .wrap-button-date{
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+  }
+  .clear-date,.today{
+    display: inline-block;
+    width: 94px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #D5D5D5;
+    border-radius: 2px;
+    margin-left: 20px;
+    background-color: white;
+    cursor: pointer;
+  }
+  .select-date-deadline .dp-content tbody{
+    margin-top: 20px;
+  }
+  .select-date-deadline thead{
+    margin-bottom: 15px;
+  }
   .select-date-deadline{
     position: absolute;
     top: 5px;
@@ -85,16 +116,19 @@
     /*border-bottom:1px solid #E0E0E0 ;*/
     /*padding-bottom: 0.4rem;*/
   }
-  .dp-title {
+  .dp-title-deadline {
     height: 30px;
     display: flex;
     align-items: center;
+    margin-bottom: 15px;
+    padding: 0 5px;
   }
-  .dp-title-text {
+  .dp-title-text-deadline {
     /*text-align: center;*/
     /*font-family: PingFangSC-Regular;*/
     width: 90%;
     font-size: 14px;
+    text-align: center;
     /*color: #3D3D3D;*/
   }
   .dp-title .icon {
@@ -199,7 +233,8 @@
         months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
         focusDate: new Date(),  //  表示当前显示的月份，决定了当前显示哪个月份的日历
         days: [],
-        selectNumDate: null
+        selectNumDate: null,
+        dateType: ''
       }
     },
     props: {
@@ -236,6 +271,16 @@
       }
     },
     methods: {
+      clear () {
+        this.$emit('selectedDate', {date: '永久'})
+      },
+      backToToday () {
+        this.focusDate = new Date()
+        this.dateType = 'single'
+        this.selectNumDate = [dateUtil.getZeroTime(new Date()).getTime()]
+        this.resetType()
+        this.$emit('selectedDate', {date: new Date()})
+      },
       isToday (day) {
         return day.date.getTime() === this.numToday
       },

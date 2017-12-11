@@ -55,7 +55,7 @@
       </div>
       <div v-show="this.repeatState" class="repeat-state">
         <span class="repeat-deadline">截止重复直到</span>
-        <div class="repeat-border" @click="selectDeadLine">
+        <div class="repeat-border" @click="selectDeadLine($event)">
           <span class="repeat-deadline">{{deadLineKind}}</span>
           <i class="icon2-arrow-down2 arrow"></i>
         </div>
@@ -123,7 +123,7 @@
     <!--<div tag="p" class="date-clear" @click="tapEmpty">清除日期放入收纳箱</div>-->
   </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
   .repeat-style-wrap-item{
     cursor: pointer;
     margin-top: 5px;
@@ -274,7 +274,11 @@
       color: #333333;
     }
     /*.dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}*/
-    .dp-table {width:100%;height:8rem;text-align: center;}
+    .dp-table {
+      width:100%;
+      /*height:8rem;*/
+      text-align: center;
+    }
     .dp-grey {color: #a8a8a8;}
     .dp-table>tbody {
       margin-top: 10px;
@@ -481,6 +485,7 @@
     },
     methods: {
       stop (e) {
+        this.deadLine = false
         e.stopPropagation()
       },
       clearDate () {
@@ -493,17 +498,23 @@
         this.resetType()
       },
       getDeadLine (obj) {
-        var year = obj.date.getFullYear()
-        var month = obj.date.getMonth() + 1
-        var date = obj.date.getDate()
-        this.deadLineRepeat = month + '月' + date + '日'
-        month = month < 10 ? ('0' + month) : month
-        date = date < 10 ? ('0' + date) : date
-        this.repeatOverDate = year + '-' + month + '-' + date + ' ' + '00:00:00'
+        if (obj.date === '永久') {
+          this.repeatOverDate = ''
+          this.deadLineRepeat = ''
+        } else {
+          var year = obj.date.getFullYear()
+          var month = obj.date.getMonth() + 1
+          var date = obj.date.getDate()
+          this.deadLineRepeat = month + '月' + date + '日'
+          month = month < 10 ? ('0' + month) : month
+          date = date < 10 ? ('0' + date) : date
+          this.repeatOverDate = year + '-' + month + '-' + date + ' ' + '00:00:00'
+        }
         this.deadLineDate = false
       },
-      selectDeadLine () {
+      selectDeadLine (e) {
         this.deadLine = !this.deadLine
+        e.stopPropagation()
       },
       repeatAlways () {
         this.deadLine = false
@@ -553,8 +564,7 @@
               this.repeatStyle[i].selected = false
             }
           }
-          if (this.selectRepeatDate.indexOf(dateUtil.getStandardTime(new Date()) === -1)) {
-            console.log('进来了')
+          if (this.selectRepeatDate.length === 0) {
             this.selectRepeatDate.push(dateUtil.getStandardTime(new Date()))
           }
           this.repeatOption = false

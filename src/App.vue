@@ -22,12 +22,12 @@
       }
     },
     mounted () {
-//      window.rsqadmg.execute('openLink', {
-//        'corpID': this.corpId,
-//        'userID': this.userId,
-//        success () {
-//        }
-//      })
+      window.rsqadmg.execute('openLink', {
+        'corpID': this.corpId,
+        'userID': this.userId,
+        success () {
+        }
+      })
     }
   }
 </script>

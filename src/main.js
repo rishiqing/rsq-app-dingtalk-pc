@@ -16,7 +16,13 @@ import 'as/js/xssFilter.js'
 import Pro from 'es6-promise'
 import Sortable from 'vue-sortable'
 import draggable from 'vuedraggable'
+import Vtip from 'vtip'
+import 'vtip/lib/index.min.css'
+// 注册指令使用
+Vue.use(Vtip.directive)
 Vue.component('draggable', draggable)
+// 工具函数调用
+Vue.prototype.$tip = Vtip.tip
 Vue.use(Sortable)
 Pro.polyfill()
 Vue.use(moment)

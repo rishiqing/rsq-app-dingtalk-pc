@@ -7,12 +7,13 @@
       <i class="icon2-selected finish-icon" :class="{'isdisplay':item.isDone}"></i>
     </div>
     <input  @keypress="changeSubItemTitle($event.target.value,$event)" class="subtodo-content margin-detail" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}" :value=item.name>
-    <i class="icon2-arrow-down2 arrow-down" @click="showOption"></i>
+    <i class="icon2-arrow-down2 arrow-down" @click="showOption($event)"></i>
     <div class="delete-subtodo" @click="deleteTask(item)" v-show="this.deleteState">删除子任务</div>
   </li>
 </template>
 <script>
 //  import dateUtil from 'ut/dateUtil'
+  import Bus from 'com/bus'
   export default {
     name: 'TodoItem',
     data () {
@@ -48,8 +49,9 @@
             })
         }
       },
-      showOption () {
+      showOption (e) {
         this.deleteState = !this.deleteState
+        e.stopPropagation()
       },
       deleteTask (item) {
         this.$store.dispatch('deleteSubTodo', {item: item}).then(
@@ -60,6 +62,9 @@
       }
     },
     mounted () {
+      Bus.$on('close', () => {
+        this.deleteState = false
+      })
     }
   }
 </script>

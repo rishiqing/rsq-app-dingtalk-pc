@@ -39,7 +39,7 @@
       },
       size: {
         type: Number,
-        default: 24
+        default: 30
       },
       src: {
         type: String

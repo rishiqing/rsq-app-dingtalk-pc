@@ -2,9 +2,9 @@
   <li class="inbox-list" :key="item.id" @dragstart="drag(this.item)">
     <span class="inbox-list-item">{{this.item.pTitle}}</span>
     <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
-      <i class="icon2-receive plan" v-show="isFromSche"></i>
-      <i v-show="isFromKanban" class="icon2-plan receive"></i>
-      <p id="cssTest" class="displayName" v-show="IsNameShow" :style="{top: top + 'px', left: left + 'px'}">{{fromName}}</p>
+      <i class="icon2-receive plan" v-show="isFromSche" v-tip.dark.transition.top="fromName"></i>
+      <i v-show="isFromKanban" class="icon2-plan receive" v-tip.dark.transition.top="fromName"></i>
+      <p v-tip.dark.transition.top="fromName" id="cssTest" class="displayName" v-show="IsNameShow" :style="{top: top + 'px', left: left + 'px'}">{{fromName}}</p>
     </div>
   </li>
 </template>
@@ -21,7 +21,7 @@
     color: white;
     /*float:left;*/
     max-width:180px;
-    height:20px;
+    min-height:20px;
     border:1px solid black;
     z-index: 1900;
     /*overflow-y: auto ;*/

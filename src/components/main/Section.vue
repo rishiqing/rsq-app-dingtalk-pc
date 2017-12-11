@@ -1,5 +1,5 @@
 <template>
-  <div class="section-wrap" :class="{'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
+  <div class="section-wrap" :class="{'floatDirection': direction, 'reverseDirection': !direction, 'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
     <div class="section-head" @mouseover="showIcon" @mouseout="hideIcon">
       <input ref="itemTitleInput" type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)" @focus="showSave">
       <div class="save-sche-title" v-show="this.showSaveButton" @click="saveTitle">保存</div>
@@ -51,6 +51,9 @@
 //      sectionName: String
     },
     computed: {
+      direction () {
+        return (this.itemTitle.pContainer === 'IE' || this.itemTitle.pContainer === 'UE')
+      },
       loginUser () {
         return this.$store.getters.loginUser || {}
       },
@@ -224,7 +227,11 @@
           var date = this.formatTitleDate(this.currentDate)
           var startTime = date.substring(0, 4) + '/' + date.substring(4, 6) + '/' + date.substring(6, 8)
           var endTime = startTime
-          var displayOrder = this.sectionItems[0].pDisplayOrder + 65536
+          if (this.sectionItems && this.sectionItems.length === 0) {
+            var displayOrder = 65535
+          } else {
+            displayOrder = this.sectionItems[0].pDisplayOrder + 65536
+          }
           this.$store.dispatch('submitCreateTodoItem', {'startDate': startTime, 'endDate': endTime, receiverIds: this.userId, pPlanedTime: newdate, pDisplayOrder: displayOrder, createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
             .then(item => {
 //              this.InputState = false
@@ -270,6 +277,12 @@
   }
 </script>
 <style scoped>
+  /*.floatDirection{*/
+    /*float: left*/
+  /*}*/
+  /*.reverseDirection{*/
+    /*float: right;*/
+  /*}*/
   @media (max-height: 600px) and (min-height: 500px) {
     .section-wrap{
       height: 45%;
@@ -321,7 +334,7 @@
     div.UELarge{
       height: 79%;
       left:9px;
-      bottom:3%
+      bottom:2%
     }
   }
   @media (min-height: 650px) {

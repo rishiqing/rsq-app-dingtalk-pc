@@ -12,9 +12,11 @@
         <span class="delayer" :class="{'is-alert': isDelay, 'ifMax': bigger}" v-show="isDelay">延期{{delayDays}}天</span>
         <!--<span>{{item.pDisplayOrder}}</span>-->
         <div  ref="wrapIcon" class="wrap-icon" @mouseover="showName(item)" @mouseout="hideName">
-          <i ref="plan-icon" class="icon2-receive plan" v-show="isFromSche"></i>
-          <i ref="receive-icon" v-show="isFromKanban" class="icon2-plan receive"></i>
-          <p v-show="IsNameShow" ref="dialog" id="cssTest" class="displayName" :style="{top: top + 'px', left: left + 'px'}">{{fromName}}</p>
+          <i ref="plan-icon" class="icon2-receive plan" v-show="isFromSche"  v-tip.dark.transition.top="fromName"></i>
+          <i ref="receive-icon" v-show="isFromKanban" class="icon2-plan receive"   v-tip.dark.transition.top="fromName"></i>
+          <!--<div  class="link b5" v-tip.dark="fromName"></div>-->
+          <!--<span v-show="IsNameShow" id="cssTest" class="tooltip" title="This is my span's tooltip message!" :style="{top: top + 'px', left: left + 'px'}">Some text</span>-->
+          <!--<p v-show="IsNameShow" ref="dialog" id="cssTest" class="displayName" :style="{top: top + 'px', left: left + 'px'}">{{fromName}}</p>-->
         </div>
     <!--<i class="handle"></i>-->
         <!--<div  v-show="this.IsNameShow">{{item.kanbanOrCreatorName}}</div>-->
@@ -23,6 +25,17 @@
   </li>
 </template>
 <style lang="scss" scoped>
+  .link {
+    color: #55b559;
+    padding: 8px 10px;
+    position: absolute;
+    margin: 10px 20px;
+  }
+  .b5 {
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   }
   li.large-width{
     width: 96.5%;
   }
@@ -121,6 +134,7 @@
     max-width:180px;
     font-size: 15px;
     min-height: 20px;
+    /*overflow-y: hidden;*/
     /*height:20px;*/
     /*border:1px solid black;*/
     z-index: 1900;
@@ -141,8 +155,8 @@
     width:0px;
     height:0px;
     position:absolute;
-    left:40%;
-    top:19px;
+    left:30%;
+    top:75%;
     transform: rotate(90deg);
     /*background: rgba(0,0,0,0.86);*/
   }
@@ -256,7 +270,11 @@
   }
 </style>
 <script>
+//  import $ from 'jquery'
   import dateUtil from 'ut/dateUtil'
+//  $(document).ready(function () {
+//    $('.tooltip').tooltipster()
+//  })
   export default {
     name: 'TodoItem',
     data () {
@@ -290,7 +308,11 @@
       },
       fromName () {
         if (this.item.from != null) {
-          return this.item.from.levelOneName
+          if (this.item.from.levelFourName === null) {
+            return this.item.from.levelOneName
+          } else {
+            return this.item.from.levelOneName + ',' + this.item.from.levelFourName + ',' + this.item.from.levelTwoName
+          }
         }
       },
       isFromKanban () {
@@ -312,7 +334,7 @@
         var mousePos = this.mousePosition(ev)
         console.log(mousePos.x + ':' + mousePos.y)
         this.top = mousePos.y - 63
-        this.left = mousePos.x - 45
+        this.left = mousePos.x - 54
 //        document.getElementById('cssTest').style.top = mousePos.x + 'px'
 //        document.getElementById('cssTest').style.left = mousePos.y + 'px'
       },

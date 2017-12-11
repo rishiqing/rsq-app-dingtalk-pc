@@ -12,6 +12,10 @@
   </div>
 </template>
 <style scoped>
+  priority-menu>li:before{
+    content: '.';
+    color:red
+  }
   .priority-name:before{
     content: "";
     display: block;
@@ -28,7 +32,7 @@
     left:21px;
     right: 0;
     margin: 0;
-    /*list-style: none;*/
+    list-style: none;
     z-index: 100;
     background-color: white;
     box-shadow: 3px 5px 24px #888888;

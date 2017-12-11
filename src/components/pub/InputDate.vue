@@ -95,6 +95,7 @@
         if (!this.showEditDate) {
           this.showEditDate = !this.showEditDate
         }
+        Bus.$emit('closetime')
         e.stopPropagation()
 //        this.$store.commit('SHOW_DATE')
       },
@@ -117,9 +118,9 @@
       this.showEditDate = this.ifshow
     },
     mounted () {
-//      Bus.$on('close', () => {
-//        this.editDate = false
-//      })
+      Bus.$on('closedate', () => {
+        this.editDate = false
+      })
     }
   }
 </script>

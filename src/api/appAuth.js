@@ -32,9 +32,11 @@ export default {
     return new Promise((resolve, reject) => {
       var request = url.resolve(window.rsqConfig.authServer, mapping.AUTH_TO_USERID) + '?corpid=' + props.corpId
       var params = props.idArray
-      if (params.length > 2) {
-        params = params.split(',')
-      }
+      // if (params.length > 2) {
+      //   console.log('前' + params)
+      //   params = params.split(',')
+      //   console.log('后' + params)
+      // }
       console.log('=======' + JSON.stringify(params))
       Vue.http.post(request, JSON.stringify(params))
         .then(res => {

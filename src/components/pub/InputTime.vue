@@ -92,6 +92,7 @@
         if (!this.showEditTime) {
           this.showEditTime = !this.showEditTime
         }
+        Bus.$emit('closedate')
         e.stopPropagation()
       },
       gotoTodoTime () {
@@ -117,14 +118,11 @@
       this.init()
     },
     mounted () {
-//      Bus.$on('close', () => {
-//        console.log('进inputtime了')
-//        if (this.editTime) {
-//          this.editTime = false
-//          Bus.$emit('sendTime')
-//         console.log('编辑时间要关闭了')
-//        }
-//      })
+      Bus.$on('closetime', () => {
+        if (this.editTime) {
+          this.editTime = false
+        }
+      })
     }
   }
 </script>

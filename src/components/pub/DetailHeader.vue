@@ -25,15 +25,16 @@
     <div :class="{'edit-desp':!editDesp}">
       这个是描述编辑状态
     </div>
-    <div class="to-plan-window" v-show="this.showPlan">
+    <div class="to-plan-window" v-show="this.showPlan" @click="stop($event)">
       <div class="plan-kind">
         <span>计划</span>
-        <div class="wrap-plan-kind" @click="showMainPlan">
+        <div class="wrap-plan-kind" @click="showMainPlan($event)">
           <span class="plan-name">{{planName}}</span>
           <i class="icon2-arrow-down2"></i>
           <ul class="wrap-plans" v-show="this.planState">
-            <li v-for="plan in plans" class="wrap-plan-item" @click="changePlan(plan)">
-              {{plan.name}}
+            <li v-for="plan in plans" class="wrap-plan-item" @click="changePlan(plan,$event)">
+              <img src="../../assets/plan.png" alt="" class="plan-img">
+              <span class="plan-name">{{plan.name}}</span>
             </li>
           </ul>
         </div>
@@ -136,6 +137,9 @@
       item: Object
     },
     methods: {
+      stop (e) {
+        e.stopPropagation()
+      },
       copyTask () {
         var time = dateUtil.getStandardTime(this.currentdate)
         this.$store.dispatch('copy', {id: this.item.id, createTaskDate: time, pDisplayOrder: this.item.pDisplayOrder}).then(() => {
@@ -159,7 +163,7 @@
       changeCard (card) {
         this.$store.commit('CHANGE_PLAN_ORDER', {card: card, id: 3})
       },
-      changePlan (plan) {
+      changePlan (plan, e) {
         this.$store.commit('CHANGE_PLAN_ORDER', {plan: plan, id: 1})
         this.$store.dispatch('getSubPlans', {defaultItem: plan}).then(
           (item) => {
@@ -167,15 +171,24 @@
               (item) => {
               })
           })
+        this.planState = false
+        e.stopPropagation()
       },
       showSubPlan () {
         this.subPlanState = !this.subPlanState
+        this.planState = false
+        this.cardState = false
       },
-      showMainPlan () {
+      showMainPlan (e) {
         this.planState = !this.planState
+        this.cardState = false
+        this.subPlanState = false
+        e.stopPropagation()
       },
       showCard () {
         this.cardState = !this.cardState
+        this.planState = false
+        this.subPlanState = false
       },
       addToPlan (e) {
         this.showPlan = !this.showPlan
@@ -245,6 +258,9 @@
 </script>
 
 <style>
+  .plan-name{
+    margin-left: 10px;
+  }
   .plan-img{
     width: 20px;
     height: 20px;
@@ -273,7 +289,9 @@
     align-items: center;
   }
   .wrap-plan-item{
-    width: 100px;
+    display: flex;
+    align-items: center;
+    width: 200px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -281,12 +299,12 @@
   }
   .wrap-plans{
     position: absolute;
-    top: 20px;
+    top: 30px;
     right: -10px;
     height: 200px;
     z-index:800;
     padding: 10px;
-    width: 100px;
+    /*width: 100px;*/
     background-color: white;
     list-style: none;
     overflow: auto;
@@ -307,6 +325,10 @@
   }
   .plan-name{
     margin-right: 5px;
+    width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
   .to-plan-window{
     position: absolute;
