@@ -8,19 +8,22 @@ const ip = require('ip')
 
 var devPort = 8090
 
+//  为了防止jenkins构建错误，需要在这里做处理
+var devIp
+try {
+  devIp = ip.address('WLAN', 'ipv4')
+} catch(e){
+  devIp = ip.address()
+}
+
 module.exports = {
-  release: {
-    env: require('./release.env'),
-    // /build/utils.js和vue-loader中使用
-    cssLoader: {
-      minimize: true,
-      extract: true,
-      productionSourceMap: true
-    },
-    index: path.resolve(__dirname, '../dist/release/pc/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist/release/pc/'),
-    assetsSubDirectory: './',
-    assetsPublicPath: '/dingtalk/release/pc/',
+  build: {
+    env: require('./prod.env'),
+    index: path.resolve(__dirname, '../dist/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsSubDirectory: './pc',
+    assetsPublicPath: '/dingtalk/',
+    productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -52,16 +55,11 @@ module.exports = {
   },
   beta: {
     env: require('./beta.env'),
-    // /build/utils.js和vue-loader中使用
-    cssLoader: {
-      minimize: true,
-      extract: true,
-      productionSourceMap: true
-    },
-    index: path.resolve(__dirname, '../dist/beta/pc/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist/beta/pc/'),
+    index: path.resolve(__dirname, '../dist/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: './',
-    assetsPublicPath: '/dingtalk/beta/pc/',
+    assetsPublicPath: '/dingtalk/',
+    productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -93,28 +91,23 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    // /build/utils.js和vue-loader中使用
-    cssLoader: {
-      minimize: false,
-      extract: false,
-      // CSS Sourcemaps off by default because relative paths are "buggy"
-      // with this option, according to the CSS-Loader README
-      // (https://github.com/webpack/css-loader#sourcemaps)
-      // In our experience, they generally work as expected,
-      // just be aware of this issue when enabling this option.
-      cssSourceMap: false
-    },
     port: process.env.PORT || devPort,
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
     hotPath: '/__webpack_hmr',
+    // CSS Sourcemaps off by default because relative paths are "buggy"
+    // with this option, according to the CSS-Loader README
+    // (https://github.com/webpack/css-loader#sourcemaps)
+    // In our experience, they generally work as expected,
+    // just be aware of this issue when enabling this option.
+    cssSourceMap: false,
     apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
     authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
     // 日事清前端文件地址
-    frontServer: 'http://' + ip.address('WLAN', 'ipv4') + ':' + (process.env.PORT || devPort) + '/',
+    frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
     stsServer: 'http://182.92.222.40:8300/sts/',
     aliOSS: {
       region: 'oss-cn-beijing',
