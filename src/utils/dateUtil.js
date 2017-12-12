@@ -354,7 +354,7 @@ export default {
       repeatBaseTime: t.repeatBaseTime
     })
     var result
-    console.log('parsed是' + JSON.stringify(t.repeatBaseTime))
+    // console.log('parsed是' + JSON.stringify(t.repeatBaseTime))
     if (parsed.dateType === 'repeat') {
       result = this.repeatDayText(t.repeatType, t.repeatBaseTime.split(','))
       if (t.isLastDate) {
