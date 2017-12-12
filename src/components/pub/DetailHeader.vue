@@ -11,7 +11,7 @@
         <i class="icon2-cancel cancel" @click="closeDetail"></i>
       </div>
       <ul v-show="this.deleteState" class="delete-task">
-        <li>移动任务</li>
+        <li @click="addToPlan">移动任务</li>
         <li @click="copyTask">复制任务</li>
         <li v-show="fromPlan">前往计划</li>
         <li @click="deleteTask(item)">删除任务</li>
@@ -294,6 +294,9 @@
     cursor: pointer;
     padding-left: 10px;
     padding-top: 10px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #666666;
   }
   .left-add{
     display: flex;

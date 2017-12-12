@@ -63,6 +63,7 @@
           this.selectWeekDate.push(obj.flag)
         }
         console.log('this.selectWeekDate' + JSON.stringify(this.selectWeekDate))
+        this.selectWeekDate.sort()
         this.$store.commit('PUB_WEEK_DATE_UPDATE', {data: this.selectWeekDate})
       }
     },

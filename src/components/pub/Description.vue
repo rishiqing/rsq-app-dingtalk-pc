@@ -137,6 +137,8 @@
       var noteElement = document.getElementById('noteEditable')
       if (this.pNote) {
         noteElement.innerHTML = this.pNote
+      } else {
+        noteElement.innerHTML = '添加任务描述...'
       }
     }
   }
