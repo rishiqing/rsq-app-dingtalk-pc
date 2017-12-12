@@ -37,10 +37,10 @@ export default {
       //   params = params.split(',')
       //   console.log('后' + params)
       // }
-      console.log('=======' + JSON.stringify(params))
+      // console.log('=======' + JSON.stringify(params))
       Vue.http.post(request, JSON.stringify(params))
         .then(res => {
-          console.log('getRsqidMap' + JSON.stringify(res))
+          // console.log('getRsqidMap' + JSON.stringify(res))
           resolve(res.json())
         }, err => {
           window.rsqadmg.log(JSON.stringify(err))

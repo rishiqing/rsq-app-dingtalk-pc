@@ -136,7 +136,7 @@
     color: #333333;
   }
   /*.dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}*/
-  .dp-table {width:100%;height:8rem;text-align: center;}
+  .dp-table {width:100%;text-align: center;}
   .dp-grey {color: #a8a8a8;}
   .dp-table .dp-selected {
     background: #55A8FD;
@@ -183,12 +183,12 @@
   .week-six{
     font-family: PingFangSC-Regular;
     font-size: 11px;
-    color: #FF7A7A;
+    /*color: #FF7A7A;*/
   }
   .week-ri{
     font-family: PingFangSC-Regular;
     font-size: 11px;
-    color: #FF7A7A;
+    /*color: #FF7A7A;*/
   }
   .arrow{
     font-size:17px;
