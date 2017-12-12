@@ -160,7 +160,7 @@
         })
       },
       fetchItems (strDate) {
-        console.log('去拿数据了')
+//        console.log('去拿数据了')
 //        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(strDate)})
         this.$store.dispatch('fetchScheduleItems', { strDate })
           .then(() => {
@@ -189,7 +189,7 @@
         this.itemTitle = itemTitle
 //        this.$store.dispatch('setCurrentTodo', item)
         this.IsShow = true
-        console.log('进来了showDetail')
+//        console.log('进来了showDetail')
       },
       closeDetail () {
         this.IsShow = false
@@ -209,7 +209,7 @@
           .then(idMap => {
 //            console.log('idmap' + JSON.stringify(idMap))
             this[targetListName] = util.getMapValuePropArray(idMap)
-            console.log('this.loginUser: %o', this.loginUser.authUser.avatar)
+//            console.log('this.loginUser: %o', this.loginUser.authUser.avatar)
 //            window.rsqadmg.exec('hideLoader')
           })
       }
@@ -222,7 +222,6 @@
 //      console.log(this.titleArray.length)
     },
     mounted () {
-      console.log('this.loginUser: %o', this.loginUser)
     }
   }
 </script>
