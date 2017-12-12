@@ -1,7 +1,9 @@
 <template>
   <div class="edit-time" :tabindex="2" @blur="blurEvent" @click="stopTime($event)">
-    <div class="timeContainer" @click="setStartTime($event)">{{startTimeShow}}</div>
-    <div class="timeContainer" @click="setEndTime($event)">{{endTimeShow}}</div>
+    <div class="wrap-time-head">
+      <div class="timeContainerFirst" @click="setStartTime($event)">{{startTimeShow}}</div>
+      <div class="timeContainerSecond" @click="setEndTime($event)">{{endTimeShow}}</div>
+    </div>
     <TimePicker
       :getScrollTime="getScrollTime"
       :startFlag = "startFlag"
@@ -74,6 +76,13 @@
   </div>
 </template>
 <style lang="scss">
+  .wrap-time-head{
+    width: 240px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   ::-webkit-scrollbar{width:4px;}
   ::-webkit-scrollbar-track{
     /*background-color:#d3d7d9;*/
@@ -178,30 +187,44 @@
     width: 50px;
   }
   .clear-time{
+    font-family: AppleSystemUIFont;
     display: flex;
     align-items: center;
     justify-content: center;
-    height:40px
+    height:40px;
+    color: #8C8C8C;
+    font-size: 12px;
   }
   .alert-list >div{
-    margin-top: 15px;
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
   }
-  .remind-option{
+  .alert-list span.remind-option{
     font-family: AppleSystemUIFont;
     font-size: 13px;
     color: #3D3D3D;
   }
-  .timeContainer{
-    display: inline-block;
-    margin-left: 23px;
+  .timeContainerFirst, .timeContainerSecond{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
     background: #FFFFFF;
     border: 1px solid #D5D5D5;
     border-radius: 2px;
-    padding: 5px 10px;
-    width: 65px;
-    text-align: center;
+    /*padding: 5px 10px;*/
+    width: 92px;
+    height: 28px;
+    /*text-align: center;*/
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+  }
+  .timeContainerFirst{
+      margin-left: 10px;
+  }
+  .timeContainerSecond{
+     margin-left: 30px;
   }
   .userDefine{
     z-index:200;
@@ -218,8 +241,11 @@
     font-size: 14px;
   }
   .user-define{
-    margin-top: 15px;
+    margin-top: 20px;
     list-style: none;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #3D3D3D;
   }
   .finish{
     font-size: 14px;
@@ -231,8 +257,8 @@
     border-top: 1px solid #ECECEC;
     border-bottom: 1px solid #ECECEC;
     margin: 0;
-    margin-top: 15px;
-    padding: 10px 0 20px 20px;
+    /*margin-top: 15px;*/
+    padding: 0 0 20px 20px;
     position: relative;
     height: 220px;
     overflow-y: auto;
@@ -244,7 +270,7 @@
     top:225px;
     left:20px;
     width: 250px;
-    padding-top: 20px;
+    /*padding-top: 20px;*/
     background-color: white;
     z-index: 3;
     box-shadow: 3px 5px 24px #888888
@@ -910,7 +936,8 @@
 //        if ()
 //        console.log('要想后台发送时间了')
         this.sendTime()
-        this.showTimePicker = false
+        this.showEndTimePicker = false
+        this.showStartTimePicker = false
       })
     }
     /**

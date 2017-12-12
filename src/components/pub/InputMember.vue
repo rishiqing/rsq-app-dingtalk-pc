@@ -90,7 +90,7 @@
         this.fetchUserIds(ids, 'localList')
       },
       selectedRsqIds (ids) {
-        console.log('selectedRsqIds' + this.fetchUserIds(ids, 'selectedLocalList'))
+        this.fetchUserIds(ids, 'selectedLocalList')
       },
       disabledRsqIds (ids) {
         this.fetchUserIds(ids, 'disabledLocalList')
@@ -127,7 +127,7 @@
             if (res.length === 0) {
               return this.$emit('member-changed', [])
             }
-            console.log('返回来的res是' + JSON.stringify(res))
+//            console.log('返回来的res是' + JSON.stringify(res))
             var idArray = util.extractProp(res, 'emplId')
 //            console.log('返回来的idarray是' + idArray)
 //            window.rsqadmg.exec('showLoader')
@@ -184,7 +184,7 @@
       }
     },
     mounted () {
-      console.log('传过来的选人id' + (this.selectedRsqIds))
+//      console.log('传过来的选人id' + (this.selectedRsqIds))
 //      this.fetchUserIds(this.selectedRsqIds, 'selectedLocalList')
     }
   }

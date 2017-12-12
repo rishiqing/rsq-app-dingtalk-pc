@@ -192,6 +192,9 @@
       },
       addToPlan (e) {
         this.showPlan = !this.showPlan
+        this.deleteState = false
+        Bus.$emit('close-time')
+        Bus.$emit('close-date')
         e.stopPropagation()
       },
       closeDetail () {
@@ -249,7 +252,10 @@
     },
     mounted () {
       Bus.$on('close', () => {
-        console.log('detailhead收到消息了')
+        this.deleteState = false
+        this.showPlan = false
+      })
+      Bus.$on('close-add-plan', () => {
         this.deleteState = false
         this.showPlan = false
       })
@@ -258,6 +264,11 @@
 </script>
 
 <style>
+  .plan-kind>span{
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #666666;
+  }
   .plan-name{
     margin-left: 10px;
   }
@@ -296,6 +307,9 @@
     white-space: nowrap;
     overflow: hidden;
     height: 30px;
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #3D3D3D;
   }
   .wrap-plans{
     position: absolute;
@@ -316,7 +330,7 @@
     border-radius: 2px;
     margin-top: 20px;
     border: none;
-    width: 280px;
+    width: 245px;
     height: 40px;
     display: flex;
     align-items: center;
@@ -325,10 +339,13 @@
   }
   .plan-name{
     margin-right: 5px;
-    width: 150px;
+    max-width: 150px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #3D3D3D;
   }
   .to-plan-window{
     position: absolute;
@@ -337,7 +354,7 @@
     background: #fff;
     z-index: 700;
     border-radius: 2px;
-    width: 285px;
+    width: 245px;
     padding: 20px 19px 16px 20px;
     box-shadow:0 4px 20px 0 rgba(90,152,212,.32)
   }
