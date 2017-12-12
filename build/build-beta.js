@@ -4,6 +4,7 @@ require('./check-versions')()
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'beta'
 }
+console.log('----build----: env is: ' + process.env.NODE_ENV)
 
 const ora = require('ora')
 const rm = require('rimraf')
