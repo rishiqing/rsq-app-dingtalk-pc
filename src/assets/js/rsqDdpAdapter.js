@@ -500,7 +500,7 @@ rsqAdapterManager.register({
     })
   },
   timePicker: function(params){
-    console.log('进来了timePicker')
+    // console.log('进来了timePicker')
     var hours = [],
       minites = [],
       symbol = [{ label: ':', value: 0 }];
@@ -592,7 +592,7 @@ rsqAdapterManager.register({
     })
   },
   openLink: function (params) {
-    console.log('进来链接了')
+    // console.log('进来链接了')
     DingTalkPC.biz.util.openLink({
       url: "http://beta.rishiqing.com/task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID,//要打开链接的地址
       onSuccess : function(res) {

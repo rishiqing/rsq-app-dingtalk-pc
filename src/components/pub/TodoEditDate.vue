@@ -123,9 +123,15 @@
   </div>
 </template>
 <style lang="scss" scoped>
+  .dp-table tr:first-child{
+    margin-top: 15px;
+  }
   .repeat-style-wrap-item{
     cursor: pointer;
     margin-top: 5px;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #666666;
   }
   .repeat-wrap{
     padding-bottom: 10px;
@@ -134,11 +140,14 @@
   .repeat-border{
     cursor: pointer;
     border: 1px solid #D5D5D5;
-    padding: 4px;
+    /*padding: 4px;*/
     margin-left: 10px;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-size: 14px;
+    width: 66px;
+    height: 24px;
   }
   .wrap-repeat-style{
     margin-top: 20px;
@@ -163,16 +172,21 @@
     margin-left: 20px;
     background-color: white;
     cursor: pointer;
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #666666;
   }
   .repeat-style-wrap-deadline{
-    width: 100px;
-    height: 50px;
+    width: 130px;
+    height: 40px;
     list-style: none;
     padding-left: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
     position: absolute;
     background-color: white;
     z-index: 120;
-    top: -50px;
+    top: -55px;
     left:70px;
     box-shadow: 3px 5px 24px #888888;
   }
@@ -222,10 +236,14 @@
     background-color: lightgray;
   }
   .repeat-deadline{
-    font-size: 14px;
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #8C8C8C;
   }
   .repeat-style{
-    font-size: 14px;
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #666666;
   }
   .date-picker .dp-sel-type .is-active{
     color: #3D3D3D;
@@ -258,19 +276,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 15px;
-      margin-bottom: 15px;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
     .dp-title-text-date {
       text-align: center;
       /*font-family: PingFangSC-Regular;*/
       width: 50%;
+      font-family: AppleSystemUIFont;
       font-size: 14px;
+      color: #666666;
       /*color: #3D3D3D;*/
     }
     .dp-title .icon {
       font-size:14px;
-      color: #333333;
+      color: #8C8C8C;
       cursor: pointer;
     }
     /*.dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}*/
@@ -280,7 +300,7 @@
       text-align: center;
     }
     .dp-grey {color: #a8a8a8;}
-    .dp-table>tbody {
+    .dp-table tbody {
       margin-top: 10px;
       margin-bottom: 20px;
     }
@@ -290,15 +310,13 @@
     .dp-sel-type {position: relative;border-bottom: solid 1px #e4e4e4;overflow: hidden;
       height: 40px;line-height: 40px;}
     .dp-btn {
-      color:#8C8C8C;
+      font-family: AppleSystemUIFont;
+      font-size: 12px;
+      color: #8C8C8C;
       cursor: pointer;
-      /*border-right: 1px solid #F0F0F0;*/
       float: left;
       width: 23%;
       text-align: center;
-      font-family: PingFangSC-Regular;
-      font-size: 12px;
-      /*color: #666666;*/
       line-height: 40px;}
     .dp-v-line {
       /*float: left;*/
@@ -317,9 +335,9 @@
       margin-top: 2px;
     }
     .week{
-      font-family: PingFangSC-Regular;
-      font-size: 11px;
-      color: #666666;
+      font-family: AppleSystemUIFont;
+      font-size: 13px;
+      color: #8C8C8C;
     }
     .dp-day {
       margin:0 auto;
@@ -329,22 +347,19 @@
       text-align: center;
       border-radius: 50%;
       font-family: AppleSystemUIFont;
-      font-size: 17px;
+      font-size: 12px;
       color: #666666;
       cursor: pointer;
     }
-    .edit-date div{
-
-    }
     .week-six{
-      font-family: PingFangSC-Regular;
-      font-size: 11px;
-      /*color: #FF7A7A;*/
+      font-family: AppleSystemUIFont;
+      font-size: 13px;
+      color: #8C8C8C;
     }
     .week-ri{
-      font-family: PingFangSC-Regular;
-      font-size: 11px;
-      /*color: #FF7A7A;*/
+      font-family: AppleSystemUIFont;
+      font-size: 13px;
+      color: #8C8C8C;
     }
     .arrow{
       font-size:17px;
@@ -614,7 +629,7 @@
         this.selectNumDate = dateStruct.dateResult || []
         this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
         this.resetType()
-        console.log('进到resetType后')
+//        console.log('进到resetType后')
         if (this.dateType === 'repeat') {
           this.selectDateState = false
           this.repeatState = true
@@ -631,8 +646,7 @@
               }
             }
           } else if (dateStruct.repeatType === 'everyWeek') {
-            console.log('进来每周了')
-            console.log('this.repeatWeek' + this.repeatWeek.length + 'this.selectNumDate' + JSON.stringify(this.selectNumDate))
+//            console.log('this.repeatWeek' + this.repeatWeek.length + 'this.selectNumDate' + JSON.stringify(this.selectNumDate))
             for (var p = 0; p < this.selectNumDate.length; p++) {
               this.repeatWeek.push(this.selectNumDate[p].toString())
             }
@@ -644,7 +658,6 @@
                 this.repeatStyle[k].selected = true
               }
             }
-            console.log('结束每周了')
             this.everyDay = false
             this.everyMonth = false
             this.everyWeek = true
@@ -681,7 +694,6 @@
             this.everyWeek = false
           }
         }
-        console.log('结束额')
       },
       clearType () {
         this.dateType = 'none'
@@ -706,12 +718,12 @@
       },
       tapChangeType (e, type) {
         if (type === 'repeat') {
-          console.log('进来repesat了' + this.everyDay + this.everyWeek + this.everyMonth + this.everyYear)
+//          console.log('进来repesat了' + this.everyDay + this.everyWeek + this.everyMonth + this.everyYear)
           this.dateType = type
           this.selectDateState = false
           this.repeatState = true
           if (!(this.everyDay || this.everyWeek || this.everyMonth || this.everyYear)) {
-            console.log('捡来repwatweek了')
+//            console.log('捡来repwatweek了')
             this.everyWeek = true
           }
           this.resetType()
@@ -736,7 +748,7 @@
             var day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
             var date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
             this.selectRepeatDate.push(date)
-            console.log('this.selectRepeatDate' + this.selectRepeatDate.length)
+//            console.log('this.selectRepeatDate' + this.selectRepeatDate.length)
           } else {
             day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
             date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
@@ -888,9 +900,9 @@
       saveTodoDateState () {
         var sorted = this.selectNumDate.sort((a, b) => { return a > b ? 1 : -1 })
 //        console.log('this.selectNumDate' + JSON.stringify(this.selectNumDate))
-        console.log('saveTodoDateState的sorted是' + JSON.stringify(sorted))
+//        console.log('saveTodoDateState的sorted是' + JSON.stringify(sorted))
         var resObj = dateUtil.frontend2backend({dateType: this.dateType, dateResult: sorted, sep: '/'})
-        console.log('saveTodoDateState的resobj是' + JSON.stringify(resObj))
+//        console.log('saveTodoDateState的resobj是' + JSON.stringify(resObj))
         //  如果不是repeat类型，那么清除
         if (this.dateType !== 'repeat') {
           resObj['repeatType'] = null
@@ -905,7 +917,7 @@
             resObj['repeatBaseTime'] = dateUtil.getStandardTime(new Date(this.selectNumDate[0]))
             resObj['repeatOverDate'] = this.repeatOverDate
           } else if (this.everyWeek) {
-            console.log('每周进来了')
+//            console.log('每周进来了')
             resObj['repeatType'] = 'everyWeek'
             // 首先拿到开始日期，因为根据开始日期计算星期数组中每个星期对应的日期
             if (this.selectNumDate.length > 0) {
@@ -920,7 +932,7 @@
                   var day = startDate + weekArray[i] - startWeek
                   day = day < 10 ? ('0' + day) : day
                   this.repeatWeekState.push('' + year + month + day)
-                  console.log('this.repeatWeek是' + JSON.stringify(this.repeatWeekState))
+//                  console.log('this.repeatWeek是' + JSON.stringify(this.repeatWeekState))
                 } else {
                   var bigday = startDate + weekArray[i] + 7 - startWeek
                   bigday = bigday < 10 ? ('0' + bigday) : bigday
@@ -930,7 +942,7 @@
             } else {
 //              console.log('进来this.selectNumDate.length=0')
             }
-            console.log('每周内容是' + JSON.stringify(this.repeatWeekState))
+//            console.log('每周内容是' + JSON.stringify(this.repeatWeekState))
             resObj['repeatBaseTime'] = this.repeatWeekState.toString()
             resObj['repeatOverDate'] = this.repeatOverDate
           } else if (this.everyMonth) {
@@ -940,7 +952,7 @@
             resObj['repeatOverDate'] = this.repeatOverDate
           } else {
             resObj['repeatType'] = 'everyYear'
-            console.log('-----' + JSON.stringify(this.selectNumDate))
+//            console.log('-----' + JSON.stringify(this.selectNumDate))
 //            console.log('this.selectRepeatDate 是' + JSON.stringify(this.selectRepeatDate))
             resObj['repeatBaseTime'] = dateUtil.getStandardTime(new Date(this.selectNumDate[0]))
             resObj['repeatOverDate'] = this.repeatOverDate
@@ -1042,7 +1054,7 @@
 //          showWeek: false,
 //          text: '最后一天'
 //        })
-        console.log('this.repeatNewMonth' + JSON.stringify(this.repeatNewMonth))
+//        console.log('this.repeatNewMonth' + JSON.stringify(this.repeatNewMonth))
       }
     },
     created () {
