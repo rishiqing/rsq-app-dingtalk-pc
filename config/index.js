@@ -22,9 +22,9 @@ module.exports = {
     // /build/utils.js和vue-loader中使用
     cssLoader: {
       minimize: true,
-      extract: true,
-      productionSourceMap: true
+      extract: true
     },
+    productionSourceMap: true,
     index: path.resolve(__dirname, '../dist/release/pc/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist/release/pc/'),
     assetsSubDirectory: './',
@@ -63,9 +63,9 @@ module.exports = {
     // /build/utils.js和vue-loader中使用
     cssLoader: {
       minimize: true,
-      extract: true,
-      productionSourceMap: true
+      extract: true
     },
+    productionSourceMap: true,
     index: path.resolve(__dirname, '../dist/beta/pc/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist/beta/pc/'),
     assetsSubDirectory: './',
@@ -104,14 +104,14 @@ module.exports = {
     // /build/utils.js和vue-loader中使用
     cssLoader: {
       minimize: false,
-      extract: false,
-      // CSS Sourcemaps off by default because relative paths are "buggy"
-      // with this option, according to the CSS-Loader README
-      // (https://github.com/webpack/css-loader#sourcemaps)
-      // In our experience, they generally work as expected,
-      // just be aware of this issue when enabling this option.
-      cssSourceMap: false
+      extract: false
     },
+    // CSS Sourcemaps off by default because relative paths are "buggy"
+    // with this option, according to the CSS-Loader README
+    // (https://github.com/webpack/css-loader#sourcemaps)
+    // In our experience, they generally work as expected,
+    // just be aware of this issue when enabling this option.
+    cssSourceMap: false,
     port: process.env.PORT || devPort,
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
