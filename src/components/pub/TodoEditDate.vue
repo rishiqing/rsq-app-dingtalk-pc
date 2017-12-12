@@ -45,11 +45,13 @@
             <td v-for="day in weekArray" :key="day.date.getTime()"
                 @click="tapDay($event, day)">
               <div class="dp-day"
-                   :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected,'is-today':isToday(day)}">
-                {{ day.date.getTime() === numToday ? '今' : day.date.getDate()}}
+                   :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected,'is-today':isToday(day), lastwidth: showdate(day) === '最后一天'}">
+                {{ showdate(day)}}
               </div>
             </td>
           </tr>
+          <div @click="tapDay($event, obj)" class="lastdate"
+               :class="{'dp-grey': !obj.isInMonth, 'dp-selected': obj.isSelected,'is-today':isToday(obj)}">{{obj.text}}</div>
         </table>
       </div>
       <div v-show="this.repeatState" class="repeat-state">
@@ -123,6 +125,24 @@
   </div>
 </template>
 <style lang="scss" scoped>
+  .lastdate{
+    margin:0 auto;
+    position: absolute;
+    top: 138px;
+    left:105px;
+    width:60px;
+    height:30px;
+    line-height:30px;
+    text-align: center;
+    border-radius: 50%;
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #666666;
+    cursor: pointer;
+  }
+  /*.dp-table div.lastwidth{*/
+    /*width: 100px;*/
+  /*}*/
   .dp-table tr:first-child{
     margin-top: 15px;
   }
@@ -298,6 +318,8 @@
       width:100%;
       /*height:8rem;*/
       text-align: center;
+      position: relative;
+      /*display:flex;*/
     }
     .dp-grey {color: #a8a8a8;}
     .dp-table tbody {
@@ -418,6 +440,15 @@
     data () {
       return {
         compId: 'SYSTEM_SELECT_DATE',
+        obj: {
+          date: new Date(2060),
+          isFocused: false,
+          isSelected: false,
+          isInMonth: true,
+          showWeek: false,
+          text: '最后一天'
+        },
+        lastDate: false,
         firstCycle: [],
         secondCycle: [],
         thirdCycle: [],
@@ -745,16 +776,24 @@
         if (this.dateType === 'repeat') {
           obj.isSelected = !obj.isSelected
           if (obj.isSelected) {
-            var day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
-            var date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
-            this.selectRepeatDate.push(date)
+            if (!obj.text) {
+              var day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
+              var date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
+              this.selectRepeatDate.push(date)
+            } else {
+              this.lastDate = true
+            }
 //            console.log('this.selectRepeatDate' + this.selectRepeatDate.length)
           } else {
-            day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
-            date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
-            var index = this.selectRepeatDate.indexOf(date)
-            if (index > -1) {
-              this.selectRepeatDate.splice(index, 1)
+            if (!obj.text) {
+              day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
+              date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
+              var index = this.selectRepeatDate.indexOf(date)
+              if (index > -1) {
+                this.selectRepeatDate.splice(index, 1)
+              }
+            } else {
+              this.lastDate = false
             }
           }
         } else {
@@ -950,6 +989,11 @@
 //            console.log('this.selectRepeatDate 是' + JSON.stringify(this.selectRepeatDate))
             resObj['repeatBaseTime'] = this.selectRepeatDate.toString()
             resObj['repeatOverDate'] = this.repeatOverDate
+            if (this.lastDate) {
+              resObj['isLastDate'] = true
+            } else {
+              resObj['isLastDate'] = false
+            }
           } else {
             resObj['repeatType'] = 'everyYear'
 //            console.log('-----' + JSON.stringify(this.selectNumDate))
@@ -1041,6 +1085,14 @@
         for (i = 28; i <= 30; i++) {
           this.fiveCycle.push(this.repeatMonthDays[i])
         }
+//        this.fiveCycle.push({
+//          date: new Date(2060),
+//          isFocused: false,
+//          isSelected: false,
+//          isInMonth: false,
+//          showWeek: false,
+//          text: '最后一天'
+//        })
         this.repeatNewMonth.push(this.firstCycle)
         this.repeatNewMonth.push(this.secondCycle)
         this.repeatNewMonth.push(this.thirdCycle)
@@ -1065,6 +1117,7 @@
       Bus.$on('senddate', () => {
 //        console.log('要发送日期了')
         this.changeDate()
+        this.repeatOption = false
       })
     }
 //    beforeRouteLeave (to, from, next) {

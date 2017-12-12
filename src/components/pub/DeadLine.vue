@@ -15,13 +15,13 @@
       <table class="dp-table">
         <thead>
         <tr>
-          <td  class="week-ri">日</td>
+          <td  class="week">日</td>
           <td  class="week">一</td>
           <td  class="week">二</td>
           <td  class="week">三</td>
           <td  class="week">四</td>
           <td  class="week">五</td>
-          <td  class="week-six">六</td>
+          <td  class="week">六</td>
         </tr>
         </thead>
         <tbody>
@@ -50,7 +50,7 @@
   .wrap-button-date{
     display: flex;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 10px;
   }
   .clear-date,.today{
     display: inline-block;
@@ -64,16 +64,19 @@
     margin-left: 20px;
     background-color: white;
     cursor: pointer;
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #666666;
   }
   .select-date-deadline .dp-content tbody{
     margin-top: 20px;
   }
   .select-date-deadline thead{
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
   .select-date-deadline{
     position: absolute;
-    top: 5px;
+    top: 0px;
     background-color: white;
     z-index: 103;
     height: 290px;
@@ -120,20 +123,23 @@
     height: 30px;
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     padding: 0 5px;
   }
   .dp-title-text-deadline {
     /*text-align: center;*/
     /*font-family: PingFangSC-Regular;*/
     width: 90%;
+    font-family: AppleSystemUIFont;
     font-size: 14px;
+    color: #666666;
     text-align: center;
     /*color: #3D3D3D;*/
   }
   .dp-title .icon {
     font-size:14px;
     color: #333333;
+    cursor: pointer;
   }
   /*.dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}*/
   .dp-table {width:100%;text-align: center;}
@@ -165,9 +171,9 @@
     width: 1px; height: 90%;background: #979797;
   }
   .week{
-    font-family: PingFangSC-Regular;
-    font-size: 11px;
-    color: #666666;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #8C8C8C;
   }
   .dp-day {
     margin:0 auto;
@@ -176,18 +182,18 @@
     line-height:30px;
     text-align: center;
     border-radius: 50%;
-    font-family: PingFangSC-Medium;
-    font-size: 17px;
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
     color: #666666;
   }
   .week-six{
-    font-family: PingFangSC-Regular;
-    font-size: 11px;
+    /*font-family: PingFangSC-Regular;*/
+    /*font-size: 11px;*/
     /*color: #FF7A7A;*/
   }
   .week-ri{
-    font-family: PingFangSC-Regular;
-    font-size: 11px;
+    /*font-family: PingFangSC-Regular;*/
+    /*font-size: 11px;*/
     /*color: #FF7A7A;*/
   }
   .arrow{

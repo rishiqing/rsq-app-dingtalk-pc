@@ -1,83 +1,1062 @@
-/*
-Error: Invalid CSS after "  outline:": expected expression (e.g. 1px, bold), was ";"
-        on line 31 of font.scss
-        from line 5 of index.scss
+/**
+ * import css rule which is modularized using SMACSS
+ * https://smacss.com/book/prototyping
+ */
+@font-face {
+  font-family: 'icomoon';
+  src: url("../fonts/icomoon.woff?j61m3r") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  /* line-height: 1; */
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
 
-26:   font-family: PingFangSC-Regular;
-27:   font-size: 12px;
-28:   color: #3D3D3D;
-29: }
-30: input{
-31:   outline:;
-32: }
-33: li:hover{
-34:   background-color: #f9f9f9;
-35: }
-36: .icon-import_contacts:before {
+.margin-detail {
+  margin-left: 10px; }
 
-Backtrace:
-font.scss:31
-index.scss:5
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:1278:in `expected'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/script/lexer.rb:231:in `expected!'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/script/parser.rb:723:in `assert_expr'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/script/parser.rb:68:in `parse'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:1134:in `sass_script'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:988:in `value!'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:796:in `block in try_declaration'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:1254:in `rethrow'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:809:in `try_declaration'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:732:in `declaration_or_ruleset'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:697:in `block_child'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:686:in `block_contents'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:678:in `block'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:670:in `ruleset'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:696:in `block_child'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:689:in `block_contents'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:137:in `stylesheet'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/scss/parser.rb:41:in `parse'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/engine.rb:414:in `_to_tree'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/engine.rb:321:in `to_tree'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:327:in `block in visit_import'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/stack.rb:88:in `block in with_import'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/stack.rb:135:in `with_frame'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/stack.rb:88:in `with_import'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:326:in `visit_import'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/base.rb:36:in `visit'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:162:in `block in visit'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/stack.rb:79:in `block in with_base'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/stack.rb:135:in `with_frame'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/stack.rb:79:in `with_base'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:162:in `visit'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/base.rb:52:in `map'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/base.rb:52:in `visit_children'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:171:in `block in visit_children'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:183:in `with_environment'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:170:in `visit_children'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/base.rb:36:in `block in visit'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:190:in `visit_root'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/base.rb:36:in `visit'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:161:in `visit'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/visitors/perform.rb:10:in `visit'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/root_node.rb:36:in `css_tree'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/engine.rb:389:in `_render_with_sourcemap'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/engine.rb:307:in `render_with_sourcemap'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:462:in `update_stylesheet'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:209:in `each'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/plugin.rb:82:in `update_stylesheets'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/exec/sass_scss.rb:340:in `watch_or_update'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/exec/sass_scss.rb:51:in `process_result'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/exec/base.rb:52:in `parse'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/lib/sass/exec/base.rb:19:in `parse!'
-C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/sass-3.5.1/bin/scss:13:in `<top (required)>'
-C:/Ruby24-x64/bin/scss:22:in `load'
-C:/Ruby24-x64/bin/scss:22:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: Invalid CSS after \"  outline:\": expected expression (e.g. 1px, bold), was \";\"\A         on line 31 of font.scss\A         from line 5 of index.scss\A \A 26:   font-family: PingFangSC-Regular;\A 27:   font-size: 12px;\A 28:   color: #3D3D3D;\A 29: }\A 30: input{\A 31:   outline:;\A 32: }\A 33: li:hover{\A 34:   background-color: #f9f9f9;\A 35: }\A 36: .icon-import_contacts:before {"; }
+.font-style {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #3D3D3D; }
+
+input {
+  outline: none; }
+
+li:hover {
+  background-color: #f9f9f9; }
+
+.icon-import_contacts:before {
+  content: "\e0e0"; }
+
+.icon-add:before {
+  content: "\e145";
+  color: white;
+  width: 11.3px;
+  height: 11.3px; }
+
+.icon-add_circle:before {
+  content: "\e147"; }
+
+.icon-create:before {
+  content: "\e150"; }
+
+.icon-send:before {
+  content: "\e163"; }
+
+.icon-move_to_inbox:before {
+  content: "\e168"; }
+
+.icon-access_alarm:before {
+  content: "\e190"; }
+
+.icon-format_align_left:before {
+  content: "\e236"; }
+
+.icon-format_bold:before {
+  content: "\e238"; }
+
+.icon-format_color_text:before {
+  content: "\e23c"; }
+
+.icon-format_indent_decrease:before {
+  content: "\e23d"; }
+
+.icon-format_indent_increase:before {
+  content: "\e23e"; }
+
+.icon-format_italic:before {
+  content: "\e23f"; }
+
+.icon-format_list_bulleted:before {
+  content: "\e241"; }
+
+.icon-format_list_numbered:before {
+  content: "\e242"; }
+
+.icon-format_underlined:before {
+  content: "\e249"; }
+
+.icon-insert_emoticon:before {
+  content: "\e24e"; }
+
+.icon-insert_invitation:before {
+  content: "\e24f"; }
+
+.icon-strikethrough_s:before {
+  content: "\e257"; }
+
+.icon-attachment:before {
+  content: "\e2bc"; }
+
+.icon-folder:before {
+  content: "\e2c7"; }
+
+.icon-keyboard_arrow_down:before {
+  content: "\e313"; }
+
+.icon-keyboard_arrow_left:before {
+  content: "\e314"; }
+
+.icon-keyboard_arrow_right:before {
+  content: "\e315"; }
+
+.icon-keyboard_arrow_up:before {
+  content: "\e316"; }
+
+.icon-laptop_chromebook:before {
+  content: "\e31f"; }
+
+.icon-layers:before {
+  content: "\e53b"; }
+
+.icon-apps:before {
+  content: "\e5c3"; }
+
+.icon-arrow_back:before {
+  content: "\e5c4"; }
+
+.icon-arrow_drop_down:before {
+  content: "\e5c5"; }
+
+.icon-arrow_drop_right:before {
+  content: "\e5c7"; }
+
+.icon-arrow_forward:before {
+  content: "\e5c8"; }
+
+.icon-cancel:before {
+  content: "\e5c9"; }
+
+.icon-check:before {
+  content: "\e5ca"; }
+
+.icon-close:before {
+  content: "\e5cd"; }
+
+.icon-event_busy:before {
+  content: "\e615"; }
+
+.icon-sync:before {
+  content: "\e627"; }
+
+.icon-notifications:before {
+  content: "\e7f4"; }
+
+.icon-pages:before {
+  content: "\e7f9"; }
+
+.icon-party_mode:before {
+  content: "\e7fa"; }
+
+.icon-people:before {
+  content: "\e7fb"; }
+
+.icon-person:before {
+  content: "\e7fd"; }
+
+.icon-check_box_outline_blank:before {
+  content: "\e835"; }
+
+.icon-radio_button_unchecked:before {
+  content: "\e836"; }
+
+.icon-radio_button_checked:before {
+  content: "\e837"; }
+
+.icon-star:before {
+  content: "\e838"; }
+
+.icon-star_outline:before {
+  content: "\e83a"; }
+
+.icon-book:before {
+  content: "\e865"; }
+
+.icon-delete:before {
+  content: "\e872"; }
+
+.icon-description:before {
+  content: "\e873"; }
+
+.icon-get_app:before {
+  content: "\e884"; }
+
+.icon-home:before {
+  content: "\e88a"; }
+
+.icon-list:before {
+  content: "\e896"; }
+
+.icon-lock:before {
+  content: "\e897"; }
+
+.icon-lock_open:before {
+  content: "\e898"; }
+
+.icon-restore:before {
+  content: "\e8b3"; }
+
+.icon-room:before {
+  content: "\e8b4"; }
+
+.icon-search:before {
+  content: "\e8b6"; }
+
+.icon-settings:before {
+  content: "\e8b8"; }
+
+.icon-view_quilt:before {
+  content: "\e8f1"; }
+
+.icon-visibility:before {
+  content: "\e8f4"; }
+
+.icon-ic_list_black_24px:before {
+  content: "\e900"; }
+
+.icon-ic_schedule_black_24px:before {
+  content: "\e901"; }
+
+.icon-ic_touch_app_black_24px:before {
+  content: "\e902"; }
+
+.icon-ic_touch_app_black_24px2:before {
+  content: "\e903"; }
+
+.icon-ic_move_to_outbox_black_24px:before {
+  content: "\e904"; }
+
+.icon-ic_list_card_black_24px:before {
+  content: "\e905"; }
+
+.icon-ic_kanban_card_black_24px:before {
+  content: "\e906"; }
+
+.icon-ic_kanban_black_24px:before {
+  content: "\e907"; }
+
+.icon-ic_kanban_big_black_24px:before {
+  content: "\e908"; }
+
+.icon-ic_filter_none_black_24px:before {
+  content: "\e909"; }
+
+.icon-ic_equalizer_black_24px:before {
+  content: "\e90a"; }
+
+.icon-ic_content_copy_black_24px:before {
+  content: "\e90b"; }
+
+.icon-ic_more_vert_black_24px:before {
+  content: "\e90c"; }
+
+.icon-card:before {
+  content: "\e90d"; }
+
+.icon-trash2:before {
+  content: "\e90e"; }
+
+.icon-spinner2:before {
+  content: "\e90f"; }
+
+.icon-mention:before {
+  content: "\e910"; }
+
+.icon-all_inclusive:before {
+  content: "\eb3d"; }
+
+@font-face {
+  font-family: 'icomoon2';
+  src: url("../fonts/icomoon2.ttf?v331iy") format("truetype"), url("../fonts/icomoon2.woff?v331iy") format("woff"), url("../fonts/icomoon2.svg?v331iy#icomoon2") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+[class^="icon2-"], [class*=" icon2-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon2' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon2-add:before {
+  content: "\e914"; }
+
+.icon2-add-circle:before {
+  content: "\e90d"; }
+
+.icon2-add-member:before {
+  content: "\e911"; }
+
+.icon2-add-rectangle:before {
+  content: "\e90e"; }
+
+.icon2-add2:before {
+  content: "\e90f"; }
+
+.icon2-alarm:before {
+  content: "\e915"; }
+
+.icon2-align-center:before {
+  content: "\e901"; }
+
+.icon2-app:before {
+  content: "\e91e"; }
+
+.icon2-app-archive:before {
+  content: "\e919"; }
+
+.icon2-app-filebox:before {
+  content: "\e91a"; }
+
+.icon2-app-minder:before {
+  content: "\e91b"; }
+
+.icon2-app-recycle:before {
+  content: "\e91c"; }
+
+.icon2-app-tomato:before {
+  content: "\e91d"; }
+
+.icon2-arrow-down:before {
+  content: "\e902"; }
+
+.icon2-arrow-down-triangle:before {
+  content: "\e903"; }
+
+.icon2-arrow-down2:before {
+  content: "\e907"; }
+
+.icon2-arrow-left:before {
+  content: "\e904"; }
+
+.icon2-arrow-left-small:before {
+  content: "\e90b"; }
+
+.icon2-arrow-left2:before {
+  content: "\e909"; }
+
+.icon2-arrow-right:before {
+  content: "\e905"; }
+
+.icon2-arrow-right-small:before {
+  content: "\e90c"; }
+
+.icon2-arrow-right2:before {
+  content: "\e90a"; }
+
+.icon2-arrow-up:before {
+  content: "\e906"; }
+
+.icon2-arrow-up2:before {
+  content: "\e908"; }
+
+.icon2-at:before {
+  content: "\e900"; }
+
+.icon2-background-colour:before {
+  content: "\e910"; }
+
+.icon2-birthday:before {
+  content: "\e91f"; }
+
+.icon2-bold:before {
+  content: "\e912"; }
+
+.icon2-cancel:before {
+  content: "\e913"; }
+
+.icon2-check-box:before {
+  content: "\e916"; }
+
+.icon2-clear:before {
+  content: "\e917"; }
+
+.icon2-clear2:before {
+  content: "\e920"; }
+
+.icon2-close-task:before {
+  content: "\e921"; }
+
+.icon2-code:before {
+  content: "\e918"; }
+
+.icon2-colour:before {
+  content: "\e922"; }
+
+.icon2-company:before {
+  content: "\e923"; }
+
+.icon2-complete-task:before {
+  content: "\e924"; }
+
+.icon2-creat-note:before {
+  content: "\e925"; }
+
+.icon2-creat-task:before {
+  content: "\e926"; }
+
+.icon2-customer-service:before {
+  content: "\e927"; }
+
+.icon2-cut-off-rule:before {
+  content: "\e928"; }
+
+.icon2-delete:before {
+  content: "\e929"; }
+
+.icon2-delete-line-text:before {
+  content: "\e92a"; }
+
+.icon2-download:before {
+  content: "\e92b"; }
+
+.icon2-edit-subplan:before {
+  content: "\e92c"; }
+
+.icon2-edit-tab:before {
+  content: "\e92d"; }
+
+.icon2-email:before {
+  content: "\e92e"; }
+
+.icon2-empty-task-description:before {
+  content: "\e92f"; }
+
+.icon2-error:before {
+  content: "\e930"; }
+
+.icon2-extended-function:before {
+  content: "\e931"; }
+
+.icon2-face:before {
+  content: "\e932"; }
+
+.icon2-filed:before {
+  content: "\e933"; }
+
+.icon2-form:before {
+  content: "\e934"; }
+
+.icon2-format-paint:before {
+  content: "\e935"; }
+
+.icon2-four-quadrant:before {
+  content: "\e936"; }
+
+.icon2-headline:before {
+  content: "\e937"; }
+
+.icon2-home:before {
+  content: "\e938"; }
+
+.icon2-horizontal-align:before {
+  content: "\e939"; }
+
+.icon2-icloud-drive:before {
+  content: "\e93a"; }
+
+.icon2-invisible:before {
+  content: "\e93b"; }
+
+.icon2-issued:before {
+  content: "\e93c"; }
+
+.icon2-italic:before {
+  content: "\e93d"; }
+
+.icon2-jurisdiction:before {
+  content: "\e93e"; }
+
+.icon2-launch:before {
+  content: "\e93f"; }
+
+.icon2-left-align:before {
+  content: "\e940"; }
+
+.icon2-left-retraction-copy:before {
+  content: "\e941"; }
+
+.icon2-link:before {
+  content: "\e942"; }
+
+.icon2-logout:before {
+  content: "\e943"; }
+
+.icon2-member:before {
+  content: "\e944"; }
+
+.icon2-micro-blog:before {
+  content: "\e945"; }
+
+.icon2-mobile-article:before {
+  content: "\e946"; }
+
+.icon2-modify-title:before {
+  content: "\e947"; }
+
+.icon2-more-functions:before {
+  content: "\e948"; }
+
+.icon2-move-note:before {
+  content: "\e949"; }
+
+.icon2-move-task:before {
+  content: "\e94a"; }
+
+.icon2-new-folder:before {
+  content: "\e94b"; }
+
+.icon2-next-month:before {
+  content: "\e94c"; }
+
+.icon2-next-week:before {
+  content: "\e94d"; }
+
+.icon2-note:before {
+  content: "\e94e"; }
+
+.icon2-note-book:before {
+  content: "\e94f"; }
+
+.icon2-notice:before {
+  content: "\e950"; }
+
+.icon2-ordered-list:before {
+  content: "\e951"; }
+
+.icon2-other:before {
+  content: "\e952"; }
+
+.icon2-password:before {
+  content: "\e953"; }
+
+.icon2-phone:before {
+  content: "\e954"; }
+
+.icon2-photograph:before {
+  content: "\e955"; }
+
+.icon2-picture:before {
+  content: "\e956"; }
+
+.icon2-picture2:before {
+  content: "\e957"; }
+
+.icon2-plan:before {
+  content: "\e958"; }
+
+.icon2-plan-solid:before {
+  content: "\e959"; }
+
+.icon2-position:before {
+  content: "\e95a"; }
+
+.icon2-preference:before {
+  content: "\e95b"; }
+
+.icon2-qq:before {
+  content: "\e95c"; }
+
+.icon2-qr-code:before {
+  content: "\e95d"; }
+
+.icon2-quote:before {
+  content: "\e95e"; }
+
+.icon2-rate-of-progress:before {
+  content: "\e95f"; }
+
+.icon2-receive:before {
+  content: "\e960"; }
+
+.icon2-redo:before {
+  content: "\e961"; }
+
+.icon2-relevance:before {
+  content: "\e962"; }
+
+.icon2-reload:before {
+  content: "\e963"; }
+
+.icon2-renew-note:before {
+  content: "\e964"; }
+
+.icon2-renew-task-description:before {
+  content: "\e965"; }
+
+.icon2-restart-task:before {
+  content: "\e966"; }
+
+.icon2-revoke:before {
+  content: "\e967"; }
+
+.icon2-right-align:before {
+  content: "\e968"; }
+
+.icon2-right-retraction:before {
+  content: "\e969"; }
+
+.icon2-row-height:before {
+  content: "\e96a"; }
+
+.icon2-schedule:before {
+  content: "\e96b"; }
+
+.icon2-screening:before {
+  content: "\e96c"; }
+
+.icon2-search:before {
+  content: "\e96d"; }
+
+.icon2-seleced-mult:before {
+  content: "\e96e"; }
+
+.icon2-selected:before {
+  content: "\e96f"; }
+
+.icon2-selected-single:before {
+  content: "\e970"; }
+
+.icon2-set:before {
+  content: "\e971"; }
+
+.icon2-shrink:before {
+  content: "\e972"; }
+
+.icon2-star-target-1:before {
+  content: "\e973"; }
+
+.icon2-star-target-2:before {
+  content: "\e974"; }
+
+.icon2-start:before {
+  content: "\e975"; }
+
+.icon2-statistics:before {
+  content: "\e976"; }
+
+.icon2-subplan:before {
+  content: "\e977"; }
+
+.icon2-subplan-web:before {
+  content: "\e978"; }
+
+.icon2-suspend:before {
+  content: "\e979"; }
+
+.icon2-tab:before {
+  content: "\e97a"; }
+
+.icon2-talk:before {
+  content: "\e97b"; }
+
+.icon2-task-description:before {
+  content: "\e97c"; }
+
+.icon2-teammate:before {
+  content: "\e97d"; }
+
+.icon2-the-day-after-tomorrow:before {
+  content: "\e97e"; }
+
+.icon2-time-stamp:before {
+  content: "\e97f"; }
+
+.icon2-today:before {
+  content: "\e980"; }
+
+.icon2-tomorrow:before {
+  content: "\e981"; }
+
+.icon2-type:before {
+  content: "\e982"; }
+
+.icon2-type-size:before {
+  content: "\e983"; }
+
+.icon2-underline:before {
+  content: "\e984"; }
+
+.icon2-unordered-list:before {
+  content: "\e985"; }
+
+.icon2-update-version:before {
+  content: "\e986"; }
+
+.icon2-upload:before {
+  content: "\e987"; }
+
+.icon2-user-manual:before {
+  content: "\e988"; }
+
+.icon2-validation-code:before {
+  content: "\e989"; }
+
+.icon2-vip:before {
+  content: "\e98a"; }
+
+.icon2-visible:before {
+  content: "\e98b"; }
+
+.icon2-voice:before {
+  content: "\e98c"; }
+
+.icon2-web:before {
+  content: "\e98d"; }
+
+.icon2-wechat:before {
+  content: "\e98e"; }
+
+.icon2-work:before {
+  content: "\e98f"; }
+
+.simditor .simditor-body, .editor-style {
+  outline: none;
+  word-wrap: break-word; }
+  .simditor .simditor-body [data-unselection-select] .unselection-content, .editor-style [data-unselection-select] .unselection-content {
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid #bababa !important; }
+  .simditor .simditor-body [data-unselection-select] img, .editor-style [data-unselection-select] img {
+    box-shadow: 0 2px 6px 1px rgba(0, 0, 0, 0.4); }
+  .simditor .simditor-body [data-img], .editor-style [data-img] {
+    padding: 0px !important; }
+  .simditor .simditor-body .unselection-wrapper, .editor-style .unselection-wrapper {
+    text-align: center; }
+    .simditor .simditor-body .unselection-wrapper[data-attach], .simditor .simditor-body .unselection-wrapper[data-global-link], .editor-style .unselection-wrapper[data-attach], .editor-style .unselection-wrapper[data-global-link] {
+      text-align: left; }
+    .simditor .simditor-body .unselection-wrapper .unselection-inline-wrapper, .editor-style .unselection-wrapper .unselection-inline-wrapper {
+      display: inline-block;
+      width: 100%; }
+    .simditor .simditor-body .unselection-wrapper .unselection-content, .editor-style .unselection-wrapper .unselection-content {
+      cursor: default; }
+    .simditor .simditor-body .unselection-wrapper [data-name], .editor-style .unselection-wrapper [data-name] {
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: right 0.2s; }
+      .simditor .simditor-body .unselection-wrapper [data-name]:before, .editor-style .unselection-wrapper [data-name]:before {
+        content: attr(data-name); }
+    .simditor .simditor-body .unselection-wrapper .unselection-attach-operation, .editor-style .unselection-wrapper .unselection-attach-operation {
+      display: none;
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      font-size: 0px;
+      transition: transform 0.2s; }
+      .simditor .simditor-body .unselection-wrapper .unselection-attach-operation .unselection-attach-operation-icon, .editor-style .unselection-wrapper .unselection-attach-operation .unselection-attach-operation-icon {
+        display: inline-block;
+        height: 100%;
+        font-size: 18px;
+        width: 28px;
+        text-align: center;
+        line-height: 35px;
+        cursor: pointer;
+        color: #575757; }
+      .simditor .simditor-body .unselection-wrapper .unselection-attach-operation .unselection-attach-more, .editor-style .unselection-wrapper .unselection-attach-operation .unselection-attach-more {
+        position: relative; }
+        .simditor .simditor-body .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu, .editor-style .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu {
+          display: none;
+          top: 100%;
+          position: absolute;
+          right: 0px;
+          line-height: 26px;
+          box-shadow: 0 3px 9px 0px rgba(0, 0, 0, 0.21);
+          z-index: 1; }
+          .simditor .simditor-body .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu .unselection-attach-menu-item, .editor-style .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu .unselection-attach-menu-item {
+            padding: 7px 10px;
+            font-size: 12px;
+            background: #fff;
+            transition: background 0.2s; }
+            .simditor .simditor-body .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu .unselection-attach-menu-item:hover, .editor-style .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu .unselection-attach-menu-item:hover {
+              background: #f9f9f9; }
+            .simditor .simditor-body .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu .unselection-attach-menu-item:before, .editor-style .unselection-wrapper .unselection-attach-operation .unselection-attach-more .unselection-attach-menu .unselection-attach-menu-item:before {
+              content: attr(title); }
+    .simditor .simditor-body .unselection-wrapper .unselection-attach, .editor-style .unselection-wrapper .unselection-attach {
+      display: inline-block;
+      height: 36px;
+      width: 300px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      border: 1px solid #e9e9e9;
+      position: relative;
+      text-align: left;
+      color: #575757;
+      font-size: 0px;
+      white-space: nowrap; }
+      .simditor .simditor-body .unselection-wrapper .unselection-attach .unselection-attach-icon, .editor-style .unselection-wrapper .unselection-attach .unselection-attach-icon {
+        display: inline-block;
+        height: 100%;
+        font-size: 20px;
+        line-height: 33px;
+        width: 30px;
+        text-align: center; }
+      .simditor .simditor-body .unselection-wrapper .unselection-attach [data-name], .editor-style .unselection-wrapper .unselection-attach [data-name] {
+        position: absolute;
+        left: 35px;
+        right: 85px;
+        bottom: 0px;
+        top: 0px;
+        line-height: 36px; }
+      .simditor .simditor-body .unselection-wrapper .unselection-attach [data-progress], .editor-style .unselection-wrapper .unselection-attach [data-progress] {
+        display: block;
+        position: absolute;
+        height: 6px;
+        width: 102px;
+        bottom: 3px;
+        left: 33px;
+        background: #F0F0F0;
+        border-radius: 3px; }
+        .simditor .simditor-body .unselection-wrapper .unselection-attach [data-progress] > span, .editor-style .unselection-wrapper .unselection-attach [data-progress] > span {
+          display: block;
+          height: 100%;
+          border-radius: inherit;
+          background: #5BBBFF;
+          width: 0%; }
+      .simditor .simditor-body .unselection-wrapper .unselection-attach [data-size], .editor-style .unselection-wrapper .unselection-attach [data-size] {
+        position: absolute;
+        display: inline-block;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+        font-size: 12px;
+        line-height: 36px;
+        padding-right: 10px; }
+        .simditor .simditor-body .unselection-wrapper .unselection-attach [data-size]:before, .editor-style .unselection-wrapper .unselection-attach [data-size]:before {
+          content: attr(data-size); }
+    .simditor .simditor-body .unselection-wrapper .unselection-global-link, .editor-style .unselection-wrapper .unselection-global-link {
+      display: inline-block;
+      height: 45px;
+      width: 90%;
+      background-color: #f9f9f9;
+      border-radius: 2px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      position: relative;
+      text-align: left;
+      color: #575757;
+      font-size: 0px;
+      white-space: nowrap; }
+      .simditor .simditor-body .unselection-wrapper .unselection-global-link [data-name], .editor-style .unselection-wrapper .unselection-global-link [data-name] {
+        display: inline-block;
+        line-height: 45px;
+        vertical-align: middle;
+        width: calc(100% - 73px); }
+      .simditor .simditor-body .unselection-wrapper .unselection-global-link .unselection-attach-operation, .editor-style .unselection-wrapper .unselection-global-link .unselection-attach-operation {
+        display: inline-block; }
+      .simditor .simditor-body .unselection-wrapper .unselection-global-link .unselection-attach-operation-icon, .editor-style .unselection-wrapper .unselection-global-link .unselection-attach-operation-icon {
+        line-height: 45px; }
+      .simditor .simditor-body .unselection-wrapper .unselection-global-link [data-global-link-type], .editor-style .unselection-wrapper .unselection-global-link [data-global-link-type] {
+        display: inline-block;
+        height: 100%;
+        width: 45px;
+        vertical-align: middle; }
+      .simditor .simditor-body .unselection-wrapper .unselection-global-link [data-global-link-type="todo"], .simditor .simditor-body .unselection-wrapper .unselection-global-link [data-global-link-type="plan"], .editor-style .unselection-wrapper .unselection-global-link [data-global-link-type="todo"], .editor-style .unselection-wrapper .unselection-global-link [data-global-link-type="plan"] {
+        background: url(https://res-front-cdn.timetask.cn/common/img/todo/tick.png) no-repeat;
+        background-position: 14px; }
+      .simditor .simditor-body .unselection-wrapper .unselection-global-link [data-global-link-type="doc"], .editor-style .unselection-wrapper .unselection-global-link [data-global-link-type="doc"] {
+        background: url(https://res-front-cdn.timetask.cn/common/img/doc/docItem.png) no-repeat;
+        background-position: 9px;
+        background-size: 27px 26px; }
+      .simditor .simditor-body .unselection-wrapper .unselection-global-link [data-global-link-type="file"], .editor-style .unselection-wrapper .unselection-global-link [data-global-link-type="file"] {
+        font-size: 20px;
+        line-height: 42px;
+        text-align: center; }
+    .simditor .simditor-body .unselection-wrapper .unselection-task-block, .editor-style .unselection-wrapper .unselection-task-block {
+      display: inline-block;
+      height: 70px;
+      width: 100%;
+      background: #F4F3F3;
+      border: 1px solid transparent;
+      position: relative; }
+      .simditor .simditor-body .unselection-wrapper .unselection-task-block [data-title], .editor-style .unselection-wrapper .unselection-task-block [data-title] {
+        font-size: 14px;
+        color: #333;
+        letter-spacing: 0;
+        display: block;
+        padding-left: 20px;
+        text-align: left;
+        margin-top: 13px;
+        margin-bottom: 7px; }
+        .simditor .simditor-body .unselection-wrapper .unselection-task-block [data-title]:before, .editor-style .unselection-wrapper .unselection-task-block [data-title]:before {
+          content: attr(data-title); }
+      .simditor .simditor-body .unselection-wrapper .unselection-task-block [data-sub-title], .editor-style .unselection-wrapper .unselection-task-block [data-sub-title] {
+        font-size: 12px;
+        color: #9B9B9B;
+        letter-spacing: 0;
+        display: block;
+        padding-left: 20px;
+        text-align: left;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden; }
+        .simditor .simditor-body .unselection-wrapper .unselection-task-block [data-sub-title]:before, .editor-style .unselection-wrapper .unselection-task-block [data-sub-title]:before {
+          content: attr(data-sub-title); }
+      .simditor .simditor-body .unselection-wrapper .unselection-task-block .simditor-r-icon-setting, .editor-style .unselection-wrapper .unselection-task-block .simditor-r-icon-setting {
+        position: absolute;
+        top: 50%;
+        right: 21px;
+        margin-top: -0.53em;
+        cursor: pointer; }
+      .simditor .simditor-body .unselection-wrapper .unselection-task-block .simditor-r-icon-close, .editor-style .unselection-wrapper .unselection-task-block .simditor-r-icon-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: -0.5em;
+        margin-right: -0.5em;
+        background: #FFF;
+        border: 1px solid #F1F1F1;
+        box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        color: #BDBDBD;
+        cursor: pointer;
+        display: none; }
+    .simditor .simditor-body .unselection-wrapper inherit, .editor-style .unselection-wrapper inherit {
+      display: block; }
+    .simditor .simditor-body .unselection-wrapper[data-file-id] .unselection-attach:hover .unselection-attach-operation, .simditor .simditor-body .unselection-wrapper[data-file-id] .unselection-global-link:hover .unselection-attach-operation, .editor-style .unselection-wrapper[data-file-id] .unselection-attach:hover .unselection-attach-operation, .editor-style .unselection-wrapper[data-file-id] .unselection-global-link:hover .unselection-attach-operation {
+      display: inline-block; }
+    .simditor .simditor-body .unselection-wrapper[data-file-id] .unselection-attach:hover [data-size], .editor-style .unselection-wrapper[data-file-id] .unselection-attach:hover [data-size] {
+      display: none; }
+    .simditor .simditor-body .unselection-wrapper[data-global-link], .editor-style .unselection-wrapper[data-global-link] {
+      line-height: 10px; }
+  .simditor .simditor-body[contenteditable="true"] .unselection-attach-more:hover .unselection-attach-menu, .editor-style[contenteditable="true"] .unselection-attach-more:hover .unselection-attach-menu {
+    display: inline-block; }
+  .simditor .simditor-body[contenteditable="true"] .unselection-task-block:hover .simditor-r-icon-close, .editor-style[contenteditable="true"] .unselection-task-block:hover .simditor-r-icon-close {
+    display: block; }
+  .simditor .simditor-body > :first-child, .editor-style > :first-child {
+    margin-top: 0 !important; }
+  .simditor .simditor-body a, .editor-style a {
+    color: #4298BA;
+    text-decoration: none;
+    word-break: break-all; }
+  .simditor .simditor-body a:visited, .editor-style a:visited {
+    color: #4298BA; }
+  .simditor .simditor-body a:hover, .editor-style a:hover {
+    color: #0F769F; }
+  .simditor .simditor-body a:active, .editor-style a:active {
+    color: #9E792E; }
+  .simditor .simditor-body a:hover, .simditor .simditor-body a:active, .editor-style a:hover, .editor-style a:active {
+    outline: 0; }
+  .simditor .simditor-body h1, .simditor .simditor-body h2, .simditor .simditor-body h3, .simditor .simditor-body h4, .simditor .simditor-body h5, .simditor .simditor-body h6, .editor-style h1, .editor-style h2, .editor-style h3, .editor-style h4, .editor-style h5, .editor-style h6 {
+    font-weight: normal;
+    margin: 40px 0 20px;
+    color: #000000; }
+  .simditor .simditor-body h1, .editor-style h1 {
+    font-size: 24px; }
+  .simditor .simditor-body h2, .editor-style h2 {
+    font-size: 22px; }
+  .simditor .simditor-body h3, .editor-style h3 {
+    font-size: 20px; }
+  .simditor .simditor-body h4, .editor-style h4 {
+    font-size: 18px; }
+  .simditor .simditor-body h5, .editor-style h5 {
+    font-size: 16px; }
+  .simditor .simditor-body h6, .editor-style h6 {
+    font-size: 16px; }
+  .simditor .simditor-body p, .simditor .simditor-body div, .editor-style p, .editor-style div {
+    word-wrap: break-word; }
+  .simditor .simditor-body p, .editor-style p {
+    margin-bottom: 0px; }
+  .simditor .simditor-body b, .simditor .simditor-body strong, .editor-style b, .editor-style strong {
+    font-weight: bold; }
+  .simditor .simditor-body i, .simditor .simditor-body em, .editor-style i, .editor-style em {
+    font-style: italic; }
+  .simditor .simditor-body u, .editor-style u {
+    text-decoration: underline; }
+  .simditor .simditor-body strike, .simditor .simditor-body del, .editor-style strike, .editor-style del {
+    text-decoration: line-through; }
+  .simditor .simditor-body ul, .simditor .simditor-body ol, .editor-style ul, .editor-style ol {
+    list-style: disc outside none;
+    margin: 15px 0;
+    padding: 0 0 0 40px;
+    line-height: 1.6; }
+    .simditor .simditor-body ul ul, .simditor .simditor-body ul ol, .simditor .simditor-body ol ul, .simditor .simditor-body ol ol, .editor-style ul ul, .editor-style ul ol, .editor-style ol ul, .editor-style ol ol {
+      padding-left: 30px; }
+    .simditor .simditor-body ul ul, .simditor .simditor-body ol ul, .editor-style ul ul, .editor-style ol ul {
+      list-style: circle outside none; }
+      .simditor .simditor-body ul ul ul, .simditor .simditor-body ol ul ul, .editor-style ul ul ul, .editor-style ol ul ul {
+        list-style: square outside none; }
+  .simditor .simditor-body ul li, .editor-style ul li {
+    list-style-type: disc; }
+  .simditor .simditor-body ol, .editor-style ol {
+    list-style: decimal; }
+    .simditor .simditor-body ol li, .editor-style ol li {
+      list-style: decimal; }
+  .simditor .simditor-body blockquote, .editor-style blockquote {
+    border-left: 6px solid #ddd;
+    padding: 5px 0 5px 10px;
+    margin: 15px 0 15px 15px; }
+    .simditor .simditor-body blockquote > :first-child, .editor-style blockquote > :first-child {
+      margin-top: 0; }
+  .simditor .simditor-body code, .editor-style code {
+    display: inline-block;
+    padding: 0 4px;
+    margin: 0 5px;
+    background: #eeeeee;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: 'monaco', 'Consolas', "Liberation Mono", Courier, monospace; }
+  .simditor .simditor-body pre, .editor-style pre {
+    padding: 10px 5px 10px 10px;
+    margin: 15px 0;
+    display: block;
+    line-height: 18px;
+    background: #F0F0F0;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: 'monaco', 'Consolas', "Liberation Mono", Courier, monospace;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-x: auto; }
+    .simditor .simditor-body pre code, .editor-style pre code {
+      display: block;
+      padding: 0;
+      margin: 0;
+      background: none;
+      border-radius: 0; }
+  .simditor .simditor-body hr, .editor-style hr {
+    display: block;
+    height: 0px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 15px 0;
+    padding: 0; }
+  .simditor .simditor-body table, .editor-style table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 15px 0; }
+    .simditor .simditor-body table thead, .editor-style table thead {
+      background-color: #f9f9f9; }
+    .simditor .simditor-body table td, .simditor .simditor-body table th, .editor-style table td, .editor-style table th {
+      min-width: 40px;
+      height: 30px;
+      border: 1px solid #ccc;
+      vertical-align: top;
+      padding: 2px 4px;
+      text-align: left;
+      box-sizing: border-box; }
+      .simditor .simditor-body table td.active, .simditor .simditor-body table th.active, .editor-style table td.active, .editor-style table th.active {
+        background-color: #ffffee; }
+  .simditor .simditor-body img, .editor-style img {
+    margin: 0;
+    vertical-align: middle;
+    max-width: 100%;
+    resize: none;
+    height: auto; }
+
+/*# sourceMappingURL=index.css.map */

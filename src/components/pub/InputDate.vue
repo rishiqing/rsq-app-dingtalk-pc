@@ -124,7 +124,11 @@
         this.editDate = false
       })
       Bus.$on('close-date', () => {
-        this.editDate = false
+        if (this.editDate) {
+          Bus.$emit('senddate')
+        } else {
+          this.editDate = false
+        }
       })
     }
   }

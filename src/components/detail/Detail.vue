@@ -384,6 +384,9 @@
     height: 40px;
     display: flex;
     align-items: center;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #666666;
   }
   .wrap-title-desp{
     background-color: white;
