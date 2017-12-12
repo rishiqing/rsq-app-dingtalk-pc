@@ -64,11 +64,11 @@ export default {
     })
   },
   postNewTodo (props) {
-    console.log('props是' + JSON.stringify(props))
+    // console.log('props是' + JSON.stringify(props))
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_NEW_TODO, props)
         .then(res => {
-          console.log('返回来的resshi ' + (res))
+          // console.log('返回来的resshi ' + (res))
           resolve(res.json())
         }, err => {
           window.rsqadmg.log(JSON.stringify(err))
@@ -150,7 +150,7 @@ export default {
   },
   deleteCommentItem (props) {
     var path = util.replaceUrlParams(mapping.DELETE_COMMENT_TODO, props)
-    console.log('删除评论路径是' + path)
+    // console.log('删除评论路径是' + path)
     return new Promise((resolve, reject) => {
       Vue.http.delete(path)
         .then(res => {

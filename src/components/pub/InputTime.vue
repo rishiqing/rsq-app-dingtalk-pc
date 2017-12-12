@@ -74,7 +74,7 @@
     },
     watch: {
       ifshow () {
-        console.log('inputtime监听到变化了')
+//        console.log('inputtime监听到变化了')
         this.showEditTime = this.ifshow
         if (this.editTime) {
           this.editTime = false
@@ -93,6 +93,7 @@
           this.showEditTime = !this.showEditTime
         }
         Bus.$emit('closedate')
+        Bus.$emit('close-priority')
         e.stopPropagation()
       },
       gotoTodoTime () {
@@ -119,6 +120,11 @@
     },
     mounted () {
       Bus.$on('closetime', () => {
+        if (this.editTime) {
+          this.editTime = false
+        }
+      })
+      Bus.$on('close-time', () => {
         if (this.editTime) {
           this.editTime = false
         }

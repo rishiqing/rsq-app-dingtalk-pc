@@ -178,7 +178,7 @@
       mouseMove (ev) {
         ev = ev || window.event
         var mousePos = this.mousePosition(ev)
-        console.log(mousePos.x + ':' + mousePos.y)
+//        console.log(mousePos.x + ':' + mousePos.y)
         this.top = mousePos.y - 65
         this.left = mousePos.x - 48
 //        console.log(document.getElementById('cssTest').style.top + ':' + document.getElementById('cssTest').style.left)

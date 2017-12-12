@@ -80,7 +80,7 @@
     },
     watch: {
       ifshow () {
-        console.log('inputdate监听到变化了')
+//        console.log('inputdate监听到变化了')
         this.showEditDate = this.ifshow
         if (this.editDate) {
           this.editDate = false
@@ -96,6 +96,8 @@
           this.showEditDate = !this.showEditDate
         }
         Bus.$emit('closetime')
+        Bus.$emit('close-add-plan')
+        Bus.$emit('close-priority')
         e.stopPropagation()
 //        this.$store.commit('SHOW_DATE')
       },
@@ -119,6 +121,9 @@
     },
     mounted () {
       Bus.$on('closedate', () => {
+        this.editDate = false
+      })
+      Bus.$on('close-date', () => {
         this.editDate = false
       })
     }

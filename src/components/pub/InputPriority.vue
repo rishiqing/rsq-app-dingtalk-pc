@@ -166,6 +166,8 @@
         if (!this.editPriority) {
           this.editPriority = true
         }
+        Bus.$emit('close-date')
+        Bus.$emit('close-time')
         e.stopPropagation()
       },
       IsDisabled (e) {
@@ -194,7 +196,13 @@
 //          this.menuState = false
 //        }
       })
-//      console.log(JSON.stringify(this.titleArray))
+      Bus.$on('close-priority', () => {
+        this.menuState = false
+//        console.log('进优先级了')
+//        if (this.menuState) {
+//          this.menuState = false
+//        }
+      })
     }
   }
 </script>

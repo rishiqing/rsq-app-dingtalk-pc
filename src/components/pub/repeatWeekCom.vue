@@ -1,12 +1,12 @@
 <template>
-  <div class="wrap-week">
+  <div class="wrap-week" @click="stopweek($event)">
     <div class="week-top">
-      <div v-for="weekday in this.weekArrayforward" @click="clickWeek(weekday)" :class="{'selected': weekday.isSelected}">
+      <div class="week-style" v-for="weekday in this.weekArrayforward" @click="clickWeek(weekday)" :class="{'selected': weekday.isSelected}">
         {{weekday.week}}
       </div>
     </div>
     <div class="week-bottom">
-      <div v-for="weekday in this.weekArraybackward" @click="clickWeek(weekday)" :class="{'selected':weekday.isSelected}">
+      <div class="week-style" v-for="weekday in this.weekArraybackward" @click="clickWeek(weekday)" :class="{'selected':weekday.isSelected}">
         {{weekday.week}}
       </div>
     </div>
@@ -48,6 +48,9 @@
 //      newItem: Boolean
     },
     methods: {
+      stopweek (e) {
+        e.stopPropagation()
+      },
       clickWeek (obj) {
         if (obj.isSelected) {
           obj.isSelected = !obj.isSelected
@@ -59,6 +62,7 @@
           obj.isSelected = true
           this.selectWeekDate.push(obj.flag)
         }
+        console.log('this.selectWeekDate' + JSON.stringify(this.selectWeekDate))
         this.$store.commit('PUB_WEEK_DATE_UPDATE', {data: this.selectWeekDate})
       }
     },
@@ -81,7 +85,7 @@
     },
     mounted () {
       var length = this.weekDate.length
-      console.log('this.weekDate.length' + this.weekDate.length)
+//      console.log('this.weekDate.length' + this.weekDate.length)
       if (this.weekDate.length > 0) {
         for (var i = 0; i < length; i++) {
           var week = new Date(parseFloat(this.weekDate[i])).getDay()
@@ -89,10 +93,10 @@
             this.weekArraybackward[week - 5].isSelected = true
             this.selectWeekDate.push(week)
           } else {
-            console.log('进来了' + week)
-            console.log(this.weekArrayforward[week - 1])
+//            console.log('进来了' + week)
+//            console.log(this.weekArrayforward[week - 1])
             this.weekArrayforward[week - 1].isSelected = true
-            console.log(this.weekArrayforward[week - 1].isSelected)
+//            console.log(this.weekArrayforward[week - 1].isSelected)
             this.selectWeekDate.push(week)
           }
         }
@@ -101,6 +105,11 @@
   }
 </script>
 <style>
+  .week-style{
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #666666;
+  }
   .wrap-week{
     width: 240px;
     height:164px;

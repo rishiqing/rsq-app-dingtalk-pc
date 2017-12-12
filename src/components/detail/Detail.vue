@@ -100,7 +100,7 @@
   import ComentList from 'com/pub/ComentList'
   import Bus from 'com/bus'
   import util from 'ut/jsUtil'
-  import moment from 'moment'
+//  import moment from 'moment'
   export default {
     name: 'app',
     components: {
@@ -203,7 +203,7 @@
         })
       },
       disappear (e) {
-        console.log('到父组件detail了' + e.target.classList)
+//        console.log('到父组件detail了' + e.target.classList)
         this.ifShow = !this.ifShow
 //        this.$store.commit('HIDE_POP')
         Bus.$emit('close')
@@ -222,27 +222,27 @@
 //        window.rsqadmg.execute('showLoader', {text: '保存中...'})
         this.$store.dispatch('updateTodo', {editItem: params}).then(() => {
           this.joinUserRsqIds = idArray
-          if (params.addJoinUsers) {
-            var IDArrays = params.addJoinUsers.split(',')
-            var empIDArray = []
-            var that = this
-            this.$store.dispatch('fetchUseridFromRsqid', {corpId: this.corpId, idArray: IDArrays})
-              .then(idMap => {
-                for (var i = 0; i < IDArrays.length; i++) {
-                  empIDArray.push(idMap[IDArrays[i]].emplId)
-                }
-                var standardTime = moment().format('YYYY-MM-DD HH:mm')
-                window.rsqadmg.exec('notify', {
-                  userIds: empIDArray,
-                  corpId: that.corpId,
-                  alertTime: standardTime,
-                  title: this.item.pTitle,
-                  success: () => {
-                    console.log('发送成功')
-                  }
-                })
-              })
-          }
+//          if (params.addJoinUsers) {
+//            var IDArrays = params.addJoinUsers.split(',')
+//            var empIDArray = []
+//            var that = this
+//            this.$store.dispatch('fetchUseridFromRsqid', {corpId: this.corpId, idArray: IDArrays})
+//              .then(idMap => {
+//                for (var i = 0; i < IDArrays.length; i++) {
+//                  empIDArray.push(idMap[IDArrays[i]].emplId)
+//                }
+//                var standardTime = moment().format('YYYY-MM-DD HH:mm')
+//                window.rsqadmg.exec('notify', {
+//                  userIds: empIDArray,
+//                  corpId: that.corpId,
+//                  alertTime: standardTime,
+//                  title: this.item.pTitle,
+//                  success: () => {
+//                    console.log('发送成功')
+//                  }
+//                })
+//              })
+//          }
         })
       },
       showEditComment () {
