@@ -54,7 +54,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      env: 'prod',
+      env: 'beta',
       authServer: config.beta.authServer,
       stsServer: config.beta.stsServer,
       ossRegion: config.beta.aliOSS.region,
