@@ -30,7 +30,7 @@ module.exports = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       env: 'dev',
       authServer: config.dev.authServer,
-      stsServer: config.build.stsServer,
+      stsServer: config.dev.stsServer,
       ossRegion: config.dev.aliOSS.region,
       ossBucket: config.dev.aliOSS.bucket,
       ossRoot: config.dev.aliOSS.root,
