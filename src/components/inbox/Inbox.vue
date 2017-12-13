@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-inbox" :class="{'slide':showInbox}" @click="stop($event)">
     <input type="text" class="inbox-input" placeholder='添加任务，按Enter保存'  @keypress="createInboxItem($event.target.value,$event)">
-    <ul class="inbox-list-wrap">
+    <ul class="inbox-list-wrap" id="sortable">
       <draggable :move="getdata" @update="datadragEnd">
         <transition-group>
           <inboxItem
@@ -25,6 +25,13 @@
 <script>
   import dateUtil from 'ut/dateUtil'
   import inboxItem from 'com/inbox/inboxItem'
+//  import $ from 'jquery'
+//  $(function () {
+//    $('#sortable').sortable({
+//      placeholder: 'ui-state-highlight'
+//    })
+//    $('#sortable').disableSelection()
+//  })
   export default {
     name: '',
     components: {
@@ -105,6 +112,7 @@
   }
 </script>
 <style scoped>
+  .ui-state-highlight { height: 30px; }
   #cssTest{
     position: fixed;
     /*display: flex;*/

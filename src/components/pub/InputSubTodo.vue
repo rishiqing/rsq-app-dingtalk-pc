@@ -20,6 +20,9 @@
   </div>
 </template>
 <style lang="" scoped>
+  .select{
+    font-size: 14px;
+  }
   .wrap-subtodo-input{
     padding-left: 15px;
     display: flex;
@@ -38,14 +41,18 @@
   .subtodo-head{
     border-bottom: 0.5px solid #EAEAEA;
   }
-  .subtodo-head,.subtodo-create,.subtodo-input{
+  .subtodo-head,.subtodo-create{
     padding-left: 15px;
     display: flex;
     align-items: center;
     height: 35px;
   }
   .subtodo-input{
+    padding-left: 11px;
     /*margin-left: 15px;*/
+    display: flex;
+    align-items: center;
+    height: 35px;
     border: 0;
     /*border: none;*/
   }

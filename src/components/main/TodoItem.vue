@@ -1,5 +1,5 @@
 <template>
-  <li class="todoItem handle " @click="clickItem" draggable='true' @dragstart="drag(item)" :class="{'large-width': bigger}">
+  <li class="todoItem handle ui-state-default" @click="clickItem" draggable='true' @dragstart="drag(item)" :class="{'large-width': bigger}">
     <!--<v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">-->
     <div class="todo-checkbox" v-if="isCheckable" @click="clickCheckOut">
       <i class="icon2-check-box select"
@@ -272,6 +272,10 @@
 <script>
 //  import $ from 'jquery'
   import dateUtil from 'ut/dateUtil'
+//  import $ from 'jquery'
+//  $(function () {
+//
+//  })
 //  $(document).ready(function () {
 //    $('.tooltip').tooltipster()
 //  })

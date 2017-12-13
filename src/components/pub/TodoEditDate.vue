@@ -55,14 +55,18 @@
         </table>
       </div>
       <div v-show="this.repeatState" class="repeat-state">
-        <span class="repeat-deadline">截止重复直到</span>
+        <span class="repeat-deadline-text">截止重复直到</span>
         <div class="repeat-border" @click="selectDeadLine($event)">
           <span class="repeat-deadline">{{deadLineKind}}</span>
           <i class="icon2-arrow-down2 arrow"></i>
         </div>
         <ul style="margin: 0" v-show="this.deadLine" class="repeat-style-wrap-deadline">
-          <li class="repeat-style-wrap-item"  @click="repeatAlways">永久</li>
-          <li class="repeat-style-wrap-item" @click="showDeadLine">按日期截止</li>
+          <li class="repeat-style-wrap-item"  @click="repeatAlways">
+            <span>永久</span>
+          </li>
+          <li class="repeat-style-wrap-item" @click="showDeadLine">
+            <span>按日期截止</span>
+          </li>
         </ul>
       </div>
       <r-deadline
@@ -134,7 +138,8 @@
     height:30px;
     line-height:30px;
     text-align: center;
-    border-radius: 50%;
+    border-radius: 2px;
+    /*border-radius: 50%;*/
     font-family: AppleSystemUIFont;
     font-size: 12px;
     color: #666666;
@@ -156,6 +161,7 @@
   .repeat-wrap{
     padding-bottom: 10px;
     border-bottom: 1px solid  #E1E1E1;
+    height: 230px;
   }
   .repeat-border{
     cursor: pointer;
@@ -219,8 +225,8 @@
     height: 40px;
   }
   .every-day{
-    margin: 10px 0;
-    width: 240px;
+    margin: 20px 28px;
+    width: 180px;
     height: 120px;
   }
   .repeat-option{
@@ -258,6 +264,11 @@
   .repeat-deadline{
     font-family: AppleSystemUIFont;
     font-size: 12px;
+    color: #666666;
+  }
+  .repeat-deadline-text{
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
     color: #8C8C8C;
   }
   .repeat-style{
@@ -282,6 +293,8 @@
     z-index: 1000;
     background-color: white;
     box-shadow: 3px 5px 24px #888888;
+    width: 240px;
+    height: 344px;
   }
   .edit-date {
     .light-color {color: #999999;}
@@ -337,7 +350,7 @@
       color: #8C8C8C;
       cursor: pointer;
       float: left;
-      width: 23%;
+      width: 24.2%;
       text-align: center;
       line-height: 40px;}
     .dp-v-line {
@@ -350,11 +363,11 @@
       /*font-size: 2.8rem;}*/
     }
     .dp-v-sep {
-      width: 1px;
-      height: 90%;
+      /*width: 1px;*/
+      height: 60%;
       /*background: #979797;*/
       border: 1px solid #F0F0F0;
-      margin-top: 2px;
+      margin-top: 7px;
     }
     .week{
       font-family: AppleSystemUIFont;
@@ -372,6 +385,21 @@
       font-size: 12px;
       color: #666666;
       cursor: pointer;
+    }
+    .dp-day-last{
+      margin:0 auto;
+      width:30px;
+      height:30px;
+      line-height:30px;
+      text-align: center;
+      /*border-radius: 50%;*/
+      font-family: AppleSystemUIFont;
+      font-size: 12px;
+      color: #666666;
+      cursor: pointer;
+    }
+    .dp-day:hover {
+      background: #F4F4F4;
     }
     .week-six{
       font-family: AppleSystemUIFont;

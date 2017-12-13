@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-edit-time" @click="changeEditTime($event)">
-    <div class="wrap-time" @click="changeEditTime($event)">
+    <div class="wrap-time-input" @click="changeEditTime($event)">
       <i class="icon2-alarm time-icon"></i>
       <span class="time margin-detail">时间</span>
       <span class="showTime font-style">{{timeValue}}</span>
@@ -30,7 +30,7 @@
   .showTime {
     margin-left: 10px;
   }
-  .wrap-time{
+  .wrap-time-input{
     position: relative;
     display: flex;
     align-items: center;

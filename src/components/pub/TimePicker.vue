@@ -67,7 +67,10 @@
     background: #EEF7FF;
   }
   .wrap-time{
-    height: 20px;
-    text-align: center;
+    height: 36px;
+    /*text-align: center;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

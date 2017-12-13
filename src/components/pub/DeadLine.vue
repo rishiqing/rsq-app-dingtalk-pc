@@ -161,14 +161,11 @@
   .dp-v-line {
     float: left;
     position: relative;
-    width: 2%;
-    color: #979797;
+    /*width: 2%;*/
+    color: #F0F0F0;
     text-align: center;
     height: 100%;
     /*font-size: 2.8rem;}*/
-  }
-  .dp-v-sep {
-    width: 1px; height: 90%;background: #979797;
   }
   .week{
     font-family: AppleSystemUIFont;

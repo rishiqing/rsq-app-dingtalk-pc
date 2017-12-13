@@ -2,6 +2,7 @@
   <div class="edit-time" :tabindex="2" @blur="blurEvent" @click="stopTime($event)">
     <div class="wrap-time-head">
       <div class="timeContainerFirst" @click="setStartTime($event)">{{startTimeShow}}</div>
+      <!--<div class="connect-line"></div>-->
       <div class="timeContainerSecond" @click="setEndTime($event)">{{endTimeShow}}</div>
     </div>
     <TimePicker
@@ -76,6 +77,11 @@
   </div>
 </template>
 <style lang="scss">
+  .connect-line{
+    border-top: 1px solid #EAEAEA;
+    width: 5px;
+    height: 1px;
+  }
   .wrap-time-head{
     width: 240px;
     height: 48px;
@@ -271,6 +277,7 @@
     left:20px;
     width: 250px;
     /*padding-top: 20px;*/
+    outline: none;
     background-color: white;
     z-index: 3;
     box-shadow: 3px 5px 24px #888888

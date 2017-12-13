@@ -1,5 +1,5 @@
 <template>
-  <ul id="sortable" class="sche-list" v-model="items" :class="{'listHeight': showHeight}" :options="{animation: 300,handle:'.handle'}">
+  <ul id="sortable " class="sche-list" v-model="items" :class="{'listHeight': showHeight}" :options="{animation: 300,handle:'.handle'}">
     <draggable :move="getdata" @update="datadragEnd">
       <transition-group>
         <template v-if="this.itemTitle.pContainer==='IE'">
@@ -89,6 +89,7 @@
   import TodoItem from 'com/main/TodoItem'
   import draggable from 'vuedraggable'
   import $ from 'jquery'
+//  import sortable from 'jquery-ui'
   $(function () {
     $('#sortable').sortable({
       placeholder: 'ui-state-highlight'

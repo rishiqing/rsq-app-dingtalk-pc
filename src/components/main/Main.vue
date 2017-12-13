@@ -3,7 +3,7 @@
     <div class="header-me">
       <div class="wrap-head-img">
         <img class="link-to-rsq" src="../../assets/c.png" alt="" @click="openLink">
-        <img src="../../assets/a.png" alt="" class="head-pic">
+        <img src="../../assets/a.png" alt="" class="head-pic" @click="openLink">
       </div>
       <!--<avatar v-for="item in selectedLocalList"-->
               <!--:key="item.rsqUserId"-->
@@ -229,6 +229,7 @@
 <style>
   .head-pic{
     margin-left: 10px;
+    cursor: pointer;
   }
   #box {
     width: 150px;

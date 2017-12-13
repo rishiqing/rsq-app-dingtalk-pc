@@ -388,6 +388,9 @@
     font-size: 13px;
     color: #666666;
   }
+  .wrap-repeat-select>li{
+    background: rgba(0,0,0,0.04);
+  }
   .wrap-title-desp{
     background-color: white;
   }
@@ -413,20 +416,32 @@
     font-family: PingFangSC-Regular;
     border: none;
     border-radius: 2px;
-    padding: 5px 10px;
+    /*padding: 5px 10px;*/
     background-color: #5EADFD;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
     color: white;
     cursor: pointer;
     margin-right: 10px;
+    width: 45px;
+    height: 20px;
   }
   .cancel-comment{
     font-family: PingFangSC-Regular;
     border: 1px solid #5EADFD;
     border-radius: 2px;
-    padding: 3px 8px;
+    /*padding: 3px 8px;*/
     background-color: white;
     color: #5EADFD;
     cursor: pointer;
+    width: 45px;
+    height: 20px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .detail-bottom{
     /*position: relative;*/
@@ -459,9 +474,10 @@
     /*bottom: 0;*/
     /*background-color: white;*/
     /*margin-top: 20px;*/
+    outline:none;
     cursor: pointer;
     background-color: white;
-    font-size: 15px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: center;

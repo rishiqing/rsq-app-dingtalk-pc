@@ -132,6 +132,7 @@
   }
   .icon{
     font-size: 14px;
+    color:#8C8C8C;
     /*width: 30px;*/
     /*text-align: left;*/
     /*font-size: 16px;*/
