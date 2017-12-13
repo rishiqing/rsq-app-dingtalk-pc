@@ -30,7 +30,8 @@ module.exports = {
       'com': resolve('src/components'),
       'ut': resolve('src/utils'),
       'as': resolve('src/assets'),
-      'jquery': 'jquery'
+      'jquery': 'jquery',
+      'jquery-ui': 'jquery-ui'
     }
   },
   plugins: [
@@ -39,7 +40,8 @@ module.exports = {
       $: "jquery",
       jQuery: "jquery",
       jquery: "jquery",
-      "window.jQuery": "jquery"
+      "window.jQuery": "jquery",
+      'jquery-ui': 'jquery-ui'
     })
   ],
   module: {

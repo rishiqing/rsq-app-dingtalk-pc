@@ -76,10 +76,11 @@
   }
   .select-date-deadline{
     position: absolute;
-    top: 0px;
+    top: 10px;
     background-color: white;
     z-index: 103;
     height: 290px;
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
   }
   .repeat-style-wrap-show{
     width: 20px;
@@ -161,14 +162,11 @@
   .dp-v-line {
     float: left;
     position: relative;
-    width: 2%;
-    color: #979797;
+    /*width: 2%;*/
+    color: #F0F0F0;
     text-align: center;
     height: 100%;
     /*font-size: 2.8rem;}*/
-  }
-  .dp-v-sep {
-    width: 1px; height: 90%;background: #979797;
   }
   .week{
     font-family: AppleSystemUIFont;

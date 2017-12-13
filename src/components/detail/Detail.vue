@@ -367,6 +367,9 @@
 </script>
 
 <style>
+  textarea:focus{
+    outline: none;
+  }
   .wrap-repeat-select{
     position: absolute;
     width: 200px;
@@ -374,7 +377,8 @@
     list-style: none;
     background-color: white;
     right: 10px;
-    box-shadow: 3px 5px 24px #888888;
+    /*box-shadow: 3px 5px 24px #888888;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     z-index:800;
     padding-left: 0;
   }
@@ -387,6 +391,9 @@
     font-family: AppleSystemUIFont;
     font-size: 13px;
     color: #666666;
+  }
+  .wrap-repeat-select>li{
+    background: rgba(0,0,0,0.04);
   }
   .wrap-title-desp{
     background-color: white;
@@ -413,20 +420,32 @@
     font-family: PingFangSC-Regular;
     border: none;
     border-radius: 2px;
-    padding: 5px 10px;
+    /*padding: 5px 10px;*/
     background-color: #5EADFD;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
     color: white;
     cursor: pointer;
     margin-right: 10px;
+    width: 45px;
+    height: 25px;
   }
   .cancel-comment{
     font-family: PingFangSC-Regular;
     border: 1px solid #5EADFD;
     border-radius: 2px;
-    padding: 3px 8px;
+    /*padding: 3px 8px;*/
     background-color: white;
     color: #5EADFD;
     cursor: pointer;
+    width: 45px;
+    height: 25px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .detail-bottom{
     /*position: relative;*/
@@ -459,9 +478,10 @@
     /*bottom: 0;*/
     /*background-color: white;*/
     /*margin-top: 20px;*/
+    outline:none;
     cursor: pointer;
     background-color: white;
-    font-size: 15px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -469,6 +489,7 @@
     /*margin-left: 10px;*/
     margin-rigth: 10px;
     margin-bottom: 10px;
+    color: #B1B1B1;
   }
   ::-webkit-scrollbar{width:4px;}
   ::-webkit-scrollbar-track{

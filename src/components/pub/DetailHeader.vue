@@ -287,7 +287,8 @@
     position: absolute;
     top: 20px;
     right: 110px;
-    box-shadow:3px 5px 24px #888888 ;
+    /*box-shadow:3px 5px 24px #888888 ;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
   }
   .wrap-repeat-delete>li{
     height: 20px;
@@ -410,7 +411,8 @@
     font-size: 13px;
     color: #666666;
     cursor: pointer;
-    box-shadow:3px 5px 24px #888888 ;
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
+    /*box-shadow:3px 5px 24px #888888 ;*/
     z-index:2000
   }
   .plan,.other,.cancel{
