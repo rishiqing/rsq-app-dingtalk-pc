@@ -1,5 +1,5 @@
 <template>
-  <li class="todoItem handle ui-state-default" @click="clickItem" draggable='true' @dragstart="drag(item)" :class="{'large-width': bigger}">
+  <li class="todoItem handle" @click="clickItem" draggable='true' @dragstart="drag(item)" :class="{'large-width': bigger}">
     <!--<v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">-->
     <div class="todo-checkbox" v-if="isCheckable" @click="clickCheckOut">
       <i class="icon2-check-box select"
@@ -55,6 +55,9 @@
     .todo-content-sche {
       max-width: 83%;
     }
+    .todoItem{
+      width: 94%;
+    }
     /*.delay-width {*/
       /*width: 85%;*/
     /*}*/
@@ -65,6 +68,9 @@
     }
     .todo-content-sche {
       max-width:81% ;
+    }
+    .todoItem{
+      width: 94%;
     }
     /*.delay-width {*/
       /*width: 85%;*/
@@ -77,6 +83,9 @@
     .todo-content-sche {
       max-width:79% ;
     }
+    .todoItem{
+      width: 94%;
+    }
     /*.delay-width {*/
       /*width: 83%;*/
     /*}*/
@@ -88,6 +97,9 @@
     .todo-content-sche {
       max-width: 77%;
     }
+    .todoItem{
+      width: 94%;
+    }
     /*.delay-width {*/
       /*width: 81%;*/
     /*}*/
@@ -97,7 +109,10 @@
       width:86.5%;
     }
     .todo-content-sche {
-      max-width: 75%;
+      max-width: 73%;
+    }
+    .todoItem{
+      width: 92%;
     }
     /*.delay-width {*/
       /*width: 78%;*/
@@ -108,7 +123,10 @@
       width:85%;
     }
     .todo-content-sche {
-      max-width:73% ;
+      max-width:71% ;
+    }
+    .todoItem{
+      width: 92%;
     }
     /*.delay-width {*/
       /*width: 75%;*/
@@ -260,7 +278,7 @@
     margin-top: 3px;
     padding-left: 21px;
     cursor: pointer;
-    width: 94%;
+    /*width: 94%;*/
   }
   li:hover{
      background-color: #f9f9f9;

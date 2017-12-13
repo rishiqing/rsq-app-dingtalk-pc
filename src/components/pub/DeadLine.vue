@@ -76,10 +76,11 @@
   }
   .select-date-deadline{
     position: absolute;
-    top: 0px;
+    top: 10px;
     background-color: white;
     z-index: 103;
     height: 290px;
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
   }
   .repeat-style-wrap-show{
     width: 20px;

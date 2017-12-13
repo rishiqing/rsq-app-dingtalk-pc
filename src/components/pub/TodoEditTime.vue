@@ -2,7 +2,7 @@
   <div class="edit-time" :tabindex="2" @blur="blurEvent" @click="stopTime($event)">
     <div class="wrap-time-head">
       <div class="timeContainerFirst" @click="setStartTime($event)">{{startTimeShow}}</div>
-      <!--<div class="connect-line"></div>-->
+      <div class="connect-line"></div>
       <div class="timeContainerSecond" @click="setEndTime($event)">{{endTimeShow}}</div>
     </div>
     <TimePicker
@@ -32,15 +32,15 @@
       <div class="wrap-remind">
         <div class="show-kind">
           <div @click="showfirst" class="show-kind-first">
-            <span>{{this.firstOption}}</span>
+            <span class="show-kind-first-text">{{this.firstOption}}</span>
             <i class="icon2-arrow-down2 arrow-down"></i>
           </div>
-          <div @click="showsecond" class="show-kind-first">
-            <span>{{this.secondOption}}</span>
+          <div @click="showsecond" class="show-kind-second">
+            <span class="show-kind-first-text">{{this.secondOption}}</span>
             <i class="icon2-arrow-down2 arrow-down"></i>
           </div>
-          <div @click="showthird" class="show-kind-first">
-            <span>{{this.thirdOption}}</span>
+          <div @click="showthird" class="show-kind-third">
+            <span class="show-kind-first-text">{{this.thirdOption}}</span>
             <i class="icon2-arrow-down2 arrow-down"></i>
           </div>
         </div>
@@ -79,15 +79,16 @@
 <style lang="scss">
   .connect-line{
     border-top: 1px solid #EAEAEA;
-    width: 5px;
+    width: 10px;
     height: 1px;
   }
   .wrap-time-head{
-    width: 240px;
+    width: 220px;
     height: 48px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    margin: 0 auto;
   }
   ::-webkit-scrollbar{width:4px;}
   ::-webkit-scrollbar-track{
@@ -106,27 +107,61 @@
   .show-kind-first{
     border: 1px solid #ECECEC;
     border-radius: 2px;
-    padding: 2px 5px;
+    width:104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    /*padding: 2px 5px;*/
+  }
+  .show-kind-second {
+    border: 1px solid #ECECEC;
+    border-radius: 2px;
+    width: 60px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .show-kind-third {
+    border: 1px solid #ECECEC;
+    border-radius: 2px;
+    width: 60px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .edit-time .show-kind-first-text{
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #3D3D3D;
   }
   .show-kind{
     display: flex;
     justify-content: space-around;
-    margin-left: -15px;
+    margin-left: -7px;
+    width: 270px;
   }
   .firstOptionlist{
     position: absolute;
     bottom: 30px;
-    left:125px;
+    left:120px;
     list-style: none;
     height: 150px;
     overflow-y: auto;
     padding-left: 0;
-    width: 50px;
+    width: 58px;
     overflow-x: hidden;
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.18);
   }
   .firstOptionlist>li{
-    padding-left: 15px;
+    /*padding-left: 15px;*/
+    height: 36px;
+    /*text-align: center;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .secondOptionlist{
     position: absolute;
@@ -135,6 +170,10 @@
     list-style: none;
     padding-left: 0;
     width: 60px;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #3D3D3D;
+    box-shadow: 0 4px 20px 0 rgba(90,152,212,.32);
   }
   .secondOptionlist>li{
     padding: 10px;
@@ -148,13 +187,17 @@
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.18);
   }
   .thirdOptionlist>li{
-    width: 110px;
+    width: 102px;
     height: 30px;
     padding-left: 10px;
     padding-top: 10px;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #3D3D3D;
   }
   .arrow-down{
     font-size: 14px;
+    margin-left: 5px;
   }
   .save-user-define{
     background: #5EADFD;
@@ -202,9 +245,15 @@
     font-size: 12px;
   }
   .alert-list >div{
-    margin-top: 20px;
+    height: 37px;
+    padding-left: 20px;
+    /*margin-top: 20px;*/
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
+  .alert-list >div:hover{
+    background: rgba(0,0,0,0.04);
   }
   .alert-list span.remind-option{
     font-family: AppleSystemUIFont;
@@ -227,10 +276,10 @@
     font-size: 12px;
   }
   .timeContainerFirst{
-      margin-left: 10px;
+      /*margin-left: 10px;*/
   }
   .timeContainerSecond{
-     margin-left: 30px;
+     /*margin-left: 30px;*/
   }
   .userDefine{
     z-index:200;
@@ -241,32 +290,42 @@
     padding-left: 20px;
     height: 150px;
     background-color: white;
-    box-shadow: 3px 5px 24px #888888
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
+    /*box-shadow: 3px 5px 24px #888888*/
   }
   .user-define,.remind,.userDefineStr{
     font-size: 14px;
   }
   .user-define{
-    margin-top: 20px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    /*margin-top: 10px;*/
+    /*margin-bottom: 15px;*/
+    padding-left: 20px;
     list-style: none;
     font-family: AppleSystemUIFont;
     font-size: 13px;
     color: #3D3D3D;
   }
+  .user-define:hover{
+    background: rgba(0,0,0,0.04);
+  }
   .finish{
     font-size: 14px;
     margin-left: 50px;
     color:#55A8FD;
-    margin-right: 10px;
+    margin-right: 15px;
   }
   .alert-list{
     border-top: 1px solid #ECECEC;
     border-bottom: 1px solid #ECECEC;
     margin: 0;
     /*margin-top: 15px;*/
-    padding: 0 0 20px 20px;
+    padding-left: 0;
+    padding-top: 5px;
     position: relative;
-    height: 220px;
+    height: 230px;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -280,7 +339,8 @@
     outline: none;
     background-color: white;
     z-index: 3;
-    box-shadow: 3px 5px 24px #888888
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
+    /*box-shadow: 3px 5px 24px #888888*/
   }
   .edit-time {
     .switch-wrapper {

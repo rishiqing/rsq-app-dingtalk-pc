@@ -23,7 +23,7 @@
       <div class="repeat-wrap" v-show="this.repeatState">
         <div class="wrap-repeat-style">
           <span class="repeat-style" >重复方式</span>
-          <div @click="changeRepeatOption" class="repeat-border">
+          <div @click="changeRepeatOption($event)" class="repeat-border">
             <span class="repeat-style">{{repeatKind}}</span>
             <i class="icon2-arrow-down2 arrow"></i>
           </div>
@@ -63,9 +63,11 @@
         <ul style="margin: 0" v-show="this.deadLine" class="repeat-style-wrap-deadline">
           <li class="repeat-style-wrap-item"  @click="repeatAlways">
             <span>永久</span>
+            <i class="icon2-selected finish-deadline" v-show="always"></i>
           </li>
           <li class="repeat-style-wrap-item" @click="showDeadLine">
             <span>按日期截止</span>
+            <i class="icon2-selected finish-deadline" v-show="!always"></i>
           </li>
         </ul>
       </div>
@@ -129,6 +131,11 @@
   </div>
 </template>
 <style lang="scss" scoped>
+  .finish-deadline{
+    font-size: 13px;
+    color: #1BA4FF;
+    margin-right: 10px;
+  }
   .lastdate{
     margin:0 auto;
     position: absolute;
@@ -152,11 +159,18 @@
     margin-top: 15px;
   }
   .repeat-style-wrap-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     cursor: pointer;
     margin-top: 5px;
+    height: 25px;
     font-family: AppleSystemUIFont;
     font-size: 13px;
     color: #666666;
+  }
+  .repeat-style-wrap-item:hover{
+    background: rgba(0,0,0,0.04);
   }
   .repeat-wrap{
     padding-bottom: 10px;
@@ -166,13 +180,14 @@
   .repeat-border{
     cursor: pointer;
     border: 1px solid #D5D5D5;
+    padding-left: 5px;
     /*padding: 4px;*/
     margin-left: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    width: 66px;
+    min-width: 66px;
     height: 24px;
   }
   .wrap-repeat-style{
@@ -204,7 +219,7 @@
   }
   .repeat-style-wrap-deadline{
     width: 130px;
-    height: 40px;
+    /*height: 40px;*/
     list-style: none;
     padding-left: 10px;
     padding-top: 7px;
@@ -212,9 +227,10 @@
     position: absolute;
     background-color: white;
     z-index: 120;
-    top: -55px;
+    top: -75px;
     left:70px;
-    box-shadow: 3px 5px 24px #888888;
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
+    /*box-shadow: 3px 5px 24px #888888;*/
   }
   .repeat-state{
     display: flex;
@@ -232,7 +248,7 @@
   .repeat-option{
     position: absolute;
     z-index:300;
-    height: 100px;
+    /*height: 100px;*/
     width: 100px;
     left:50px;
     padding: 0;
@@ -251,7 +267,7 @@
     left:50px;
     background-color: white;
     padding: 10px;
-    z-index: 102;
+    z-index: 10007;
     /*padding: 0;*/
     /*margin: 0;*/
     list-style: none;
@@ -259,7 +275,8 @@
     cursor: pointer;
   }
   .repeat-style-wrap:hover{
-    background-color: lightgray;
+    background-color:  rgba(0,0,0,0.04);
+    z-index: 2000;
   }
   .repeat-deadline{
     font-family: AppleSystemUIFont;
@@ -292,7 +309,8 @@
     left:10px;
     z-index: 1000;
     background-color: white;
-    box-shadow: 3px 5px 24px #888888;
+    /*box-shadow: 3px 5px 24px #888888;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     width: 240px;
     height: 344px;
   }
@@ -518,6 +536,9 @@
       'r-deadline': DeadLine
     },
     computed: {
+      always () {
+        return this.deadLineKind === '永久'
+      },
       deadLineKind () {
         return this.deadLineRepeat || '永久'
       },
@@ -574,6 +595,7 @@
       },
       stop (e) {
         this.deadLine = false
+        this.repeatOption = false
         e.stopPropagation()
       },
       clearDate () {
@@ -612,8 +634,9 @@
         this.deadLine = false
         this.deadLineDate = true
       },
-      changeRepeatOption () {
+      changeRepeatOption (e) {
         this.repeatOption = !this.repeatOption
+        e.stopPropagation()
       },
       changeRepeat (item) {
         if (item.title === '每天') {
@@ -1146,6 +1169,9 @@
 //        console.log('要发送日期了')
         this.changeDate()
         this.repeatOption = false
+        this.deadLineDate = false
+        this.repeatState = false
+        this.selectDateState = false
       })
     }
 //    beforeRouteLeave (to, from, next) {

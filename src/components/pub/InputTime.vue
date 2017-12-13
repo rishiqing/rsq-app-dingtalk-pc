@@ -23,7 +23,7 @@
     font-size: 14px;
   }
   .time{
-    font-size: 12px;
+    font-size: 13px;
     font-family: PingFangSC-Regular;
     color: #B1B1B1;
   }

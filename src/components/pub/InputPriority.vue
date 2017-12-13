@@ -53,16 +53,17 @@
   }
   .priority-menu{
     list-style: none;
-    position: absolute;
+    position: fixed;
     width: 150px;
-    top:40px;
+    top:300px;
     left:21px;
     right: 0;
     margin: 0;
     list-style: none;
     z-index: 100;
     background-color: white;
-    box-shadow: 3px 5px 24px #888888;
+    /*box-shadow: 3px 5px 24px #888888;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     padding-left: 15px;
     padding-top: 10px;
   }
@@ -99,7 +100,7 @@
     right:10px
   }
   .priority{
-    font-size: 12px;
+    font-size: 13px;
     font-family: PingFangSC-Regular;
     color: #B1B1B1;
   }

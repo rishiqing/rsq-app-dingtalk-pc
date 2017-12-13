@@ -42,7 +42,7 @@
     margin: 0;
   }
   .word-update{
-    font-size: 12px;
+    font-size: 13px;
     margin-left: 10px;
     font-family: PingFangSC-Regular;
     color: #B1B1B1;

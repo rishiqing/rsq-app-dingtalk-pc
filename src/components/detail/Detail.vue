@@ -367,6 +367,9 @@
 </script>
 
 <style>
+  textarea:focus{
+    outline: none;
+  }
   .wrap-repeat-select{
     position: absolute;
     width: 200px;
@@ -374,7 +377,8 @@
     list-style: none;
     background-color: white;
     right: 10px;
-    box-shadow: 3px 5px 24px #888888;
+    /*box-shadow: 3px 5px 24px #888888;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     z-index:800;
     padding-left: 0;
   }
@@ -426,7 +430,7 @@
     cursor: pointer;
     margin-right: 10px;
     width: 45px;
-    height: 20px;
+    height: 25px;
   }
   .cancel-comment{
     font-family: PingFangSC-Regular;
@@ -437,7 +441,7 @@
     color: #5EADFD;
     cursor: pointer;
     width: 45px;
-    height: 20px;
+    height: 25px;
     font-size: 10px;
     display: flex;
     align-items: center;
@@ -485,6 +489,7 @@
     /*margin-left: 10px;*/
     margin-rigth: 10px;
     margin-bottom: 10px;
+    color: #B1B1B1;
   }
   ::-webkit-scrollbar{width:4px;}
   ::-webkit-scrollbar-track{
