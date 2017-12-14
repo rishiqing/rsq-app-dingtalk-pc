@@ -1,5 +1,5 @@
 <template>
-  <li class="todoItem handle" @click="clickItem" draggable='true' @dragstart="drag(item)" :class="{'large-width': bigger}">
+  <li :data-id="id" class="todoItem handle" @click="clickItem" draggable='true' @dragstart="drag(item)" :class="{'large-width': bigger}">
     <!--<v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">-->
     <div class="todo-checkbox" v-if="isCheckable" @click="clickCheckOut">
       <i class="icon2-check-box select"
@@ -313,6 +313,9 @@
       bigger: Boolean
     },
     computed: {
+      id () {
+        return this.item.id
+      },
       currentDate () { return this.$store.getters.defaultTaskDate },
       isIE () { return this.item.pContainer === 'IE' },
       isIU () { return this.item.pContainer === 'IU' },
@@ -361,7 +364,7 @@
 //        document.getElementById('cssTest').style.left = mousePos.y + 'px'
       },
       drag (item) {
-//        console.log('drag的item是' + JSON.stringify(item))
+        console.log('drag的item是' + JSON.stringify(item))
         this.$store.dispatch('setDragItem', item)
       },
       isMaxlength (item) {

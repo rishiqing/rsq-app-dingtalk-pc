@@ -23,7 +23,7 @@
     height: 30px;
     cursor: pointer;
     position: absolute;
-    bottom: 15px;
+    bottom: 5px;
     left: 20px;
   }
   .remind-sb{
@@ -31,10 +31,12 @@
     margin-left: 15px;
   }
   .upload-icon{
+    position: absolute;
     font-size: 20px;
     /*<!--margin-left: -32px;-->*/
-    margin-top: -15px;
-    margin-bottom: 5px;
+    top: 85px;
+    left:30px;
+    /*bottom: 15px;*/
     color:#b1b1b1;
     cursor: pointer;
   }
@@ -53,7 +55,8 @@
   }
   .file-input {
     cursor: pointer;
-    width: 10px;
+    width: 50px;
+    /*height: 30px;*/
     opacity: 0;
     /*<!--margin-left: -15px;-->*/
     /*position:absolute;*/

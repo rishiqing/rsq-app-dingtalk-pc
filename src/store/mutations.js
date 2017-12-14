@@ -488,7 +488,7 @@ export default {
   SAVE_DRAG_ITEM (state, p) {
     state.schedule.dragItemId = p.item.id
     state.schedule.dragItem = p.item
-    // console.log('state.schedule.dragItem是' + JSON.stringify(state.schedule.dragItemId))
+    console.log('state.schedule.dragItem是' + JSON.stringify(state.schedule.dragItemId))
   },
   CREATE_SCHE_TITLE (state, p) {
     state.schedule.titleArray.push(p)

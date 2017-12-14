@@ -69,6 +69,17 @@
   import Bus from 'com/bus'
   import util from 'ut/jsUtil'
   import Avatar from 'com/pub/TextAvatar'
+//  import $ from 'jquery'
+//  import sortable from 'jquery-ui/ui/widgets/sortable'
+//  import selectable from 'jquery-ui/ui/widgets/resizable'
+//  import q from 'jquery-ui/themes/base/sortable.css'
+//  import p from 'jquery-ui/themes/base/resizable.css'
+//  $(function () {
+//    console.log(sortable + selectable + p + q)
+//    $('#sortable1, #sortable2').sortable({
+//      connectWith: '.connectedSortable'
+//    }).disableSelection()
+//  })
   export default {
     name: 'app',
     components: {
