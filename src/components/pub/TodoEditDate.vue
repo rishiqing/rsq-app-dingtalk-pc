@@ -358,7 +358,7 @@
       margin-bottom: 20px;
     }
     .dp-table .dp-selected {
-      background: #55A8FD;
+      background: #55A8FD !important;
       color:white;}
     .dp-sel-type {position: relative;border-bottom: solid 1px #e4e4e4;overflow: hidden;
       height: 40px;line-height: 40px;}
@@ -1097,6 +1097,10 @@
 //            this.selectRepeatDate = []
             this.repeatWeekState = []
             this.$store.commit('PUB_WEEK_DATE_DELETE')
+            if (editItem.repeatType) {
+              console.log('重复设置')
+              this.$store.commit('SAVE_REPEAT_FLAG')
+            }
           })
       },
       changeDate () {
@@ -1170,8 +1174,8 @@
         this.changeDate()
         this.repeatOption = false
         this.deadLineDate = false
-        this.repeatState = false
-        this.selectDateState = false
+//        this.repeatState = false
+//        this.selectDateState = false
       })
     }
 //    beforeRouteLeave (to, from, next) {

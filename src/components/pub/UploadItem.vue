@@ -6,7 +6,7 @@
       <div class="file-size">{{format(uploadedSize)}}/{{format(task.file.size)}}</div>
     </div>
     <div @click="triggerDelete" class="icon-wrap">
-      <i class="icon2-error delete-comment"></i>
+      <i class="icon2-cancel delete-comment"></i>
       <span class="done-text" v-show="!task.isShowProgress">上传完成</span>
     </div>
     <div ref="progressBar" class="progress-mask" v-show="task.isShowProgress" :style="progressStyle"></div>
@@ -30,6 +30,7 @@
     color: #DEDEDE;
     font-size: 18px;
     z-index:9;
+    cursor: pointer;
   }
   .done-text {
     color: #9B9B9B;
