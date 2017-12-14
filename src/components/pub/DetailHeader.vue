@@ -33,8 +33,11 @@
           <i class="icon2-arrow-down2"></i>
           <ul class="wrap-plans" v-show="this.planState">
             <li v-for="plan in plans" class="wrap-plan-item" @click="changePlan(plan,$event)">
-              <img src="../../assets/plan.png" alt="" class="plan-img">
-              <span class="plan-name">{{plan.name}}</span>
+              <div class="wrap-plan-item-first">
+                <img src="../../assets/plan.png" alt="" class="plan-img">
+                <span class="plan-name">{{plan.name}}</span>
+              </div>
+              <i class="icon2-selected finish-plan" v-show="ifEqualPlan(plan.name)"></i>
             </li>
           </ul>
         </div>
@@ -46,7 +49,8 @@
           <i class="icon2-arrow-down2"></i>
           <ul class="wrap-plans" v-show="this.subPlanState">
             <li v-for="subplan in subplans" class="wrap-plan-item" @click="changeSubPlan(subplan)">
-              {{subplan.name}}
+              <span>{{subplan.name}}</span>
+              <i class="icon2-selected finish-plan" v-show="ifEqualSubPlan(subplan.name)"></i>
             </li>
           </ul>
         </div>
@@ -58,7 +62,8 @@
           <i class="icon2-arrow-down2"></i>
           <ul class="wrap-plans" v-show="this.cardState">
             <li v-for="card in cards" class="wrap-plan-item" @click="changeCard(card)">
-              {{card.name}}
+              <span>{{card.name}}</span>
+              <i class="icon2-selected finish-plan" v-show="ifEqualCard(card.name)"></i>
             </li>
           </ul>
         </div>
@@ -137,6 +142,21 @@
       item: Object
     },
     methods: {
+      ifEqualSubPlan (name) {
+        if (this.subPlanName) {
+          return name === this.subPlanName
+        }
+      },
+      ifEqualPlan (name) {
+        if (this.planName) {
+          return name === this.planName
+        }
+      },
+      ifEqualCard (name) {
+        if (this.cardName) {
+          return name === this.cardName
+        }
+      },
       stop (e) {
         e.stopPropagation()
       },
@@ -264,6 +284,14 @@
 </script>
 
 <style>
+  .wrap-plan-item-first{
+    display: flex;
+    align-items: center;
+  }
+  .finish-plan{
+    font-size: 12px;
+    color:#1ba4ff
+  }
   .plan-kind>span{
     font-family: AppleSystemUIFont;
     font-size: 13px;
@@ -306,6 +334,7 @@
   .wrap-plan-item{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 200px;
     text-overflow: ellipsis;
     white-space: nowrap;

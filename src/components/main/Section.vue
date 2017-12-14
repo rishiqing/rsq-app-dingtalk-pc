@@ -5,7 +5,8 @@
       <div class="save-sche-title" v-show="this.showSaveButton" @click="saveTitle">保存</div>
       <img src="../../assets/big.png" class="enlarge" @click="showLarge" v-show="!this.showHeight && this.showIconLarge">
       <img src="../../assets/small.png" class="enSmall" @click="showSmall" v-show="this.showHeight && !this.showSaveButton">
-      <img src="../../assets/h.png" v-show="!this.showSaveButton" class="icon2-add-circle create-icon" @click="changeInputState">
+      <i class="icon2-add-circle create-icon" v-show="!this.showSaveButton" @click="changeInputState"></i>
+      <!--<img src="../../assets/h.png" v-show="!this.showSaveButton" class="icon2-add-circle create-icon" @click="changeInputState">-->
     </div>
     <div class="wrap-input">
       <input class="create-task" ref="createTask" v-model="content" placeholder="输入任务标题，按回车保存" type="text" v-show="InputState" @blur="hideInput" @keypress="createSche($event.target.value,$event)" autofocus>
@@ -418,11 +419,14 @@
     }
     .create-icon{
       cursor:pointer;
-      width: 20.8px;
-      height: 20.8px;
-      /*font-size: 13px;*/
+      /*width: 20.8px;*/
+      /*height: 20.8px;*/
+      font-size: 20px;
     color: #D4D8DC
   }
+    .create-icon:hover{
+      color: #5EADFD;
+    }
   .wrap-input{
     position: relative;
     width: 95%;

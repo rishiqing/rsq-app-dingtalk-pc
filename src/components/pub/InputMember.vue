@@ -5,10 +5,21 @@
     <div class="wrap-member-name margin-detail font-style">
       {{nameConcat}}
     </div>
-    <img src="../../assets/h.png"  @click="showNativeMemberEdit($event)" class="add-member">
+    <i class="icon2-add-circle create-icon add-member" @click="showNativeMemberEdit($event)" ></i>
+    <!--<img src="../../assets/h.png"  @click="showNativeMemberEdit($event)" class="add-member">-->
   </div>
 </template>
 <style>
+  .create-icon{
+    cursor:pointer;
+    /*width: 20.8px;*/
+    /*height: 20.8px;*/
+    font-size: 20px;
+    color: #D4D8DC
+  }
+  .create-icon:hover{
+    color: #5EADFD;
+  }
   .wrap-member-name{
     max-width: 500px
   }

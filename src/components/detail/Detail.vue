@@ -62,7 +62,7 @@
         <div v-show="this.commentState" class="bottom-comment" @click="changeCommentState">
           输入的讨论内容或发送文件
         </div>
-        <textarea  :class="{}" ref="textareaComment" autofocus v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
+        <textarea  placeholder="说点什么" :class="{}" ref="textareaComment" autofocus v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
         <r-upload
           :commentState="this.commentState"
           @get-file-id="setFileId"
@@ -367,6 +367,11 @@
 </script>
 
 <style>
+  ::-webkit-input-placeholder{
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: rgba(0,0,0,0.36);
+  }
   textarea:focus{
     outline: none;
   }
@@ -459,7 +464,7 @@
   }
   .wrap-button{
     position: absolute;
-    right: 20px;
+    right: 5px;
     display: flex;
     align-items: center;
     top:70px;
@@ -470,6 +475,8 @@
     border: none;
     width: 99%;
     height: 90px;
+    padding-left: 10px;
+    padding-top: 10px;
   }
   .bottom-comment{
     /*position: fixed;*/
@@ -481,7 +488,7 @@
     outline:none;
     cursor: pointer;
     background-color: white;
-    font-size: 13px;
+    font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;

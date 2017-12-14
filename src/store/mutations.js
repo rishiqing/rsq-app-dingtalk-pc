@@ -562,5 +562,9 @@ export default {
     //     items[i].isFrom = p.item.isFrom
     //   }
     // }
+  },
+  SAVE_REPEAT_FLAG (state) {
+    state.repeatFlag = true
+    console.log('已经改变')
   }
 }
