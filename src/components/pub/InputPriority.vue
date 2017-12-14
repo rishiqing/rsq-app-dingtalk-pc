@@ -1,8 +1,8 @@
 <template>
-  <div class="wrap-priority" @click="changeMenuState($event)">
+  <div class="wrap-priority">
     <i class="icon2-four-quadrant priority-icon"></i>
     <span class="priority margin-detail">优先级</span>
-    <span class="section-name margin-detail font-style">{{sectionName}}</span>
+    <span class="section-name margin-detail font-style" @click="changeMenuState($event)">{{sectionName}}</span>
     <ul class="priority-menu" v-show="this.menuState && this.editPriority">
       <li class="priority-name" @click="changeSection(titleItem, $event)" v-for="titleItem in this.titleArray">
         <span class="section-name-list">{{titleItem.title}}</span>
@@ -80,6 +80,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    cursor: pointer;
   }
   .section-name-list{
     font-size: 12px;
@@ -112,7 +113,6 @@
     background-color: white;
     padding-left: 15px;
     border-bottom:0.5px solid #EAEAEA ;
-    cursor: pointer;
   }
 
 </style>

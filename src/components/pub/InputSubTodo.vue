@@ -13,9 +13,9 @@
       <i class="icon2-check-box select"></i>
       <input autofocus ref="subtodoInput" type="text" class="subtodo-input"  @keypress="createSubtodo($event.target.value,$event)" @blur="hideInput">
     </div>
-    <div class="subtodo-create" @click="showSubTodoInput">
+    <div class="subtodo-create">
       <i class="icon2-add-circle add-icon"></i>
-      <span class="subplan-add margin-detail">添加子任务</span>
+      <span class="subplan-add margin-detail" @click="showSubTodoInput">添加子任务</span>
     </div>
   </div>
 </template>
@@ -32,6 +32,7 @@
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #5EADFD;
+    cursor: pointer;
   }
   .subtodo{
     background-color: white;
@@ -57,7 +58,6 @@
     /*border: none;*/
   }
   .subtodo-create{
-    cursor: pointer;
   }
   .subplan-icon,.add-icon{
     font-size: 14px;

@@ -40,7 +40,7 @@
     watch: {
       highlightDay (date) {
         if (date.getDate() === new Date().getDate()) {
-          console.log('highlightDay变化了')
+//          console.log('highlightDay变化了')
           this.calDayClick(date)
         }
       }
@@ -54,7 +54,7 @@
     methods: {
       dateText (day) {
         if (day.month) {
-          console.log('进来了月份')
+//          console.log('进来了月份')
           return day.month
         } else {
           return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
