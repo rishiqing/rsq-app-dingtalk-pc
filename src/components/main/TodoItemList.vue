@@ -89,7 +89,6 @@
   import TodoItem from 'com/main/TodoItem'
   import draggable from 'vuedraggable'
 //  import $ from 'jquery'
-//  import sortable from 'jquery-ui'
 //  $(function () {
 //    $('#sortable').sortable({
 //      placeholder: 'ui-state-highlight'
