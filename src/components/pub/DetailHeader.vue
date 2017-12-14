@@ -411,7 +411,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 46px;
     background-color: white;
     padding-left: 15px;
   }

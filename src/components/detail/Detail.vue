@@ -472,6 +472,7 @@
     height: 26px;
   }
   .comment-text{
+    resize: none;
     border: none;
     width: 99%;
     height: 90px;
@@ -540,7 +541,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 620px;
-    height: 570px;
+    /*height: 570px;*/
+    height: 97%;
     background-color: #F9F9FA;
   }
 </style>

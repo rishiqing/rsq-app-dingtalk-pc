@@ -1,9 +1,9 @@
 <template>
-  <div class="wrap-member" @click="showNativeMemberEdit($event)">
+  <div class="wrap-member">
     <i class="icon2-member member-icon"></i>
     <span class="member margin-detail">执行人</span>
     <div class="wrap-member-name margin-detail font-style">
-      {{nameConcat}}
+      <span @click="showNativeMemberEdit($event)">{{nameConcat}}</span>
     </div>
     <i class="icon2-add-circle create-icon add-member" @click="showNativeMemberEdit($event)" ></i>
     <!--<img src="../../assets/h.png"  @click="showNativeMemberEdit($event)" class="add-member">-->
@@ -21,7 +21,8 @@
     color: #5EADFD;
   }
   .wrap-member-name{
-    max-width: 500px
+    max-width: 500px;
+    cursor:pointer;
   }
   .add-member{
     width: 22px;
@@ -43,7 +44,6 @@
     background-color: white;
     padding-left: 15px;
     border-bottom:0.5px solid #EAEAEA ;
-    cursor: pointer;
   }
 
 </style>

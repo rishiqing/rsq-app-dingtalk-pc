@@ -4,7 +4,7 @@
       <div class="timeContainerFirst" @click="setStartTime($event)">{{startTimeShow}}</div>
       <div class="connect-line"></div>
       <div class="timeContainerSecond" @click="setEndTime($event)">{{endTimeShow}}</div>
-      <div>{{getEndTime}}</div>
+      <!--<div>{{getEndTime}}</div>-->
     </div>
     <TimePicker
       :getScrollTime="getScrollTime"
@@ -1045,15 +1045,15 @@
         this.clock.endTime = this.currentTodo.clock.endTime
       }
       Bus.$on('sendtime', () => {
-        if (this.ifRepeat) {
-          console.log('时间进来了')
-          this.closeRepeatTime = true
-        } else {
-          console.log('不重复时间进来了')
-          this.sendTime()
-          this.showEndTimePicker = false
-          this.showStartTimePicker = false
-        }
+//        if (this.ifRepeat) {
+//          console.log('时间进来了')
+//          this.closeRepeatTime = true
+//        } else {
+        console.log('不重复时间进来了')
+        this.sendTime()
+        this.showEndTimePicker = false
+        this.showStartTimePicker = false
+//        }
       })
     }
     /**
