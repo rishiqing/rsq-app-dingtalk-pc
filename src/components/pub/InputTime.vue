@@ -1,9 +1,9 @@
 <template>
   <div class="wrap-edit-time" @click="changeEditTime($event)">
-    <div class="wrap-time" @click="changeEditTime($event)">
+    <div class="wrap-time-input">
       <i class="icon2-alarm time-icon"></i>
       <span class="time margin-detail">时间</span>
-      <span class="showTime font-style">{{timeValue}}</span>
+      <span class="showTime font-style" @click="changeEditTime($event)">{{timeValue}}</span>
     </div>
     <r-todo-edit-time
       v-show="this.editTime && this.showEditTime"
@@ -17,20 +17,21 @@
 <style lang="" scoped>
   .wrap-edit-time{
     position: relative;
-    cursor: pointer;
+    /*cursor: pointer;*/
   }
   .time-icon{
     font-size: 14px;
   }
   .time{
-    font-size: 12px;
+    font-size: 13px;
     font-family: PingFangSC-Regular;
     color: #B1B1B1;
   }
   .showTime {
     margin-left: 10px;
+    cursor: pointer;
   }
-  .wrap-time{
+  .wrap-time-input{
     position: relative;
     display: flex;
     align-items: center;

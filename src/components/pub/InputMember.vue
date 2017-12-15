@@ -1,16 +1,28 @@
 <template>
-  <div class="wrap-member" @click="showNativeMemberEdit($event)">
+  <div class="wrap-member">
     <i class="icon2-member member-icon"></i>
     <span class="member margin-detail">执行人</span>
     <div class="wrap-member-name margin-detail font-style">
-      {{nameConcat}}
+      <span @click="showNativeMemberEdit($event)">{{nameConcat}}</span>
     </div>
-    <img src="../../assets/h.png"  @click="showNativeMemberEdit($event)" class="add-member">
+    <i class="icon2-add-circle create-icon add-member" @click="showNativeMemberEdit($event)" ></i>
+    <!--<img src="../../assets/h.png"  @click="showNativeMemberEdit($event)" class="add-member">-->
   </div>
 </template>
 <style>
+  .create-icon{
+    cursor:pointer;
+    /*width: 20.8px;*/
+    /*height: 20.8px;*/
+    font-size: 20px;
+    color: #D4D8DC
+  }
+  .create-icon:hover{
+    color: #5EADFD;
+  }
   .wrap-member-name{
-    max-width: 500px
+    max-width: 500px;
+    cursor:pointer;
   }
   .add-member{
     width: 22px;
@@ -21,7 +33,7 @@
     font-size: 14px;
   }
   .member{
-    font-size: 12px;
+    font-size: 13px;
     font-family: PingFangSC-Regular;
     color: #B1B1B1;
   }
@@ -32,7 +44,6 @@
     background-color: white;
     padding-left: 15px;
     border-bottom:0.5px solid #EAEAEA ;
-    cursor: pointer;
   }
 
 </style>

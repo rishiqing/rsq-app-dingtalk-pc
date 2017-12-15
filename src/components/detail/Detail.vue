@@ -62,7 +62,7 @@
         <div v-show="this.commentState" class="bottom-comment" @click="changeCommentState">
           输入的讨论内容或发送文件
         </div>
-        <textarea  :class="{}" ref="textareaComment" autofocus v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
+        <textarea  placeholder="说点什么" :class="{}" ref="textareaComment" autofocus v-model="commentContent" class="comment-text"  name="" id=""  rows="5" v-show="!this.commentState"></textarea>
         <r-upload
           :commentState="this.commentState"
           @get-file-id="setFileId"
@@ -367,6 +367,14 @@
 </script>
 
 <style>
+  ::-webkit-input-placeholder{
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: rgba(0,0,0,0.36);
+  }
+  textarea:focus{
+    outline: none;
+  }
   .wrap-repeat-select{
     position: absolute;
     width: 200px;
@@ -374,7 +382,8 @@
     list-style: none;
     background-color: white;
     right: 10px;
-    box-shadow: 3px 5px 24px #888888;
+    /*box-shadow: 3px 5px 24px #888888;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     z-index:800;
     padding-left: 0;
   }
@@ -384,6 +393,12 @@
     height: 40px;
     display: flex;
     align-items: center;
+    font-family: AppleSystemUIFont;
+    font-size: 13px;
+    color: #666666;
+  }
+  .wrap-repeat-select>li{
+    background: rgba(0,0,0,0.04);
   }
   .wrap-title-desp{
     background-color: white;
@@ -410,20 +425,32 @@
     font-family: PingFangSC-Regular;
     border: none;
     border-radius: 2px;
-    padding: 5px 10px;
+    /*padding: 5px 10px;*/
     background-color: #5EADFD;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
     color: white;
     cursor: pointer;
     margin-right: 10px;
+    width: 45px;
+    height: 25px;
   }
   .cancel-comment{
     font-family: PingFangSC-Regular;
     border: 1px solid #5EADFD;
     border-radius: 2px;
-    padding: 3px 8px;
+    /*padding: 3px 8px;*/
     background-color: white;
     color: #5EADFD;
     cursor: pointer;
+    width: 45px;
+    height: 25px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .detail-bottom{
     /*position: relative;*/
@@ -437,7 +464,7 @@
   }
   .wrap-button{
     position: absolute;
-    right: 20px;
+    right: 5px;
     display: flex;
     align-items: center;
     top:70px;
@@ -445,9 +472,12 @@
     height: 26px;
   }
   .comment-text{
+    resize: none;
     border: none;
     width: 99%;
     height: 90px;
+    padding-left: 10px;
+    padding-top: 10px;
   }
   .bottom-comment{
     /*position: fixed;*/
@@ -456,6 +486,7 @@
     /*bottom: 0;*/
     /*background-color: white;*/
     /*margin-top: 20px;*/
+    outline:none;
     cursor: pointer;
     background-color: white;
     font-size: 15px;
@@ -466,6 +497,7 @@
     /*margin-left: 10px;*/
     margin-rigth: 10px;
     margin-bottom: 10px;
+    color: #B1B1B1;
   }
   ::-webkit-scrollbar{width:4px;}
   ::-webkit-scrollbar-track{
@@ -509,7 +541,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 620px;
-    height: 570px;
+    /*height: 570px;*/
+    height: 97%;
     background-color: #F9F9FA;
   }
 </style>

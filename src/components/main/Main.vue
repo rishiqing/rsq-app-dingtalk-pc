@@ -3,7 +3,7 @@
     <div class="header-me">
       <div class="wrap-head-img">
         <img class="link-to-rsq" src="../../assets/c.png" alt="" @click="openLink">
-        <img src="../../assets/a.png" alt="" class="head-pic">
+        <img src="../../assets/a.png" alt="" class="head-pic" @click="openLink">
       </div>
       <!--<avatar v-for="item in selectedLocalList"-->
               <!--:key="item.rsqUserId"-->
@@ -69,6 +69,17 @@
   import Bus from 'com/bus'
   import util from 'ut/jsUtil'
   import Avatar from 'com/pub/TextAvatar'
+//  import $ from 'jquery'
+//  import sortable from 'jquery-ui/ui/widgets/sortable'
+//  import selectable from 'jquery-ui/ui/widgets/resizable'
+//  import q from 'jquery-ui/themes/base/sortable.css'
+//  import p from 'jquery-ui/themes/base/resizable.css'
+//  $(function () {
+//    console.log(sortable + selectable + p + q)
+//    $('#sortable1, #sortable2').sortable({
+//      connectWith: '.connectedSortable'
+//    }).disableSelection()
+//  })
   export default {
     name: 'app',
     components: {
@@ -229,6 +240,7 @@
 <style>
   .head-pic{
     margin-left: 10px;
+    cursor: pointer;
   }
   #box {
     width: 150px;

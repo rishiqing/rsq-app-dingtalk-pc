@@ -76,8 +76,10 @@ export default {
     var months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
     for (var j = 0; j < 7; j++) {
       var newDate = new Date(fullYear, month, startDate + j)
+      var _year = newDate.getFullYear()
+      var _month = newDate.getMonth()
       if (newDate.getDate() === 1) {
-        days.push({month: months[newDate.getMonth()], date: new Date(2035)})
+        days.push({month: months[newDate.getMonth()], date: new Date(_year, _month)})
       }
       days.push({date: newDate})
     }
@@ -354,7 +356,7 @@ export default {
       repeatBaseTime: t.repeatBaseTime
     })
     var result
-    console.log('parsed是' + JSON.stringify(t.repeatBaseTime))
+    // console.log('parsed是' + JSON.stringify(t.repeatBaseTime))
     if (parsed.dateType === 'repeat') {
       result = this.repeatDayText(t.repeatType, t.repeatBaseTime.split(','))
       if (t.isLastDate) {

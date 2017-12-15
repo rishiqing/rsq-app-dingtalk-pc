@@ -53,7 +53,7 @@
     left:142px
   }
   .edit-time-wrap{
-    box-shadow: 0 4px 20px 0 rgba(90,152,212,.32);
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     z-index: 500;
     position: absolute;
     top: 40px;
@@ -67,7 +67,10 @@
     background: #EEF7FF;
   }
   .wrap-time{
-    height: 20px;
-    text-align: center;
+    height: 36px;
+    /*text-align: center;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

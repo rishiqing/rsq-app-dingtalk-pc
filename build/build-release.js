@@ -15,6 +15,11 @@ const webpackConfig = require('./webpack.release.conf.js')
 const spinner = ora('building for release...')
 spinner.start()
 
+console.log(chalk.blue('basic prod config:'))
+console.log(chalk.blue('auth server:', config.release.authServer))
+console.log(chalk.blue('rishiqing api server:', config.release.apiServer))
+console.log(chalk.blue('frontend server:', config.release.frontServer))
+
 rm(path.join(config.release.assetsRoot, config.release.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, function (err, stats) {

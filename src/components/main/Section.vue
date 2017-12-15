@@ -1,11 +1,12 @@
 <template>
-  <div class="section-wrap" :class="{'floatDirection': direction, 'reverseDirection': !direction, 'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
+  <div :data-pContainer="whichsection" class="section-wrap " :class="{'floatDirection': direction, 'reverseDirection': !direction, 'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
     <div class="section-head" @mouseover="showIcon" @mouseout="hideIcon">
       <input ref="itemTitleInput" type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)" @focus="showSave">
       <div class="save-sche-title" v-show="this.showSaveButton" @click="saveTitle">保存</div>
       <img src="../../assets/big.png" class="enlarge" @click="showLarge" v-show="!this.showHeight && this.showIconLarge">
       <img src="../../assets/small.png" class="enSmall" @click="showSmall" v-show="this.showHeight && !this.showSaveButton">
-      <img src="../../assets/h.png" v-show="!this.showSaveButton" class="icon2-add-circle create-icon" @click="changeInputState">
+      <i class="icon2-add-circle create-icon" v-show="!this.showSaveButton" @click="changeInputState"></i>
+      <!--<img src="../../assets/h.png" v-show="!this.showSaveButton" class="icon2-add-circle create-icon" @click="changeInputState">-->
     </div>
     <div class="wrap-input">
       <input class="create-task" ref="createTask" v-model="content" placeholder="输入任务标题，按回车保存" type="text" v-show="InputState" @blur="hideInput" @keypress="createSche($event.target.value,$event)" autofocus>
@@ -27,6 +28,11 @@
 <script>
   import TodoItemList from 'com/main/TodoItemList'
   import dateUtil from 'ut/dateUtil'
+  import $ from 'jquery'
+  import 'jquery-ui'
+  //  import 'jquery-ui/ui/widgets/resizable'
+  import 'jquery-ui/themes/base/sortable.css'
+  import 'jquery-ui/themes/base/resizable.css'
   export default {
     name: 'ScheduleView',
     data () {
@@ -51,6 +57,9 @@
 //      sectionName: String
     },
     computed: {
+      whichsection () {
+        return this.itemTitle.pContainer
+      },
       direction () {
         return (this.ieLarge || this.ueLarge)
       },
@@ -126,7 +135,7 @@
       },
       drop (event) {
         console.log('进来drop次')
-        console.log('this.dragItem' + JSON.stringify(this.dragItem))
+//        console.log('this.dragItem' + JSON.stringify(this.dragItem))
         if (this.dragItem.pContainer !== this.itemTitle.pContainer && this.dragItem.pContainer !== 'inbox') {
           console.log('别的范围')
           if (this.sectionItems && this.sectionItems.length > 0) {
@@ -269,9 +278,30 @@
             }
           })
         })
+      },
+      addDrag () {
+        var sortableItem = $('.sortable1')
+        console.log('sortableItem是' + sortableItem.length)
+        $('.sortable1').sortable({
+          connectWith: '.connectedSortable',
+          placeholder: 'ui-state-highlight',
+          stop: function (event, ui) {
+            console.log('%o', ui.item)
+            console.log(ui.sender)
+            console.log(ui.helper)
+            console.log(ui.placeholder)
+          },
+          receive: function (event, ui) {
+            console.log('%o', ui.item)
+            console.log(ui.sender)
+            console.log(ui.helper)
+            console.log(ui.placeholder)
+          }
+        }).disableSelection()
       }
     },
     mounted () {
+//      this.addDrag()
 //      console.log('section中拿到的title是' + this.titleArray)
     }
   }
@@ -418,11 +448,14 @@
     }
     .create-icon{
       cursor:pointer;
-      width: 20.8px;
-      height: 20.8px;
-      /*font-size: 13px;*/
+      /*width: 20.8px;*/
+      /*height: 20.8px;*/
+      font-size: 20px;
     color: #D4D8DC
   }
+    .create-icon:hover{
+      color: #5EADFD;
+    }
   .wrap-input{
     position: relative;
     width: 95%;

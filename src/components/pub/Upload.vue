@@ -1,7 +1,10 @@
 <template>
   <div class="wrap-upload">
     <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
+
+    <!--<div class="wrap-upload-icon">-->
     <i class="icon-attachment upload-icon" v-show="!this.commentState"></i>
+    <!--</div>-->
     <!--<i class="icon2-at remind-sb" @click="call" v-show="!this.commentState"></i>-->
     <ul class="ul-list" v-show="!this.commentState">
       <r-upload-item
@@ -15,15 +18,27 @@
   </div>
 </template>
 <style lang="scss">
+  .wrap-upload-icon{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 5px;
+    left: 20px;
+  }
   .remind-sb{
     cursor: pointer;
     margin-left: 15px;
   }
   .upload-icon{
+    position: absolute;
     font-size: 20px;
     /*<!--margin-left: -32px;-->*/
-    margin-top: -15px;
-    color:#b1b1b1
+    top: 85px;
+    left:30px;
+    /*bottom: 15px;*/
+    color:#b1b1b1;
+    cursor: pointer;
   }
   .wrap-upload {
     /*position: absolute;*/
@@ -40,7 +55,8 @@
   }
   .file-input {
     cursor: pointer;
-    width: 10px;
+    width: 50px;
+    /*height: 30px;*/
     opacity: 0;
     /*<!--margin-left: -15px;-->*/
     /*position:absolute;*/

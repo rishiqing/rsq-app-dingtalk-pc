@@ -21,8 +21,9 @@
     font-size: 15px;
   }
   .desp{
-    line-height: 36px;
+    line-height: 20px;
     padding-left: 15px;
+    padding-top: 13px;
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #666666;
@@ -137,6 +138,8 @@
       var noteElement = document.getElementById('noteEditable')
       if (this.pNote) {
         noteElement.innerHTML = this.pNote
+      } else {
+        noteElement.innerHTML = '添加任务描述...'
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-inbox" :class="{'slide':showInbox}" @click="stop($event)">
     <input type="text" class="inbox-input" placeholder='添加任务，按Enter保存'  @keypress="createInboxItem($event.target.value,$event)">
-    <ul class="inbox-list-wrap">
+    <ul class="inbox-list-wrap " id="sortable2">
       <draggable :move="getdata" @update="datadragEnd">
         <transition-group>
           <inboxItem
@@ -25,6 +25,19 @@
 <script>
   import dateUtil from 'ut/dateUtil'
   import inboxItem from 'com/inbox/inboxItem'
+  import $ from 'jquery'
+  import 'jquery-ui/ui/widgets/sortable'
+  import 'jquery-ui/ui/widgets/resizable'
+  import 'jquery-ui/themes/base/sortable.css'
+  import 'jquery-ui/themes/base/resizable.css'
+//  import $ from 'jquery'
+//  $(function () {
+//    console.log(sortble + resizeble)
+//    $('#sortable2').sortable({
+//      placeholder: 'ui-state-highlight'
+//    })
+//    $('#sortable2').disableSelection()
+//  })
   export default {
     name: '',
     components: {
@@ -97,14 +110,32 @@
               e.target.value = ''
             })
         }
+      },
+      addInboxDrag () {
+//        console.log(sortable + resizeble + p + q)
+        $('#sortable2').sortable({
+          connectWith: '.connectedSortable',
+          placeholder: 'ui-state-highlight'
+        }).disableSelection()
       }
     },
     mounted () {
+//      this.addInboxDrag()
 //      console.log('手按箱' + JSON.stringify(this.items))
     }
   }
 </script>
 <style scoped>
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{
+    /*background-color:#d3d7d9;*/
+    background: hsla(210,7%,84%,.39)
+  }
+  ::-webkit-scrollbar-thumb{
+    /*background-color:gray;*/
+    background: #d4d7da;
+  }
+  .ui-state-highlight { height: 30px; }
   #cssTest{
     position: fixed;
     /*display: flex;*/

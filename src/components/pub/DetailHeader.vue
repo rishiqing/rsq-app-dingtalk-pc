@@ -11,7 +11,7 @@
         <i class="icon2-cancel cancel" @click="closeDetail"></i>
       </div>
       <ul v-show="this.deleteState" class="delete-task">
-        <li>移动任务</li>
+        <li @click="addToPlan">移动任务</li>
         <li @click="copyTask">复制任务</li>
         <li v-show="fromPlan">前往计划</li>
         <li @click="deleteTask(item)">删除任务</li>
@@ -33,8 +33,11 @@
           <i class="icon2-arrow-down2"></i>
           <ul class="wrap-plans" v-show="this.planState">
             <li v-for="plan in plans" class="wrap-plan-item" @click="changePlan(plan,$event)">
-              <img src="../../assets/plan.png" alt="" class="plan-img">
-              <span class="plan-name">{{plan.name}}</span>
+              <div class="wrap-plan-item-first">
+                <img src="../../assets/plan.png" alt="" class="plan-img">
+                <span class="plan-name">{{plan.name}}</span>
+              </div>
+              <i class="icon2-selected finish-plan" v-show="ifEqualPlan(plan.name)"></i>
             </li>
           </ul>
         </div>
@@ -46,7 +49,8 @@
           <i class="icon2-arrow-down2"></i>
           <ul class="wrap-plans" v-show="this.subPlanState">
             <li v-for="subplan in subplans" class="wrap-plan-item" @click="changeSubPlan(subplan)">
-              {{subplan.name}}
+              <span>{{subplan.name}}</span>
+              <i class="icon2-selected finish-plan" v-show="ifEqualSubPlan(subplan.name)"></i>
             </li>
           </ul>
         </div>
@@ -58,7 +62,8 @@
           <i class="icon2-arrow-down2"></i>
           <ul class="wrap-plans" v-show="this.cardState">
             <li v-for="card in cards" class="wrap-plan-item" @click="changeCard(card)">
-              {{card.name}}
+              <span>{{card.name}}</span>
+              <i class="icon2-selected finish-plan" v-show="ifEqualCard(card.name)"></i>
             </li>
           </ul>
         </div>
@@ -137,6 +142,21 @@
       item: Object
     },
     methods: {
+      ifEqualSubPlan (name) {
+        if (this.subPlanName) {
+          return name === this.subPlanName
+        }
+      },
+      ifEqualPlan (name) {
+        if (this.planName) {
+          return name === this.planName
+        }
+      },
+      ifEqualCard (name) {
+        if (this.cardName) {
+          return name === this.cardName
+        }
+      },
       stop (e) {
         e.stopPropagation()
       },
@@ -264,6 +284,14 @@
 </script>
 
 <style>
+  .wrap-plan-item-first{
+    display: flex;
+    align-items: center;
+  }
+  .finish-plan{
+    font-size: 12px;
+    color:#1ba4ff
+  }
   .plan-kind>span{
     font-family: AppleSystemUIFont;
     font-size: 13px;
@@ -287,13 +315,17 @@
     position: absolute;
     top: 20px;
     right: 110px;
-    box-shadow:3px 5px 24px #888888 ;
+    /*box-shadow:3px 5px 24px #888888 ;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
   }
   .wrap-repeat-delete>li{
     height: 20px;
     cursor: pointer;
     padding-left: 10px;
     padding-top: 10px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #666666;
   }
   .left-add{
     display: flex;
@@ -302,6 +334,7 @@
   .wrap-plan-item{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 200px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -378,7 +411,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 46px;
     background-color: white;
     padding-left: 15px;
   }
@@ -407,7 +440,8 @@
     font-size: 13px;
     color: #666666;
     cursor: pointer;
-    box-shadow:3px 5px 24px #888888 ;
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
+    /*box-shadow:3px 5px 24px #888888 ;*/
     z-index:2000
   }
   .plan,.other,.cancel{

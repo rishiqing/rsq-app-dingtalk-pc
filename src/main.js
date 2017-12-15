@@ -18,6 +18,7 @@ import Sortable from 'vue-sortable'
 import draggable from 'vuedraggable'
 import Vtip from 'vtip'
 import 'vtip/lib/index.min.css'
+import 'jquery-ui'
 // 注册指令使用
 Vue.use(Vtip.directive)
 Vue.component('draggable', draggable)

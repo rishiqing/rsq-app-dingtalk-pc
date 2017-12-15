@@ -23,7 +23,7 @@
       <div class="repeat-wrap" v-show="this.repeatState">
         <div class="wrap-repeat-style">
           <span class="repeat-style" >重复方式</span>
-          <div @click="changeRepeatOption" class="repeat-border">
+          <div @click="changeRepeatOption($event)" class="repeat-border">
             <span class="repeat-style">{{repeatKind}}</span>
             <i class="icon2-arrow-down2 arrow"></i>
           </div>
@@ -45,22 +45,30 @@
             <td v-for="day in weekArray" :key="day.date.getTime()"
                 @click="tapDay($event, day)">
               <div class="dp-day"
-                   :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected,'is-today':isToday(day)}">
-                {{ day.date.getTime() === numToday ? '今' : day.date.getDate()}}
+                   :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected,'is-today':isToday(day), lastwidth: showdate(day) === '最后一天'}">
+                {{ showdate(day)}}
               </div>
             </td>
           </tr>
+          <div @click="tapDay($event, obj)" class="lastdate"
+               :class="{'dp-grey': !obj.isInMonth, 'dp-selected': obj.isSelected,'is-today':isToday(obj)}">{{obj.text}}</div>
         </table>
       </div>
       <div v-show="this.repeatState" class="repeat-state">
-        <span class="repeat-deadline">截止重复直到</span>
+        <span class="repeat-deadline-text">截止重复直到</span>
         <div class="repeat-border" @click="selectDeadLine($event)">
           <span class="repeat-deadline">{{deadLineKind}}</span>
           <i class="icon2-arrow-down2 arrow"></i>
         </div>
         <ul style="margin: 0" v-show="this.deadLine" class="repeat-style-wrap-deadline">
-          <li class="repeat-style-wrap-item"  @click="repeatAlways">永久</li>
-          <li class="repeat-style-wrap-item" @click="showDeadLine">按日期截止</li>
+          <li class="repeat-style-wrap-item"  @click="repeatAlways">
+            <span>永久</span>
+            <i class="icon2-selected finish-deadline" v-show="always"></i>
+          </li>
+          <li class="repeat-style-wrap-item" @click="showDeadLine">
+            <span>按日期截止</span>
+            <i class="icon2-selected finish-deadline" v-show="!always"></i>
+          </li>
         </ul>
       </div>
       <r-deadline
@@ -123,30 +131,63 @@
   </div>
 </template>
 <style lang="scss" scoped>
+  .finish-deadline{
+    font-size: 13px;
+    color: #1BA4FF;
+    margin-right: 10px;
+  }
+  .lastdate{
+    margin:0 auto;
+    position: absolute;
+    top: 138px;
+    left:105px;
+    width:60px;
+    height:30px;
+    line-height:30px;
+    text-align: center;
+    border-radius: 2px;
+    /*border-radius: 50%;*/
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #666666;
+    cursor: pointer;
+  }
+  /*.dp-table div.lastwidth{*/
+    /*width: 100px;*/
+  /*}*/
   .dp-table tr:first-child{
     margin-top: 15px;
   }
   .repeat-style-wrap-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     cursor: pointer;
     margin-top: 5px;
+    height: 25px;
     font-family: AppleSystemUIFont;
     font-size: 13px;
     color: #666666;
   }
+  .repeat-style-wrap-item:hover{
+    background: rgba(0,0,0,0.04);
+  }
   .repeat-wrap{
     padding-bottom: 10px;
     border-bottom: 1px solid  #E1E1E1;
+    height: 230px;
   }
   .repeat-border{
     cursor: pointer;
     border: 1px solid #D5D5D5;
+    padding-left: 5px;
     /*padding: 4px;*/
     margin-left: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    width: 66px;
+    min-width: 66px;
     height: 24px;
   }
   .wrap-repeat-style{
@@ -178,7 +219,7 @@
   }
   .repeat-style-wrap-deadline{
     width: 130px;
-    height: 40px;
+    /*height: 40px;*/
     list-style: none;
     padding-left: 10px;
     padding-top: 7px;
@@ -186,9 +227,10 @@
     position: absolute;
     background-color: white;
     z-index: 120;
-    top: -55px;
+    top: -75px;
     left:70px;
-    box-shadow: 3px 5px 24px #888888;
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
+    /*box-shadow: 3px 5px 24px #888888;*/
   }
   .repeat-state{
     display: flex;
@@ -199,14 +241,14 @@
     height: 40px;
   }
   .every-day{
-    margin: 10px 0;
-    width: 240px;
+    margin: 20px 28px;
+    width: 180px;
     height: 120px;
   }
   .repeat-option{
     position: absolute;
     z-index:300;
-    height: 100px;
+    /*height: 100px;*/
     width: 100px;
     left:50px;
     padding: 0;
@@ -225,7 +267,7 @@
     left:50px;
     background-color: white;
     padding: 10px;
-    z-index: 102;
+    z-index: 10007;
     /*padding: 0;*/
     /*margin: 0;*/
     list-style: none;
@@ -233,9 +275,15 @@
     cursor: pointer;
   }
   .repeat-style-wrap:hover{
-    background-color: lightgray;
+    background-color:  rgba(0,0,0,0.04);
+    z-index: 2000;
   }
   .repeat-deadline{
+    font-family: AppleSystemUIFont;
+    font-size: 12px;
+    color: #666666;
+  }
+  .repeat-deadline-text{
     font-family: AppleSystemUIFont;
     font-size: 12px;
     color: #8C8C8C;
@@ -261,7 +309,10 @@
     left:10px;
     z-index: 1000;
     background-color: white;
-    box-shadow: 3px 5px 24px #888888;
+    /*box-shadow: 3px 5px 24px #888888;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
+    width: 240px;
+    height: 344px;
   }
   .edit-date {
     .light-color {color: #999999;}
@@ -298,6 +349,8 @@
       width:100%;
       /*height:8rem;*/
       text-align: center;
+      position: relative;
+      /*display:flex;*/
     }
     .dp-grey {color: #a8a8a8;}
     .dp-table tbody {
@@ -305,7 +358,7 @@
       margin-bottom: 20px;
     }
     .dp-table .dp-selected {
-      background: #55A8FD;
+      background: #55A8FD !important;
       color:white;}
     .dp-sel-type {position: relative;border-bottom: solid 1px #e4e4e4;overflow: hidden;
       height: 40px;line-height: 40px;}
@@ -315,7 +368,7 @@
       color: #8C8C8C;
       cursor: pointer;
       float: left;
-      width: 23%;
+      width: 24.2%;
       text-align: center;
       line-height: 40px;}
     .dp-v-line {
@@ -328,11 +381,11 @@
       /*font-size: 2.8rem;}*/
     }
     .dp-v-sep {
-      width: 1px;
-      height: 90%;
+      /*width: 1px;*/
+      height: 60%;
       /*background: #979797;*/
       border: 1px solid #F0F0F0;
-      margin-top: 2px;
+      margin-top: 7px;
     }
     .week{
       font-family: AppleSystemUIFont;
@@ -350,6 +403,21 @@
       font-size: 12px;
       color: #666666;
       cursor: pointer;
+    }
+    .dp-day-last{
+      margin:0 auto;
+      width:30px;
+      height:30px;
+      line-height:30px;
+      text-align: center;
+      /*border-radius: 50%;*/
+      font-family: AppleSystemUIFont;
+      font-size: 12px;
+      color: #666666;
+      cursor: pointer;
+    }
+    .dp-day:hover {
+      background: #F4F4F4;
     }
     .week-six{
       font-family: AppleSystemUIFont;
@@ -418,6 +486,15 @@
     data () {
       return {
         compId: 'SYSTEM_SELECT_DATE',
+        obj: {
+          date: new Date(2060),
+          isFocused: false,
+          isSelected: false,
+          isInMonth: true,
+          showWeek: false,
+          text: '最后一天'
+        },
+        lastDate: false,
         firstCycle: [],
         secondCycle: [],
         thirdCycle: [],
@@ -459,6 +536,9 @@
       'r-deadline': DeadLine
     },
     computed: {
+      always () {
+        return this.deadLineKind === '永久'
+      },
       deadLineKind () {
         return this.deadLineRepeat || '永久'
       },
@@ -515,6 +595,7 @@
       },
       stop (e) {
         this.deadLine = false
+        this.repeatOption = false
         e.stopPropagation()
       },
       clearDate () {
@@ -553,8 +634,9 @@
         this.deadLine = false
         this.deadLineDate = true
       },
-      changeRepeatOption () {
+      changeRepeatOption (e) {
         this.repeatOption = !this.repeatOption
+        e.stopPropagation()
       },
       changeRepeat (item) {
         if (item.title === '每天') {
@@ -745,16 +827,24 @@
         if (this.dateType === 'repeat') {
           obj.isSelected = !obj.isSelected
           if (obj.isSelected) {
-            var day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
-            var date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
-            this.selectRepeatDate.push(date)
+            if (!obj.text) {
+              var day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
+              var date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
+              this.selectRepeatDate.push(date)
+            } else {
+              this.lastDate = true
+            }
 //            console.log('this.selectRepeatDate' + this.selectRepeatDate.length)
           } else {
-            day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
-            date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
-            var index = this.selectRepeatDate.indexOf(date)
-            if (index > -1) {
-              this.selectRepeatDate.splice(index, 1)
+            if (!obj.text) {
+              day = obj.date.getDate() < 10 ? '0' + obj.date.getDate() : obj.date.getDate()
+              date = '' + obj.date.getFullYear() + (obj.date.getMonth() + 1) + day
+              var index = this.selectRepeatDate.indexOf(date)
+              if (index > -1) {
+                this.selectRepeatDate.splice(index, 1)
+              }
+            } else {
+              this.lastDate = false
             }
           }
         } else {
@@ -950,6 +1040,11 @@
 //            console.log('this.selectRepeatDate 是' + JSON.stringify(this.selectRepeatDate))
             resObj['repeatBaseTime'] = this.selectRepeatDate.toString()
             resObj['repeatOverDate'] = this.repeatOverDate
+            if (this.lastDate) {
+              resObj['isLastDate'] = true
+            } else {
+              resObj['isLastDate'] = false
+            }
           } else {
             resObj['repeatType'] = 'everyYear'
 //            console.log('-----' + JSON.stringify(this.selectNumDate))
@@ -1002,6 +1097,10 @@
 //            this.selectRepeatDate = []
             this.repeatWeekState = []
             this.$store.commit('PUB_WEEK_DATE_DELETE')
+            if (editItem.repeatType) {
+              console.log('重复设置')
+              this.$store.commit('SAVE_REPEAT_FLAG')
+            }
           })
       },
       changeDate () {
@@ -1041,6 +1140,14 @@
         for (i = 28; i <= 30; i++) {
           this.fiveCycle.push(this.repeatMonthDays[i])
         }
+//        this.fiveCycle.push({
+//          date: new Date(2060),
+//          isFocused: false,
+//          isSelected: false,
+//          isInMonth: false,
+//          showWeek: false,
+//          text: '最后一天'
+//        })
         this.repeatNewMonth.push(this.firstCycle)
         this.repeatNewMonth.push(this.secondCycle)
         this.repeatNewMonth.push(this.thirdCycle)
@@ -1065,6 +1172,10 @@
       Bus.$on('senddate', () => {
 //        console.log('要发送日期了')
         this.changeDate()
+        this.repeatOption = false
+        this.deadLineDate = false
+//        this.repeatState = false
+//        this.selectDateState = false
       })
     }
 //    beforeRouteLeave (to, from, next) {

@@ -31,6 +31,7 @@ module.exports = merge(baseWebpackConfig, {
       env: 'dev',
       authServer: config.dev.authServer,
       stsServer: config.dev.stsServer,
+      remindServer: config.dev.remindServer,
       ossRegion: config.dev.aliOSS.region,
       ossBucket: config.dev.aliOSS.bucket,
       ossRoot: config.dev.aliOSS.root,

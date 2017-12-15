@@ -108,6 +108,7 @@ export default {
     month: '',
     year: ''
   },
+  repeatFlag: false,
   weekDate: [],
   //  --------缓存相关--------
   /**

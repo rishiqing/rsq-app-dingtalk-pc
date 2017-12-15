@@ -83,13 +83,13 @@
   }
   .delete-subtodo{
     z-index: 200;
-    font-size: 14px;
+    font-size: 12px;
     position: absolute;
     top: 30px;
     right:5px;
     cursor: pointer;
     background-color: white;
-    box-shadow: 3px 5px 24px #888888;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.18);
     width: 100px;
     display: flex;
     align-items: center;

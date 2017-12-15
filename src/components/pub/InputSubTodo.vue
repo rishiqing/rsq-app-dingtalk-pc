@@ -13,13 +13,16 @@
       <i class="icon2-check-box select"></i>
       <input autofocus ref="subtodoInput" type="text" class="subtodo-input"  @keypress="createSubtodo($event.target.value,$event)" @blur="hideInput">
     </div>
-    <div class="subtodo-create" @click="showSubTodoInput">
+    <div class="subtodo-create">
       <i class="icon2-add-circle add-icon"></i>
-      <span class="subplan-add margin-detail">添加子任务</span>
+      <span class="subplan-add margin-detail" @click="showSubTodoInput">添加子任务</span>
     </div>
   </div>
 </template>
 <style lang="" scoped>
+  .select{
+    font-size: 14px;
+  }
   .wrap-subtodo-input{
     padding-left: 15px;
     display: flex;
@@ -29,6 +32,7 @@
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #5EADFD;
+    cursor: pointer;
   }
   .subtodo{
     background-color: white;
@@ -38,19 +42,22 @@
   .subtodo-head{
     border-bottom: 0.5px solid #EAEAEA;
   }
-  .subtodo-head,.subtodo-create,.subtodo-input{
+  .subtodo-head,.subtodo-create{
     padding-left: 15px;
     display: flex;
     align-items: center;
     height: 35px;
   }
   .subtodo-input{
+    padding-left: 11px;
     /*margin-left: 15px;*/
+    display: flex;
+    align-items: center;
+    height: 35px;
     border: 0;
     /*border: none;*/
   }
   .subtodo-create{
-    cursor: pointer;
   }
   .subplan-icon,.add-icon{
     font-size: 14px;
@@ -59,7 +66,7 @@
     color:#5EADFD
   }
   .subplan{
-    font-size: 12px;
+    font-size: 13px;
     font-family: PingFangSC-Regular;
     color: #B1B1B1;
   }

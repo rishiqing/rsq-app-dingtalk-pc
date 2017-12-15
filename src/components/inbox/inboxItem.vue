@@ -1,5 +1,5 @@
 <template>
-  <li class="inbox-list" :key="item.id" @dragstart="drag(item)">
+  <li class="inbox-list ui-state-default" :key="item.id" @dragstart="drag(item)">
     <span class="inbox-list-item">{{item.pTitle}}</span>
     <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
       <i class="icon2-receive plan" v-show="isFromSche" v-tip.dark.transition.top="fromName"></i>
@@ -9,6 +9,7 @@
   </li>
 </template>
 <style>
+  .ui-state-highlight { height: 30px; }
   #cssTest{
     position: fixed;
     /*bottom: 30px;*/

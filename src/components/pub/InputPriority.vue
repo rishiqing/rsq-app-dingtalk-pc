@@ -1,8 +1,8 @@
 <template>
-  <div class="wrap-priority" @click="changeMenuState($event)">
+  <div class="wrap-priority">
     <i class="icon2-four-quadrant priority-icon"></i>
     <span class="priority margin-detail">优先级</span>
-    <span class="section-name margin-detail font-style">{{sectionName}}</span>
+    <span class="section-name margin-detail font-style" @click="changeMenuState($event)">{{sectionName}}</span>
     <ul class="priority-menu" v-show="this.menuState && this.editPriority">
       <li class="priority-name" @click="changeSection(titleItem, $event)" v-for="titleItem in this.titleArray">
         <span class="section-name-list">{{titleItem.title}}</span>
@@ -53,16 +53,17 @@
   }
   .priority-menu{
     list-style: none;
-    position: absolute;
+    position: fixed;
     width: 150px;
-    top:40px;
+    top:300px;
     left:21px;
     right: 0;
     margin: 0;
     list-style: none;
     z-index: 100;
     background-color: white;
-    box-shadow: 3px 5px 24px #888888;
+    /*box-shadow: 3px 5px 24px #888888;*/
+    box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     padding-left: 15px;
     padding-top: 10px;
   }
@@ -79,6 +80,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    cursor: pointer;
   }
   .section-name-list{
     font-size: 12px;
@@ -99,7 +101,7 @@
     right:10px
   }
   .priority{
-    font-size: 12px;
+    font-size: 13px;
     font-family: PingFangSC-Regular;
     color: #B1B1B1;
   }
@@ -111,7 +113,6 @@
     background-color: white;
     padding-left: 15px;
     border-bottom:0.5px solid #EAEAEA ;
-    cursor: pointer;
   }
 
 </style>

@@ -88,13 +88,21 @@
 <script>
   import TodoItem from 'com/main/TodoItem'
   import draggable from 'vuedraggable'
+  import $ from 'jquery'
+  import 'jquery-ui'
+//  import 'jquery-ui/ui/widgets/resizable'
+  import 'jquery-ui/themes/base/sortable.css'
+  import 'jquery-ui/themes/base/resizable.css'
   export default {
     data () {
       return {
         options: {
           handle: '.handle'
         },
-        itemsArray: null
+        itemsArray: null,
+        itemId: '',
+        pContainer: '',
+        index: ''
       }
     },
     name: 'TodoItemList',
@@ -122,6 +130,28 @@
         return this.$store.state.schedule.dragItem
       }
     },
+    watch: {
+//      itemId () {
+//        console.log('this.items' + JSON.stringify(this.items))
+//        if (this.index === 0) {
+//            console.log('进来了')
+//            console.log(this.sectionItems[0].pDisplayOrder)
+//          var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
+//        } else if (this.index === (this.sectionItems.length - 1)) {
+//          displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
+//        } else {
+//          var prepDisplayOrder = this.sectionItems[this.index - 1].pDisplayOrder
+//          var backpDisplayOrder = this.sectionItems[this.index + 1].pDisplayOrder
+//           console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
+//          displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
+//        }
+//        console.log('displkayOrder是' + displayOrder)
+//        this.$store.dispatch('changePriority', {id: this.id, pContainer: this.itemTitle.pContainer, pDisplayOrder: displayOrder}).then(
+//          () => {
+//          }
+//        )
+//      }
+    },
     components: {
       'r-todo-item': TodoItem,
       'draggable': draggable
@@ -137,15 +167,15 @@
         if (this.dragItem.pContainer === this.itemTitle.pContainer) {
           console.log('自己范围拖动')
           if (evt.newIndex === 0) {
-//            console.log('进来了')
-//            console.log(this.sectionItems[0].pDisplayOrder)
+            console.log('进来了')
+            console.log(this.sectionItems[0].pDisplayOrder)
             var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
           } else if (evt.newIndex === (this.sectionItems.length - 1)) {
             displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
           } else {
             var prepDisplayOrder = this.sectionItems[evt.newIndex - 1].pDisplayOrder
             var backpDisplayOrder = this.sectionItems[evt.newIndex + 1].pDisplayOrder
-//            console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
+            console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
             displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
           }
           console.log('displkayOrder是' + displayOrder)
@@ -182,10 +212,31 @@
 //                .then(() => {
 //                })
             })
+      },
+      addDrag () {
+        $('.sortable1').sortable({
+          connectWith: '.connectedSortable',
+          placeholder: 'ui-state-highlight',
+//          stop: function (event, ui) {
+//            console.log('-%o', ui.item)
+//            console.log(ui.sender)
+//            console.log(ui.helper)
+//            console.log(ui.placeholder)
+//            console.log(event)
+//          },
+          stop: function (event, ui) {
+//            var pContainer = ui.item.parent().parent()[0].getAttribute('data-pcontainer')
+            this.index = ui.item.index()
+            this.itemId = ui.item[0].getAttribute('data-id')
+            console.log(this.itemId)
+          }
+        }).disableSelection()
       }
     },
     mounted () {
       this.itemsArray = this.items
+//      this.addDrag()
+//      console.log(sortable + resizeble + p + q)
 //      console.log('this.itemsArray' + this.itemsArray)
     }
   }
