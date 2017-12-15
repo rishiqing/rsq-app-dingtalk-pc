@@ -120,7 +120,7 @@ module.exports = {
     hotPath: '/__webpack_hmr',
     apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
+    authServer: 'http://dd.rsq.etoutiao.cn/main/',
     // 日事清前端文件地址
     frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
     stsServer: 'http://182.92.222.40:8300/sts/',
