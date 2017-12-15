@@ -57,6 +57,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       env: 'beta',
       authServer: config.beta.authServer,
       stsServer: config.beta.stsServer,
+      remindServer: config.beta.remindServer,
       ossRegion: config.beta.aliOSS.region,
       ossBucket: config.beta.aliOSS.bucket,
       ossRoot: config.beta.aliOSS.root,

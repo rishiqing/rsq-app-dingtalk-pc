@@ -50,7 +50,7 @@ export default {
   },
   sendToConversation (props) {
     return new Promise((resolve, reject) => {
-      var request = url.resolve(window.rsqConfig.authServer, mapping.SEND_TO_CONV) + '?' + util.combineUrlParams(props.urlParams)
+      var request = url.resolve(window.rsqConfig.remindServer, mapping.SEND_TO_CONV) + '?' + util.combineUrlParams(props.urlParams)
       Vue.http.post(request, JSON.stringify(props.data))
         .then(res => {
           resolve(res.json())
@@ -63,7 +63,7 @@ export default {
   sendAsyncCorpMessage (props) {
     // alert(JSON.stringify(props))
     return new Promise((resolve, reject) => {
-      var request = url.resolve(window.rsqConfig.authServer, mapping.SEND_TO_CORP_CONV) + '?' + util.combineUrlParams(props.urlParams)
+      var request = url.resolve(window.rsqConfig.remindServer, mapping.SEND_TO_CORP_CONV) + '?' + util.combineUrlParams(props.urlParams)
       Vue.http.post(request, JSON.stringify(props.data))
         .then(res => {
           resolve(res.json())
@@ -75,7 +75,7 @@ export default {
   },
   sendRemind (props) {
     return new Promise((resolve, reject) => {
-      var request = url.resolve(window.rsqConfig.authServer, mapping.SEND_REMIND) + '?' + util.combineUrlParams(props.urlParams)
+      var request = url.resolve(window.rsqConfig.remindServer, mapping.SEND_REMIND) + '?' + util.combineUrlParams(props.urlParams)
       Vue.http.post(request, JSON.stringify(props.data))
         .then(res => {
           resolve(res.json())

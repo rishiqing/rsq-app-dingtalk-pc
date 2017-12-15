@@ -51,6 +51,8 @@ module.exports = {
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
     stsServer: 'https://stsserver.hz.taeapp.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
+    // 钉钉提醒服务器，用于发送钉钉内的通知提醒
+    remindServer: 'https://ding.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
@@ -92,6 +94,8 @@ module.exports = {
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
     stsServer: 'http://182.92.222.40:8300/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
+    // 钉钉提醒服务器，用于发送钉钉内的通知提醒
+    remindServer: 'http://beta.dd.rsq.etoutiao.cn/remind/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
@@ -124,6 +128,8 @@ module.exports = {
     // 日事清前端文件地址
     frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
     stsServer: 'http://182.92.222.40:8300/sts/',
+    // 钉钉提醒服务器，用于发送钉钉内的通知提醒
+    remindServer: 'http://dd.rsq.etoutiao.cn/remind/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
