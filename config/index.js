@@ -41,10 +41,10 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
     // 日事清api的后台地址
-    apiServer: 'https://ding.rishiqing.com/',
+    apiServer: 'https://pcding.rishiqing.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'https://ding.rishiqing.com/',
+    authServer: 'https://pcding.rishiqing.com/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
     frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
@@ -52,7 +52,9 @@ module.exports = {
     stsServer: 'https://stsserver.hz.taeapp.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
     // 钉钉提醒服务器，用于发送钉钉内的通知提醒
-    remindServer: 'https://ding.rishiqing.com/',
+    remindServer: 'https://pcding.rishiqing.com/',
+    // PC端登录后，自动打开网页时的跳转root链接
+    autoOpenServer: 'https://www.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
@@ -96,6 +98,8 @@ module.exports = {
     // stsServer: 'http://182.92.222.40:8300/sts/',
     // 钉钉提醒服务器，用于发送钉钉内的通知提醒
     remindServer: 'http://beta.dd.rsq.etoutiao.cn/remind/',
+    // PC端登录后，自动打开网页时的跳转root链接
+    autoOpenServer: 'http://beta.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
@@ -130,6 +134,8 @@ module.exports = {
     stsServer: 'http://182.92.222.40:8300/sts/',
     // 钉钉提醒服务器，用于发送钉钉内的通知提醒
     remindServer: 'http://dd.rsq.etoutiao.cn/remind/',
+    // PC端登录后，自动打开网页时的跳转root链接
+    autoOpenServer: 'http://beta.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
