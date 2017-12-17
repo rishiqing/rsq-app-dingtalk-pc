@@ -38,6 +38,7 @@ module.exports = merge(baseWebpackConfig, {
       version: config.dev.version,
       apiServer: config.dev.apiServer,
       frontServer: config.dev.frontServer,
+      autoOpenServer: config.dev.autoOpenServer,
       filename: 'index.html',
       template: 'index.html',
       inject: true
