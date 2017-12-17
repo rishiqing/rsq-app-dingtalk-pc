@@ -57,12 +57,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       env: 'release',
       authServer: config.release.authServer,
       stsServer: config.release.stsServer,
+      remindServer: config.release.remindServer,
       ossRegion: config.release.aliOSS.region,
       ossBucket: config.release.aliOSS.bucket,
       ossRoot: config.release.aliOSS.root,
       version: config.release.version,
       apiServer: config.release.apiServer,
       frontServer: config.release.frontServer,
+      autoOpenServer: config.release.autoOpenServer,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.release.index,

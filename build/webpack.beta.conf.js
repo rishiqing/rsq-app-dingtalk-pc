@@ -57,12 +57,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       env: 'beta',
       authServer: config.beta.authServer,
       stsServer: config.beta.stsServer,
+      remindServer: config.beta.remindServer,
       ossRegion: config.beta.aliOSS.region,
       ossBucket: config.beta.aliOSS.bucket,
       ossRoot: config.beta.aliOSS.root,
       version: config.beta.version,
       apiServer: config.beta.apiServer,
       frontServer: config.beta.frontServer,
+      autoOpenServer: config.beta.autoOpenServer,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.beta.index,
