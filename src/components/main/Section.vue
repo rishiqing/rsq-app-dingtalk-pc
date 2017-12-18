@@ -28,6 +28,7 @@
 <script>
   import TodoItemList from 'com/main/TodoItemList'
   import dateUtil from 'ut/dateUtil'
+  import util from 'ut/jsUtil'
   import $ from 'jquery'
   import 'jquery-ui'
   //  import 'jquery-ui/ui/widgets/resizable'
@@ -48,13 +49,20 @@
         currentDate: new Date(),
         InputState: false,
         remindState: false,
-        content: ''
+        content: '',
+        rsqIdA: ''
       }
     },
     props: {
       name: String,
-      itemTitle: Object
+      itemTitle: Object,
+      rsqId: String
 //      sectionName: String
+    },
+    watch: {
+      rsqId (ids) {
+        console.log('ids' + ids)
+      }
     },
     computed: {
       whichsection () {
@@ -66,9 +74,9 @@
       loginUser () {
         return this.$store.getters.loginUser || {}
       },
-      userId () {
-        return this.items[0].pUserId.toString()
-      },
+//      userId () {
+//        return this.items[0].pUserId.toString()
+//      },
       focusdate () {
         return this.$store.state.focusDate
       },
@@ -99,6 +107,18 @@
       },
       sectionItems () {
         return this.items.filter((item) => { return item.pContainer === this.itemTitle.pContainer })
+      },
+      selectYear () {
+        return this.$store.state.pub.year
+      },
+      selectMonth () {
+        return this.$store.state.pub.month
+      },
+      userId () {
+        return this.loginUser.authUser.userId
+      },
+      corpId () {
+        return this.loginUser.authUser.corpId
       }
 //      title () {
 //        var titleArray = this.$store.state.schedule.titleArray
@@ -232,8 +252,13 @@
 //          var todoType = this.isInbox ? 'inbox' : 'schedule'
 //          console.log(dateUtil.getStandardTime(this.currentDate))
           var newdate = dateUtil.createStandardTime(new Date())
-//          console.log('newdate是' + newdate)
-          var date = this.formatTitleDate(this.currentDate)
+          if (this.focusdate) {
+            var standardTime = dateUtil.getStandardTime(this.focusdate)
+            var date = this.formatTitleDate(this.focusdate)
+          } else {
+            date = this.formatTitleDate(this.currentDate)
+            standardTime = this.formatTitleDate(this.currentDate)
+          }
           var startTime = date.substring(0, 4) + '/' + date.substring(4, 6) + '/' + date.substring(6, 8)
           var endTime = startTime
           if (this.sectionItems && this.sectionItems.length === 0) {
@@ -241,13 +266,22 @@
           } else {
             displayOrder = this.sectionItems[0].pDisplayOrder + 65536
           }
-          this.$store.dispatch('submitCreateTodoItem', {'startDate': startTime, 'endDate': endTime, receiverIds: this.userId, pPlanedTime: newdate, pDisplayOrder: displayOrder, createTaskDate: this.formatTitleDate(this.currentDate), pTitle: title, pContainer: this.itemTitle.pContainer, todoType: 'schedule'})
-            .then(item => {
-//              this.InputState = false
-              this.remindState = false
-              this.content = ''
-//              console.log('返回来的item是' + item)
-              return item
+          var that = this
+          this.$store.dispatch('fetchRsqidFromUserid', {corpId: this.corpId, idArray: [this.userId]})
+            .then(function (idMap) {
+              console.log('idmap' + JSON.stringify(idMap))
+              var userArray = util.getMapValuePropArray(idMap)
+              console.log('userId是' + JSON.stringify(userArray))
+              var id = userArray[0].rsqUserId
+              console.log(id.toString())
+              that.$store.dispatch('submitCreateTodoItem', {'startDate': startTime, 'endDate': endTime, receiverIds: id, pPlanedTime: newdate, pDisplayOrder: displayOrder, createTaskDate: standardTime, pTitle: title, pContainer: that.itemTitle.pContainer, todoType: 'schedule'})
+                .then(item => {
+    //              this.InputState = false
+                  this.remindState = false
+                  this.content = ''
+    //              console.log('返回来的item是' + item)
+                  return item
+                })
             })
         }
       },
@@ -298,9 +332,46 @@
             console.log(ui.placeholder)
           }
         }).disableSelection()
+      },
+      get () {
+        return this.$store.dispatch('fetchRsqidFromUserid', {corpId: this.corpId, idArray: [this.userId]})
+          .then(function (idMap) {
+            console.log('idmap' + JSON.stringify(idMap))
+            var userArray = util.getMapValuePropArray(idMap)
+            console.log('userId是' + JSON.stringify(userArray))
+            console.log(userArray[0].rsqUserId)
+            this.rsqIdA = userArray[0].rsqUserId
+            return userArray[0].rsqUserId
+          })
       }
     },
+    created () {
+//      console.log('remindState' + this.remindState)
+//      this.$store.dispatch('fetchRsqidFromUserid', {corpId: this.corpId, idArray: [this.userId]})
+//        .then(function (idMap) {
+//          console.log('idmap' + JSON.stringify(idMap))
+//          var userArray = util.getMapValuePropArray(idMap)
+//          console.log('userId是' + JSON.stringify(userArray))
+//          console.log(userArray[0].rsqUserId)
+//          this['ids'] = userArray[0].rsqUserId
+//          this.rsqId = util.extractProp(userArray, 'rsqUserId')
+//          this.rsqIdA = userArray[0].rsqUserId
+//          console.log('-------' + this.ids)
+//        })
+    },
     mounted () {
+//      debugger
+//      console.log('remindState' + this.remindState)
+//      this.$store.dispatch('fetchRsqidFromUserid', {corpId: this.corpId, idArray: [this.userId]})
+//        .then(function (idMap) {
+//          console.log('idmap' + JSON.stringify(idMap))
+//          var userArray = util.getMapValuePropArray(idMap)
+//          console.log('userId是' + JSON.stringify(userArray))
+//          console.log(userArray[0].rsqUserId)
+//          this.rsqId = util.extractProp(userArray, 'rsqUserId')
+//          this.rsqIdA = userArray[0].rsqUserId
+//          console.log('-------' + this.remindState)
+//        })
 //      this.addDrag()
 //      console.log('section中拿到的title是' + this.titleArray)
     }
