@@ -48,6 +48,7 @@
         :itemTitle="item"
         :key="item.id"
         @todo-item-click="showDetail"
+         :rsqId="rsqId"
       ></r-section>
       <r-detail
         :item="this.item"
@@ -99,7 +100,8 @@
         IsShow: false,
         selectDate: false,
         showInbox: false,
-        itemTitle: ''
+        itemTitle: '',
+        rsqId: ''
 //        selectMonth: '',
 //        selectYear: ''
       }
@@ -229,10 +231,32 @@
       this.getAllTodoTitleList()
       this.getInboxTodos()
       this.fetchUserIds('selectedLocalList')
+//      this.$store.dispatch('fetchRsqidFromUserid', {corpId: this.corpId, idArray: [this.userId]})
+//        .then(function (idMap) {
+//          console.log('idmap' + JSON.stringify(idMap))
+//                window.rsqadmg.exec('hideLoader')
+//          var userArray = util.getMapValuePropArray(idMap)
+//          console.log(JSON.stringify(userArray))
+//                  console.log('userId是' + JSON.stringify(userArray))
+//          var rsqIdArray = util.extractProp(userArray, 'rsqUserId')
+//          console.log(rsqIdArray)
+//          this.rsqId = rsqIdArray
+//          console.log(this.rsqId)
+//        })
 //      this.openLink()
 //      console.log(this.titleArray.length)
     },
     mounted () {
+//      this.$store.dispatch('fetchRsqidFromUserid', {corpId: this.corpId, idArray: [this.userId]})
+//        .then(function (idMap) {
+//          console.log('idmap' + JSON.stringify(idMap))
+//          var userArray = util.getMapValuePropArray(idMap)
+//          console.log(JSON.stringify(userArray))
+//          var rsqIdArray = util.extractProp(userArray, 'rsqUserId')
+//          console.log(rsqIdArray)
+//          this.rsqId = rsqIdArray.toString()
+//          console.log(this.rsqId)
+//        })
     }
   }
 </script>
