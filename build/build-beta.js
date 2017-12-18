@@ -15,6 +15,11 @@ const webpackConfig = require('./webpack.beta.conf')
 const spinner = ora('building for beta...')
 spinner.start()
 
+console.log(chalk.blue('basic prod config:'))
+console.log(chalk.blue('auth server:', config.beta.authServer))
+console.log(chalk.blue('rishiqing api server:', config.beta.apiServer))
+console.log(chalk.blue('frontend server:', config.beta.frontServer))
+
 rm(path.join(config.beta.assetsRoot, config.beta.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, function (err, stats) {
