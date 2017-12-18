@@ -140,9 +140,12 @@ export default {
    */
   submitCreateTodoItem ({dispatch}, p) {
     //  判断下是创建日程item还是收纳箱item
+    console.log(JSON.stringify(p))
     if (p.todoType === 'schedule') {
+      console.log(' 进来了')
       return dispatch('createScheduleItem', p)
     } else {
+      console.log('-----进来了')
       return dispatch('createInboxItem', p)
     }
   },
@@ -205,6 +208,7 @@ export default {
     // 读取顺序号
     p['checkAuthority'] = 'public'
     p['pNote'] = ''
+    console.log(JSON.stringify(p))
     return dispatch('fetchScheduleItems', {strDate})
       .then(() => {
         console.log('传过去' + JSON.stringify(p))
