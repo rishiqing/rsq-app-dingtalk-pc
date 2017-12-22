@@ -142,10 +142,8 @@ export default {
     //  判断下是创建日程item还是收纳箱item
     console.log(JSON.stringify(p))
     if (p.todoType === 'schedule') {
-      console.log(' 进来了')
       return dispatch('createScheduleItem', p)
     } else {
-      console.log('-----进来了')
       return dispatch('createInboxItem', p)
     }
   },
