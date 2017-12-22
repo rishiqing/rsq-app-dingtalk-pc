@@ -442,17 +442,38 @@ export default {
   CHANGE_PRIORITY (state, p) {
     // var id = state.todo.currentTodo.id || ''
     // if (id) {
+    var flag = 1
     state.todo.currentTodo.pContainer = p.pContainer
   // } else {
     var items = state.schedule.items
+    // console.log(items.length)
     for (var i = 0; i < items.length; i++) {
-      if (items[i].id === p.id) {
+      // console.log(items[i].id + ':' + p.id)
+      // console.log(items[i].id.toString() === p.id.toString())
+      if (items[i].id.toString() === p.id.toString()) {
         // console.log('已经改变')
+        flag = 0
         items[i].pContainer = p.pContainer
         items[i].pDisplayOrder = p.pDisplayOrder
       }
     }
+    if (flag) {
+      items.push(p.item)
+    }
     // }
+  },
+  CHANGE_PRIORITY_INBOX (state, p) {
+    // } else {
+    var items = state.inbox.items
+    // console.log(items.length)
+    for (var i = 0; i < items.length; i++) {
+      // console.log(items[i].id + ':' + p.id)
+      // console.log(items[i].id.toString() === p.id.toString())
+      if (items[i].id.toString() === p.id.toString()) {
+        // console.log('已经改变')
+        items[i].pDisplayOrder = p.pDisplayOrder
+      }
+    }
   },
   PUB_SCHE_DATE_UPDATE (state, p) {
     state.pub.year = p.year

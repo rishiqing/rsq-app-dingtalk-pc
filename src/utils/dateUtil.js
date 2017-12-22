@@ -15,6 +15,14 @@ export default {
     var day = date.getDay()
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset * 7 - day + 3)
   },
+  firstDayOfWeekEdit (date, offset) {
+    offset = offset || 0
+    // console.log('clearTime之前的date是' + date)
+    date = this.clearTime(date)
+    // console.log('clearTime之后的date是' + date)
+    var day = date.getDay()
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset * 7 - day)
+  },
   /**
    * date的月份偏移offset之后所在月的第一天。如果需要返回date所在月份，则offset可以不传值。
    * @param date
@@ -107,9 +115,9 @@ export default {
    * @param focusDate
    */
   getMonthDays (focusDate) {
+    console.log('focusDate是' + focusDate.getMonth())
     var arr = []
-    var initDate = this.firstDayOfWeek(this.firstDayOfMonth(focusDate))
-
+    var initDate = this.firstDayOfWeekEdit(this.firstDayOfMonth(focusDate))
     var end = false
     while (!end) {
       var weekArr = []
@@ -145,6 +153,67 @@ export default {
    * @param type
    * @param arr
    */
+  getMonthdaysByLyz (focusDate) {
+    console.log('进来了')
+    var dayArr = []
+    var year = focusDate.getFullYear()
+    if (focusDate.getMonth() === 12) {
+      var month = 1
+    } else {
+      month = focusDate.getMonth() + 1
+    }
+    switch (month) {
+      case 1:
+      case 3:
+      case 5:
+      case 7:
+      case 8:
+      case 10:
+      case 12:
+        for (var i = 1; i <= 31; i++) {
+          var thisDate = new Date(year, month, i)
+          var obj = {
+            date: thisDate,
+            isFocused: this.isSameDate(focusDate, thisDate),
+            isSelected: false,
+            isInMonth: thisDate.getMonth() === focusDate.getMonth(),
+            showWeek: false
+          }
+          dayArr.push(obj)
+        }
+        break
+      case 4:
+      case 6:
+      case 9:
+      case 11:
+        for (i = 1; i <= 30; i++) {
+          thisDate = new Date(year, month, i)
+          obj = {
+            date: thisDate,
+            isFocused: this.isSameDate(focusDate, thisDate),
+            isSelected: false,
+            isInMonth: thisDate.getMonth() === focusDate.getMonth(),
+            showWeek: false
+          }
+          dayArr.push(obj)
+        }
+        break
+      case 2:
+        for (i = 1; i <= 28; i++) {
+          thisDate = new Date(year, month, i)
+          obj = {
+            date: thisDate,
+            isFocused: this.isSameDate(focusDate, thisDate),
+            isSelected: false,
+            isInMonth: thisDate.getMonth() === focusDate.getMonth(),
+            showWeek: false
+          }
+          dayArr.push(obj)
+        }
+        break
+    }
+    return dayArr
+  },
   formatDateDisplay (type, arr) {
     if (!type || !arr) {
       return ''

@@ -1,7 +1,7 @@
 <template>
-  <ul class="sche-list" v-model="items" :class="{'listHeight': showHeight}" :options="{animation: 300,handle:'.handle'}">
-    <draggable :move="getdata" @update="datadragEnd">
-      <transition-group>
+  <ul class="sortable1 sche-list connectedSortable" v-model="items" :class="{'listHeight': showHeight}" :options="{animation: 300,handle:'.handle'}" :data-pContainer="this.itemTitle.pContainer">
+    <!--<draggable :move="getdata" @update="datadragEnd">-->
+      <!--<transition-group>-->
         <template v-if="this.itemTitle.pContainer==='IE'">
           <r-todo-item
               v-for="item in items"
@@ -16,7 +16,7 @@
               @drag="getDragItem"
           ></r-todo-item>
         </template>
-         <template v-else-if="this.itemTitle.pContainer==='IU'">
+        <template v-else-if="this.itemTitle.pContainer==='IU'">
            <r-todo-item
                v-for="item in items"
                v-if="item.pContainer==='IU'"
@@ -58,8 +58,8 @@
               :key="item.id"
           ></r-todo-item>
         </template>
-      </transition-group>
-    </draggable>
+      <!--</transition-group>-->
+    <!--</draggable>-->
   </ul>
 </template>
 <style lang="scss" scoped>
@@ -90,7 +90,7 @@
   import draggable from 'vuedraggable'
   import $ from 'jquery'
   import 'jquery-ui'
-//  import 'jquery-ui/ui/widgets/resizable'
+  import 'jquery-ui/ui/widgets/resizable'
   import 'jquery-ui/themes/base/sortable.css'
   import 'jquery-ui/themes/base/resizable.css'
   export default {
@@ -102,7 +102,10 @@
         itemsArray: null,
         itemId: '',
         pContainer: '',
-        index: ''
+        index: '',
+        pCon: '',
+        sectionItems: [],
+        isInbox: false
       }
     },
     name: 'TodoItemList',
@@ -114,15 +117,18 @@
       itemTitle: Object
     },
     computed: {
+      inboxItems () {
+        return this.$store.state.inbox.items
+      },
       itemcount () {
         return this.items.length >= 8 && this.isCheckable
       },
       UEitems () {
         return this.items.filter((item) => { return item.pContainer === 'UE' })
       },
-      sectionItems () {
-        return this.items.filter((item) => { return item.pContainer === this.itemTitle.pContainer })
-      },
+//      sectionItems () {
+//        return this.items.filter((item) => { return item.pContainer === this.itemTitle.pContainer })
+//      },
       dragItemId () {
         return this.$store.state.schedule.dragItemId
       },
@@ -131,26 +137,73 @@
       }
     },
     watch: {
-//      itemId () {
-//        console.log('this.items' + JSON.stringify(this.items))
-//        if (this.index === 0) {
-//            console.log('进来了')
-//            console.log(this.sectionItems[0].pDisplayOrder)
-//          var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
-//        } else if (this.index === (this.sectionItems.length - 1)) {
-//          displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
-//        } else {
-//          var prepDisplayOrder = this.sectionItems[this.index - 1].pDisplayOrder
-//          var backpDisplayOrder = this.sectionItems[this.index + 1].pDisplayOrder
-//           console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
-//          displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
-//        }
+      itemId (id) {
+//        console.log(this.pCon)
+//        console.log(JSON.stringify(this.items))
+//        if (!this.isInbox) {
+        this.sectionItems = this.items.filter((item) => { return item.pContainer === this.pCon })
+//        console.log('this.sectionItems' + this.sectionItems.length)
+        if (this.index === 0) {
+//          console.log('进来了')
+//          console.log(this.sectionItems[0].pDisplayOrder)
+          if (this.sectionItems.length !== 0) {
+            var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
+          } else {
+            displayOrder = 65535
+          }
+        } else if (this.index === (this.sectionItems.length)) {
+//          console.log(this.sectionItems.length)
+//          console.log('-----' + this.sectionItems[this.sectionItems.length - 1])
+          displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
+        } else {
+//          console.log(this.index)
+          var prepDisplayOrder = this.sectionItems[this.index - 1].pDisplayOrder
+          var backpDisplayOrder = this.sectionItems[this.index].pDisplayOrder
+//          console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
+          displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
+        }
 //        console.log('displkayOrder是' + displayOrder)
-//        this.$store.dispatch('changePriority', {id: this.id, pContainer: this.itemTitle.pContainer, pDisplayOrder: displayOrder}).then(
-//          () => {
+        this.$store.dispatch('changePriority', {
+          id: this.itemId,
+          pContainer: this.pCon,
+          pDisplayOrder: displayOrder
+        }).then(
+          () => {
+//            for (var i = 0; i < this.items.length)
+//            console.log(JSON.stringify(this.items))
+          }
+        )
+//        } else {
+//          console.log('进来了inbox')
+//          if (this.index === 0) {
+//            console.log('进来了0')
+//          console.log(this.sectionItems[0].pDisplayOrder)
+//            if (this.inboxItems.length !== 0) {
+//              displayOrder = this.inboxItems[0].pDisplayOrder + 65535
+//            } else {
+//              displayOrder = 65535
+//            }
+//          } else if (this.index === (this.inboxItems.length)) {
+//            console.log(this.inboxItems.length)
+//         console.log('-----' + this.items[this.items.length - 1])
+//            displayOrder = (this.inboxItems[this.inboxItems.length - 1].pDisplayOrder - 1) / 2
+//          } else {
+//            console.log('进来了' + this.index + this.inboxItems.length)
+//            prepDisplayOrder = this.inboxItems[this.index - 1].pDisplayOrder
+//            backpDisplayOrder = this.inboxItems[this.index].pDisplayOrder
+//          console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
+//            displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
 //          }
-//        )
+//        console.log('displkayOrder是' + displayOrder)
+//          this.$store.dispatch('changePriorityInbox', {id: this.itemId, pDisplayOrder: displayOrder}).then(
+//            () => {
+//            for (var i = 0; i < this.items.length)
+//            console.log(JSON.stringify(this.items))
+//            }
+//          )
+//        }
 //      }
+      }
     },
     components: {
       'r-todo-item': TodoItem,
@@ -214,28 +267,36 @@
             })
       },
       addDrag () {
+        var that = this
         $('.sortable1').sortable({
           connectWith: '.connectedSortable',
           placeholder: 'ui-state-highlight',
-//          stop: function (event, ui) {
-//            console.log('-%o', ui.item)
-//            console.log(ui.sender)
-//            console.log(ui.helper)
-//            console.log(ui.placeholder)
-//            console.log(event)
-//          },
           stop: function (event, ui) {
-//            var pContainer = ui.item.parent().parent()[0].getAttribute('data-pcontainer')
-            this.index = ui.item.index()
-            this.itemId = ui.item[0].getAttribute('data-id')
-            console.log(this.itemId)
+//            console.log(ui.item.parent()[0].getAttribute('data-pcontainer'))
+            var pContainer = ui.item.parent()[0].getAttribute('data-pcontainer')
+//            if (pContainer) {
+            that.index = ui.item.index()
+            that.itemId = ui.item[0].getAttribute('data-id')
+            that.pCon = pContainer
+            console.log(that.itemId + ':' + pContainer)
+//            ui.item.parent()[0].removeChild(document.getElementsByClassName('inbox-list')[0])
+//            ui.item.removeClass('inbox-list').addClass('todoItem')
+//            } else {
+//              console.log('进来inbox')
+//              this.isInbox = true
+//              console.log(this.isInbox)
+//              that.index = ui.item.index()
+//              that.itemId = ui.item[0].getAttribute('data-id')
+//              that.pCon = 'inbox'
+//            }
+//            console.log('this.items' + JSON.stringify(that.items))
           }
         }).disableSelection()
       }
     },
     mounted () {
       this.itemsArray = this.items
-//      this.addDrag()
+      this.addDrag()
 //      console.log(sortable + resizeble + p + q)
 //      console.log('this.itemsArray' + this.itemsArray)
     }

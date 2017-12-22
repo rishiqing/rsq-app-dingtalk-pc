@@ -1,9 +1,9 @@
 <template>
-  <div class="wrap-inbox" :class="{'slide':showInbox}" @click="stop($event)">
+  <div class="wrap-inbox connectedSortable" :class="{'slide':showInbox}" @click="stop($event)" :data-pcontainer="inbox">
     <input type="text" class="inbox-input" placeholder='添加任务，按Enter保存'  @keypress="createInboxItem($event.target.value,$event)">
-    <ul class="inbox-list-wrap " id="sortable2">
-      <draggable :move="getdata" @update="datadragEnd">
-        <transition-group>
+    <ul class="inbox-list-wrap connectedSortable" id="sortable2">
+      <!--<draggable :move="getdata" @update="datadragEnd">-->
+        <!--<transition-group>-->
           <inboxItem
             v-for="item in items"
             :item="item"
@@ -17,8 +17,8 @@
               <!--<p id="cssTest" class="displayName" v-show="showfromName">{{fromName(item)}}</p>-->
             <!--</div>-->
           <!--</li>-->
-        </transition-group>
-      </draggable>
+        <!--</transition-group>-->
+      <!--</draggable>-->
     </ul>
   </div>
 </template>
@@ -46,7 +46,40 @@
     data () {
       return {
         currentDate: new Date(),
-        showfromName: false
+        showfromName: false,
+        index: '',
+        itemId: '',
+        pCon: ''
+      }
+    },
+    watch: {
+      itemId () {
+        if (this.index === 0) {
+//          console.log('进来了')
+//          console.log(this.sectionItems[0].pDisplayOrder)
+          if (this.items.length !== 0) {
+            var displayOrder = this.items[0].pDisplayOrder + 65535
+          } else {
+            displayOrder = 65535
+          }
+        } else if (this.index === (this.items.length)) {
+//          console.log(this.items.length)
+//          console.log('-----' + this.items[this.items.length - 1])
+          displayOrder = (this.items[this.items.length - 1].pDisplayOrder - 1) / 2
+        } else {
+//          console.log(this.index)
+          var prepDisplayOrder = this.items[this.index - 1].pDisplayOrder
+          var backpDisplayOrder = this.items[this.index].pDisplayOrder
+//          console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
+          displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
+        }
+//        console.log('displkayOrder是' + displayOrder)
+        this.$store.dispatch('changePriorityInbox', {id: this.itemId, pDisplayOrder: displayOrder}).then(
+          () => {
+//            for (var i = 0; i < this.items.length)
+//            console.log(JSON.stringify(this.items))
+          }
+        )
       }
     },
     props: {
@@ -55,6 +88,11 @@
     computed: {
       items () {
         return this.$store.state.inbox.items
+      },
+      inbox () {
+        if (this.items) {
+          return this.items[0].pContainer
+        }
       }
     },
     methods: {
@@ -112,15 +150,27 @@
         }
       },
       addInboxDrag () {
+        var that = this
 //        console.log(sortable + resizeble + p + q)
         $('#sortable2').sortable({
-          connectWith: '.connectedSortable',
-          placeholder: 'ui-state-highlight'
+//          connectWith: '.connectedSortable',
+          placeholder: 'ui-state-highlight',
+          stop: function (event, ui) {
+            console.log(ui.item.parent()[0].className + ui.item.parent()[0].className.indexOf('wrap-inbox'))
+//            if (ui.item.parent()[0].className.indexOf('inbox-list-wrap') !== -1) {
+//              var pContainer = 'inbox'
+//            }
+//            var pContainer = ui.item.parent()[0].getAttribute('data-pcontainer')
+            that.index = ui.item.index()
+            that.itemId = ui.item[0].getAttribute('data-id')
+//            console.log(that.itemId + ':' + that.index + pContainer)
+//            console.log('this.items' + JSON.stringify(that.items))
+          }
         }).disableSelection()
       }
     },
     mounted () {
-//      this.addInboxDrag()
+      this.addInboxDrag()
 //      console.log('手按箱' + JSON.stringify(this.items))
     }
   }

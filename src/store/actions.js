@@ -988,8 +988,15 @@ export default {
   },
   changePriority ({commit, state}, p) {
     return api.todo.changePriority(p)
+      .then((item) => {
+        commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer, item: item})
+      })
+    // commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
+  },
+  changePriorityInbox ({commit, state}, p) {
+    return api.todo.changePriority(p)
       .then(() => {
-        commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
+        commit('CHANGE_PRIORITY_INBOX', {id: p.id, pDisplayOrder: p.pDisplayOrder})
       })
     // commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
   },
