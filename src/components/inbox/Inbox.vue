@@ -175,14 +175,29 @@
     right: 15px;
     top: 13px;
   }
+  @media (min-height: 701px) {
+    .inbox-list-wrap{
+      height: 82%;
+    }
+  }
   @media (min-height: 650px) and (max-height: 700px) {
     .inbox-list-wrap{
-      height: 80%;
+      height: 82%;
     }
   }
   @media (min-height: 590px) and (max-height: 620px) {
     .inbox-list-wrap{
-      height: 70%;
+      height: 68%;
+    }
+  }
+  @media (min-height: 560px) and (max-height: 589px) {
+    .inbox-list-wrap{
+      height: 63%;
+    }
+  }
+  @media (min-height: 500px) and (max-height: 559px) {
+    .inbox-list-wrap{
+      height: 56%;
     }
   }
   @media (min-height: 621px) and (max-height: 649px) {
@@ -252,7 +267,7 @@
     top:50px;
     right: -310px;
     transition: 0.1s;
-    height: 600px;
+    /*height: 600px;*/
     z-index: 5;
     background: #F9F9F9;
     box-shadow: -1px 2px 3px 0 rgba(186,215,225,0.45);
