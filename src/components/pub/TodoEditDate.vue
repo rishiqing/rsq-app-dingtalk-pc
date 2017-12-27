@@ -312,7 +312,7 @@
     /*box-shadow: 3px 5px 24px #888888;*/
     box-shadow: 0 1px 5px 0 rgba(114,175,225,0.45);
     width: 240px;
-    height: 344px;
+    /*height: 364px;*/
   }
   .edit-date {
     .light-color {color: #999999;}
