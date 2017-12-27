@@ -861,7 +861,9 @@
           this.focusDate = dateUtil.firstDayOfMonth(this.focusDate, offset)
 //          console.log('之后this.focusdate是' + this.focusDate)
         }
-        this.days = dateUtil.getMonthDays(this.focusDate) //  this.days数据结构很有意思
+        this.days = dateUtil.getMonthDays(this.focusDate)
+//        console.log('---------' + dateUtil.getMonthDaysByLyz(this.focusDate))
+//        this.days = dateUtil.getMonthDaysByLyz(this.focusDate)//  this.days数据结构很有意思
 //        console.log('this.days' + JSON.stringify(this.days))
 //        this.repeatNewMonth.push({
 //          date: new Date(2070),

@@ -1,5 +1,5 @@
 <template>
-  <li class="inbox-list ui-state-default" :key="item.id" @dragstart="drag(item)">
+  <li class="inbox-list" :key="item.id" @dragstart="drag(item)"  :data-id="id" :data-pcontainer="inbox">
     <span class="inbox-list-item">{{item.pTitle}}</span>
     <div class="wrap-icon" @mouseover="showName" @mouseout="hideName">
       <i class="icon2-receive plan" v-show="isFromSche" v-tip.dark.transition.top="fromName"></i>
@@ -153,6 +153,10 @@
       item: Object
     },
     computed: {
+      inbox () {
+        return this.item.pContainer
+      },
+      id () { return this.item.id },
       currentDate () { return this.$store.getters.defaultTaskDate },
       isFromSche () {
         return this.item.isFrom === 'receive'

@@ -1,7 +1,7 @@
 <template>
-  <ul class="sche-list" v-model="items" :class="{'listHeight': showHeight}" :options="{animation: 300,handle:'.handle'}">
-    <draggable :move="getdata" @update="datadragEnd">
-      <transition-group>
+  <ul class="sortable1 sche-list connectedSortable" v-model="items" :class="{'listHeight': showHeight}" :options="{animation: 300,handle:'.handle'}" :data-pContainer="this.itemTitle.pContainer">
+    <!--<draggable :move="getdata" @update="datadragEnd">-->
+      <!--<transition-group>-->
         <template v-if="this.itemTitle.pContainer==='IE'">
           <r-todo-item
               v-for="item in items"
@@ -16,7 +16,7 @@
               @drag="getDragItem"
           ></r-todo-item>
         </template>
-         <template v-else-if="this.itemTitle.pContainer==='IU'">
+        <template v-else-if="this.itemTitle.pContainer==='IU'">
            <r-todo-item
                v-for="item in items"
                v-if="item.pContainer==='IU'"
@@ -58,8 +58,8 @@
               :key="item.id"
           ></r-todo-item>
         </template>
-      </transition-group>
-    </draggable>
+      <!--</transition-group>-->
+    <!--</draggable>-->
   </ul>
 </template>
 <style lang="scss" scoped>
@@ -90,7 +90,7 @@
   import draggable from 'vuedraggable'
   import $ from 'jquery'
   import 'jquery-ui'
-//  import 'jquery-ui/ui/widgets/resizable'
+  import 'jquery-ui/ui/widgets/resizable'
   import 'jquery-ui/themes/base/sortable.css'
   import 'jquery-ui/themes/base/resizable.css'
   export default {
@@ -102,7 +102,10 @@
         itemsArray: null,
         itemId: '',
         pContainer: '',
-        index: ''
+        index: '',
+        pCon: '',
+        sectionItems: [],
+        isInbox: false
       }
     },
     name: 'TodoItemList',
@@ -114,15 +117,18 @@
       itemTitle: Object
     },
     computed: {
+      inboxItems () {
+        return this.$store.state.inbox.items
+      },
       itemcount () {
         return this.items.length >= 8 && this.isCheckable
       },
       UEitems () {
         return this.items.filter((item) => { return item.pContainer === 'UE' })
       },
-      sectionItems () {
-        return this.items.filter((item) => { return item.pContainer === this.itemTitle.pContainer })
-      },
+//      sectionItems () {
+//        return this.items.filter((item) => { return item.pContainer === this.itemTitle.pContainer })
+//      },
       dragItemId () {
         return this.$store.state.schedule.dragItemId
       },
@@ -131,26 +137,42 @@
       }
     },
     watch: {
-//      itemId () {
-//        console.log('this.items' + JSON.stringify(this.items))
-//        if (this.index === 0) {
-//            console.log('进来了')
-//            console.log(this.sectionItems[0].pDisplayOrder)
-//          var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
-//        } else if (this.index === (this.sectionItems.length - 1)) {
-//          displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
-//        } else {
-//          var prepDisplayOrder = this.sectionItems[this.index - 1].pDisplayOrder
-//          var backpDisplayOrder = this.sectionItems[this.index + 1].pDisplayOrder
-//           console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
-//          displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
-//        }
-//        console.log('displkayOrder是' + displayOrder)
-//        this.$store.dispatch('changePriority', {id: this.id, pContainer: this.itemTitle.pContainer, pDisplayOrder: displayOrder}).then(
-//          () => {
-//          }
-//        )
-//      }
+      itemId (id) {
+        if (this.pCon !== 'inbox') {
+          this.sectionItems = this.items.filter((item) => { return item.pContainer === this.pCon })
+          if (this.index === 0) {
+            if (this.sectionItems.length !== 0) {
+              var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
+            } else {
+              displayOrder = 65535
+            }
+          } else if (this.index === (this.sectionItems.length)) {
+            displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
+          } else {
+            var prepDisplayOrder = this.sectionItems[this.index - 1].pDisplayOrder
+            var backpDisplayOrder = this.sectionItems[this.index].pDisplayOrder
+            displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
+          }
+          console.log('displayOrder' + displayOrder)
+          this.$store.dispatch('changePriority', {
+            id: this.itemId,
+            pContainer: this.pCon,
+            pDisplayOrder: displayOrder
+          }).then(
+            () => {
+            }
+          )
+        } else {
+          this.$store.dispatch('changePriority', {
+            id: this.itemId,
+            pDisplayOrder: 65535,
+            pContainer: 'inbox'
+          }).then(
+            () => {
+            }
+          )
+        }
+      }
     },
     components: {
       'r-todo-item': TodoItem,
@@ -214,28 +236,24 @@
             })
       },
       addDrag () {
+        var that = this
         $('.sortable1').sortable({
           connectWith: '.connectedSortable',
           placeholder: 'ui-state-highlight',
-//          stop: function (event, ui) {
-//            console.log('-%o', ui.item)
-//            console.log(ui.sender)
-//            console.log(ui.helper)
-//            console.log(ui.placeholder)
-//            console.log(event)
-//          },
           stop: function (event, ui) {
-//            var pContainer = ui.item.parent().parent()[0].getAttribute('data-pcontainer')
-            this.index = ui.item.index()
-            this.itemId = ui.item[0].getAttribute('data-id')
-            console.log(this.itemId)
+            console.log('触发的是todoitemlist')
+            var pContainer = ui.item.parent()[0].getAttribute('data-pcontainer')
+            console.log('pContainer' + pContainer)
+            that.index = ui.item.index()
+            that.pCon = pContainer
+            that.itemId = ui.item[0].getAttribute('data-id')
           }
         }).disableSelection()
       }
     },
     mounted () {
       this.itemsArray = this.items
-//      this.addDrag()
+      this.addDrag()
 //      console.log(sortable + resizeble + p + q)
 //      console.log('this.itemsArray' + this.itemsArray)
     }

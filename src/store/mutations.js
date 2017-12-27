@@ -440,19 +440,49 @@ export default {
     }
   },
   CHANGE_PRIORITY (state, p) {
-    // var id = state.todo.currentTodo.id || ''
-    // if (id) {
+    var flag = 1
     state.todo.currentTodo.pContainer = p.pContainer
-  // } else {
     var items = state.schedule.items
     for (var i = 0; i < items.length; i++) {
-      if (items[i].id === p.id) {
-        // console.log('已经改变')
+      if (items[i].id.toString() === p.id.toString()) {
+        console.log('象限已经改变')
+        flag = 0
         items[i].pContainer = p.pContainer
         items[i].pDisplayOrder = p.pDisplayOrder
       }
     }
-    // }
+    if (p.pContainer === 'inbox') {
+      state.inbox.items.push(p.item)
+    }
+    if (flag) {
+      var inboxitems = state.inbox.items
+      // console.log(items.length)
+      for (i = 0; i < inboxitems.length; i++) {
+        // console.log(items[i].id + ':' + p.id)
+        // console.log(items[i].id.toString() === p.id.toString())
+        if (inboxitems[i].id.toString() === p.id.toString()) {
+          // console.log('收纳箱已经改变')
+          inboxitems.splice(i)
+          // inboxitems[i].pDisplayOrder = p.pDisplayOrder
+          // inboxitems[i].pContainer = p.pContainer
+          // console.log(inboxitems[i].pContainer)
+        }
+      }
+      items.push(p.item)
+    }
+  },
+  CHANGE_PRIORITY_INBOX (state, p) {
+    // } else {
+    var items = state.inbox.items
+    // console.log(items.length)
+    for (var i = 0; i < items.length; i++) {
+      // console.log(items[i].id + ':' + p.id)
+      // console.log(items[i].id.toString() === p.id.toString())
+      if (items[i].id.toString() === p.id.toString()) {
+        // console.log('已经改变')
+        items[i].pDisplayOrder = p.pDisplayOrder
+      }
+    }
   },
   PUB_SCHE_DATE_UPDATE (state, p) {
     state.pub.year = p.year
