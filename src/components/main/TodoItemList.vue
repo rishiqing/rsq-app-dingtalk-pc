@@ -138,71 +138,40 @@
     },
     watch: {
       itemId (id) {
-//        console.log(this.pCon)
-//        console.log(JSON.stringify(this.items))
-//        if (!this.isInbox) {
-        this.sectionItems = this.items.filter((item) => { return item.pContainer === this.pCon })
-//        console.log('this.sectionItems' + this.sectionItems.length)
-        if (this.index === 0) {
-//          console.log('进来了')
-//          console.log(this.sectionItems[0].pDisplayOrder)
-          if (this.sectionItems.length !== 0) {
-            var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
+        if (this.pCon !== 'inbox') {
+          this.sectionItems = this.items.filter((item) => { return item.pContainer === this.pCon })
+          if (this.index === 0) {
+            if (this.sectionItems.length !== 0) {
+              var displayOrder = this.sectionItems[0].pDisplayOrder + 65535
+            } else {
+              displayOrder = 65535
+            }
+          } else if (this.index === (this.sectionItems.length)) {
+            displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
           } else {
-            displayOrder = 65535
+            var prepDisplayOrder = this.sectionItems[this.index - 1].pDisplayOrder
+            var backpDisplayOrder = this.sectionItems[this.index].pDisplayOrder
+            displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
           }
-        } else if (this.index === (this.sectionItems.length)) {
-//          console.log(this.sectionItems.length)
-//          console.log('-----' + this.sectionItems[this.sectionItems.length - 1])
-          displayOrder = (this.sectionItems[this.sectionItems.length - 1].pDisplayOrder - 1) / 2
+          console.log('displayOrder' + displayOrder)
+          this.$store.dispatch('changePriority', {
+            id: this.itemId,
+            pContainer: this.pCon,
+            pDisplayOrder: displayOrder
+          }).then(
+            () => {
+            }
+          )
         } else {
-//          console.log(this.index)
-          var prepDisplayOrder = this.sectionItems[this.index - 1].pDisplayOrder
-          var backpDisplayOrder = this.sectionItems[this.index].pDisplayOrder
-//          console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
-          displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
+          this.$store.dispatch('changePriority', {
+            id: this.itemId,
+            pDisplayOrder: 65535,
+            pContainer: 'inbox'
+          }).then(
+            () => {
+            }
+          )
         }
-//        console.log('displkayOrder是' + displayOrder)
-        this.$store.dispatch('changePriority', {
-          id: this.itemId,
-          pContainer: this.pCon,
-          pDisplayOrder: displayOrder
-        }).then(
-          () => {
-//            for (var i = 0; i < this.items.length)
-//            console.log(JSON.stringify(this.items))
-          }
-        )
-//        } else {
-//          console.log('进来了inbox')
-//          if (this.index === 0) {
-//            console.log('进来了0')
-//          console.log(this.sectionItems[0].pDisplayOrder)
-//            if (this.inboxItems.length !== 0) {
-//              displayOrder = this.inboxItems[0].pDisplayOrder + 65535
-//            } else {
-//              displayOrder = 65535
-//            }
-//          } else if (this.index === (this.inboxItems.length)) {
-//            console.log(this.inboxItems.length)
-//         console.log('-----' + this.items[this.items.length - 1])
-//            displayOrder = (this.inboxItems[this.inboxItems.length - 1].pDisplayOrder - 1) / 2
-//          } else {
-//            console.log('进来了' + this.index + this.inboxItems.length)
-//            prepDisplayOrder = this.inboxItems[this.index - 1].pDisplayOrder
-//            backpDisplayOrder = this.inboxItems[this.index].pDisplayOrder
-//          console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
-//            displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
-//          }
-//        console.log('displkayOrder是' + displayOrder)
-//          this.$store.dispatch('changePriorityInbox', {id: this.itemId, pDisplayOrder: displayOrder}).then(
-//            () => {
-//            for (var i = 0; i < this.items.length)
-//            console.log(JSON.stringify(this.items))
-//            }
-//          )
-//        }
-//      }
       }
     },
     components: {
@@ -272,24 +241,12 @@
           connectWith: '.connectedSortable',
           placeholder: 'ui-state-highlight',
           stop: function (event, ui) {
-//            console.log(ui.item.parent()[0].getAttribute('data-pcontainer'))
+            console.log('触发的是todoitemlist')
             var pContainer = ui.item.parent()[0].getAttribute('data-pcontainer')
-//            if (pContainer) {
+            console.log('pContainer' + pContainer)
             that.index = ui.item.index()
-            that.itemId = ui.item[0].getAttribute('data-id')
             that.pCon = pContainer
-            console.log(that.itemId + ':' + pContainer)
-//            ui.item.parent()[0].removeChild(document.getElementsByClassName('inbox-list')[0])
-//            ui.item.removeClass('inbox-list').addClass('todoItem')
-//            } else {
-//              console.log('进来inbox')
-//              this.isInbox = true
-//              console.log(this.isInbox)
-//              that.index = ui.item.index()
-//              that.itemId = ui.item[0].getAttribute('data-id')
-//              that.pCon = 'inbox'
-//            }
-//            console.log('this.items' + JSON.stringify(that.items))
+            that.itemId = ui.item[0].getAttribute('data-id')
           }
         }).disableSelection()
       }

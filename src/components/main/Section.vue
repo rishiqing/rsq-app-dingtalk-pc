@@ -1,7 +1,7 @@
 <template>
   <div :data-pContainer="whichsection" class="section-wrap " :class="{'floatDirection': direction, 'reverseDirection': !direction, 'showheight': showHeight, 'IELarge':ieLarge, 'IULarge': iuLarge,'UELarge': ueLarge,'UULarge': uuLarge}" @drop="drop($event)" @dragover="allowDrop($event)">
     <div class="section-head" @mouseover="showIcon" @mouseout="hideIcon">
-      <input ref="itemTitleInput" type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)" @focus="showSave">
+      <input ref="itemTitleInput" type="text" class="sche-name" :value=this.itemTitle.title @keypress="changeTitle($event.target.value, $event)" @focus="showSave" disabled="isMem">
       <div class="save-sche-title" v-show="this.showSaveButton" @click="saveTitle">保存</div>
       <img src="../../assets/big.png" class="enlarge" @click="showLarge" v-show="!this.showHeight && this.showIconLarge">
       <img src="../../assets/small.png" class="enSmall" @click="showSmall" v-show="this.showHeight && !this.showSaveButton">
@@ -73,6 +73,9 @@
       },
       loginUser () {
         return this.$store.getters.loginUser || {}
+      },
+      isMem () {
+        return this.$store.getters.loginUser.rsqUser.isPersonVIP
       },
 //      userId () {
 //        return this.items[0].pUserId.toString()
@@ -360,20 +363,7 @@
 //        })
     },
     mounted () {
-//      debugger
-//      console.log('remindState' + this.remindState)
-//      this.$store.dispatch('fetchRsqidFromUserid', {corpId: this.corpId, idArray: [this.userId]})
-//        .then(function (idMap) {
-//          console.log('idmap' + JSON.stringify(idMap))
-//          var userArray = util.getMapValuePropArray(idMap)
-//          console.log('userId是' + JSON.stringify(userArray))
-//          console.log(userArray[0].rsqUserId)
-//          this.rsqId = util.extractProp(userArray, 'rsqUserId')
-//          this.rsqIdA = userArray[0].rsqUserId
-//          console.log('-------' + this.remindState)
-//        })
-//      this.addDrag()
-//      console.log('section中拿到的title是' + this.titleArray)
+//      console.log('loginuser' + (this.loginUser.rsqUser.isPersonVIP))
     }
   }
 </script>

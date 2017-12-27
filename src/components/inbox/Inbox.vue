@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-inbox connectedSortable" :class="{'slide':showInbox}" @click="stop($event)" :data-pcontainer="inbox">
     <input type="text" class="inbox-input" placeholder='添加任务，按Enter保存'  @keypress="createInboxItem($event.target.value,$event)">
-    <ul class="inbox-list-wrap connectedSortable" id="sortable2">
+    <ul class="inbox-list-wrap connectedSortable" id="sortable2" :data-pcontainer="inbox">
       <!--<draggable :move="getdata" @update="datadragEnd">-->
         <!--<transition-group>-->
           <inboxItem
@@ -54,38 +54,82 @@
     },
     watch: {
       itemId () {
-        if (this.index === 0) {
-//          console.log('进来了')
-//          console.log(this.sectionItems[0].pDisplayOrder)
-          if (this.items.length !== 0) {
-            var displayOrder = this.items[0].pDisplayOrder + 65535
+        if (this.pCon === 'inbox') {
+          if (this.index === 0) {
+            if (this.items.length !== 0) {
+              var displayOrder = this.items[0].pDisplayOrder + 65535
+            } else {
+              displayOrder = 65535
+            }
+          } else if (this.index === (this.items.length)) {
+            displayOrder = (this.items[this.items.length - 1].pDisplayOrder - 1) / 2
           } else {
-            displayOrder = 65535
+            var prepDisplayOrder = this.items[this.index - 1].pDisplayOrder
+            var backpDisplayOrder = this.items[this.index].pDisplayOrder
+            displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
           }
-        } else if (this.index === (this.items.length)) {
-//          console.log(this.items.length)
-//          console.log('-----' + this.items[this.items.length - 1])
-          displayOrder = (this.items[this.items.length - 1].pDisplayOrder - 1) / 2
+          this.$store.dispatch('changePriorityInbox', {id: this.itemId, pDisplayOrder: displayOrder}).then(
+            () => {
+            }
+          )
         } else {
-//          console.log(this.index)
-          var prepDisplayOrder = this.items[this.index - 1].pDisplayOrder
-          var backpDisplayOrder = this.items[this.index].pDisplayOrder
-//          console.log('进来了' + prepDisplayOrder + backpDisplayOrder)
-          displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
-        }
-//        console.log('displkayOrder是' + displayOrder)
-        this.$store.dispatch('changePriorityInbox', {id: this.itemId, pDisplayOrder: displayOrder}).then(
-          () => {
-//            for (var i = 0; i < this.items.length)
-//            console.log(JSON.stringify(this.items))
+          var sectionItems = this.scheItems.filter((item) => { return item.pContainer === this.pCon })
+          console.log(sectionItems.length)
+          if (this.focusdate) {
+            var date = this.focusdate
+          } else {
+            date = this.currentDate
           }
-        )
+          var startdate = dateUtil.getStandardTime(date)
+          startdate = startdate.substring(0, 4) + '/' + startdate.substring(4, 6) + '/' + startdate.substring(6, 8)
+          var enddate = startdate
+          if (this.index === 0) {
+            if (sectionItems.length !== 0) {
+              displayOrder = sectionItems[0].pDisplayOrder + 65535
+            } else {
+              displayOrder = 65535
+            }
+          } else if (this.index === (sectionItems.length)) {
+            displayOrder = (sectionItems[sectionItems.length - 1].pDisplayOrder - 1) / 2
+          } else {
+            prepDisplayOrder = sectionItems[this.index - 1].pDisplayOrder
+            backpDisplayOrder = sectionItems[this.index].pDisplayOrder
+            displayOrder = (prepDisplayOrder + backpDisplayOrder) / 2
+          }
+          console.log(displayOrder)
+          this.$store.dispatch('changePriority', {id: this.itemId, pDisplayOrder: displayOrder, pContainer: this.pCon, startDate: startdate, endDate: enddate}).then(
+            () => {
+            }
+          )
+        }
       }
     },
     props: {
       showInbox: Boolean
     },
     computed: {
+      focusdate () {
+        return this.$store.state.focusDate
+      },
+      scheItems () {
+        var items = this.$store.state.schedule.items
+        var newItems = []
+        if (items !== null && items.length !== 0) {
+          for (var i = 0; i < items.length; i++) {
+            if (!items[i].pIsDone) {
+              newItems.push(items[i])
+            }
+          }
+          for (i = 0; i < items.length; i++) {
+            if (items[i].pIsDone) {
+              newItems.push(items[i])
+            }
+          }
+          return newItems
+        } else {
+          return []
+        }
+      },
       items () {
         return this.$store.state.inbox.items
       },
@@ -153,18 +197,17 @@
         var that = this
 //        console.log(sortable + resizeble + p + q)
         $('#sortable2').sortable({
-//          connectWith: '.connectedSortable',
+          connectWith: '.connectedSortable',
           placeholder: 'ui-state-highlight',
           stop: function (event, ui) {
-            console.log(ui.item.parent()[0].className + ui.item.parent()[0].className.indexOf('wrap-inbox'))
-//            if (ui.item.parent()[0].className.indexOf('inbox-list-wrap') !== -1) {
-//              var pContainer = 'inbox'
-//            }
-//            var pContainer = ui.item.parent()[0].getAttribute('data-pcontainer')
+            console.log('触发的是收纳箱')
+            var pContainer = ui.item.parent()[0].getAttribute('data-pcontainer')
+            console.log('pContainer' + pContainer)
             that.index = ui.item.index()
+            console.log('index' + that.index)
+            that.pCon = pContainer
             that.itemId = ui.item[0].getAttribute('data-id')
-//            console.log(that.itemId + ':' + that.index + pContainer)
-//            console.log('this.items' + JSON.stringify(that.items))
+//            ui.item.addClass('todoItem').removeClass('inbox-list')
           }
         }).disableSelection()
       }
