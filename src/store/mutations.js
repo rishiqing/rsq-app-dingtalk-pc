@@ -468,7 +468,12 @@ export default {
           // console.log(inboxitems[i].pContainer)
         }
       }
-      items.push(p.item)
+      for (i = 0; i > items.length; i++) {
+        if (items[i].pDisplayOrder < p.item.pDisplayOrder) {
+          items.splice(i, 0, p.item)
+        }
+      }
+      // items.push(p.item)
     }
   },
   CHANGE_PRIORITY_INBOX (state, p) {

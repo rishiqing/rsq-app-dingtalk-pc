@@ -84,6 +84,7 @@
         return this.$store.state.focusDate
       },
       items () {
+        console.log('过来了')
         var items = this.$store.state.schedule.items
         var newItems = []
         if (items !== null && items.length !== 0) {
@@ -280,8 +281,8 @@
               that.$store.dispatch('submitCreateTodoItem', {'startDate': startTime, 'endDate': endTime, receiverIds: id, pPlanedTime: newdate, pDisplayOrder: displayOrder, createTaskDate: standardTime, pTitle: title, pContainer: that.itemTitle.pContainer, todoType: 'schedule'})
                 .then(item => {
     //              this.InputState = false
-                  this.remindState = false
-                  this.content = ''
+                  that.remindState = false
+                  that.content = ''
     //              console.log('返回来的item是' + item)
                   return item
                 })
