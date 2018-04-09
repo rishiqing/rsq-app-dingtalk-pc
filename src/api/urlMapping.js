@@ -37,5 +37,6 @@ export default {
   'MOVE_TO_KANBAN': 'task/mainTodo/moveToKanbanCard',
   'FREE_LOGIN': 'task/dingtalkOauth/tokenDirectSignIn',
   'GET_RECORD': 'task/v2/todo/getTodoActions',
+  'GET_COMMENT': 'task/v2/todo/getTodoComments',
   'COPY': 'task/v2/todo/copy'
 }
