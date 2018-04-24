@@ -498,23 +498,24 @@ export default {
   saveTodoAction ({commit, state}, p) {
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
+    const realName = state.loginUser.rsqUser.realName
     editItem['todoId'] = todo.id
     if (editItem.type === 9) {
-      editItem['comment'] = '李永州 更新了标题'
+      editItem['comment'] = realName + ' 更新了标题'
     } else if (editItem.type === 5 && editItem.status) {
-      editItem['comment'] = '李永州 完成了任务'
+      editItem['comment'] = realName + ' 完成了任务'
     } else if (editItem.type === 5 && !editItem.status) {
-      editItem['comment'] = '李永州 重启了任务'
+      editItem['comment'] = realName + ' 重启了任务'
     } else if (editItem.type === 7) {
-      editItem['comment'] = '李永州 创建了子任务'
+      editItem['comment'] = realName + ' 创建了子任务'
     } else if (editItem.type === 17 && editItem.status) {
       console.log('子任务的操作进来了吗')
-      editItem['comment'] = '李永州 完成了子任务' + '"' + p.name + '"'
+      editItem['comment'] = realName + ' 完成了子任务' + '"' + p.name + '"'
     } else if (editItem.type === 17 && !editItem.status) {
       console.log('子任务的操作进来了吗')
-      editItem['comment'] = '李永州 重启了子任务' + '"' + p.name + '"'
+      editItem['comment'] = realName + ' 重启了子任务' + '"' + p.name + '"'
     } else if (editItem.type === 10) {
-      editItem['comment'] = '李永州 更新了子任务内容为' + '"' + editItem.idOrContent + '"'
+      editItem['comment'] = realName + ' 更新了子任务内容为' + '"' + editItem.idOrContent + '"'
     }
     return api.todo.putRecordProps(editItem)
       .then(record => {

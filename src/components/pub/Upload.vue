@@ -125,7 +125,7 @@
         window.rsqadmg.exec('selectDeptMember', {
           btnText: '确定',  //  选择器按钮文本，pc端需要的参数
           multiple: true, //  默认false，选择单人
-          maximum: 10,  //  可选择人数的上限，默认-1不限制人数
+          maximum: -1,  //  可选择人数的上限，默认-1不限制人数
           title: that.selectTitle, //  选择器标题，pc端需要的参数
           corpId: corpId,  //  加密的企业 ID，
           selectedIds: [],
