@@ -412,7 +412,7 @@ rsqAdapterManager.register({
       multiple: params.multiple, //是否多选： true多选 false单选； 默认true
       users: params.selectedIds, //默认选中的用户列表，userid；成功回调中应包含该信息
       corpId: params.corpId, //企业id
-      max: params.maximum, //人数限制，当multiple为true才生效，可选范围1-1500
+      max: params.maximum || 100, //人数限制，当multiple为true才生效，可选范围1-1500
       onSuccess: function(data) {
         rsqChk(params.success, [data]);
         //onSuccess将在选人结束，点击确定按钮的时候被回调
