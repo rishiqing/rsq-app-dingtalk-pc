@@ -37,29 +37,41 @@
     },
     methods: {
       enter () {
-        this.engine = false
-        window.clearTimeout(this.t)
+        // this.engine = false
+        // window.clearTimeout(this.t)
+        window.rsqadmg.execute('openLink', {
+          'corpID': this.corpId,
+          'userID': this.userId,
+          success () {
+          }
+        }
       }
     },
     components: {
       'start': start
     },
     watch: {
-      engine () {
+      // engine () {
+      //   window.rsqadmg.execute('openLink', {
+      //     'corpID': this.corpId,
+      //     'userID': this.userId,
+      //     success () {
+      //     }
+      //   })
+      // }
+    },
+    mounted () {
         window.rsqadmg.execute('openLink', {
           'corpID': this.corpId,
           'userID': this.userId,
           success () {
           }
-        })
-      }
-    },
-    mounted () {
-      this.t = window.setTimeout(
-        () => {
-          this.engine = false
-        }, 2000
-      )
+        }
+      // this.t = window.setTimeout(
+      //   () => {
+      //     this.engine = false
+      //   }, 2000
+      // )
 //      window.rsqadmg.execute('openLink', {
 //        'corpID': this.corpId,
 //        'userID': this.userId,
