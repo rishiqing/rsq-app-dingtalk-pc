@@ -44,7 +44,7 @@
           'userID': this.userId,
           success () {
           }
-        }
+        })
       }
     },
     components: {
@@ -61,12 +61,12 @@
       // }
     },
     mounted () {
-        window.rsqadmg.execute('openLink', {
-          'corpID': this.corpId,
-          'userID': this.userId,
-          success () {
-          }
+      window.rsqadmg.execute('openLink', {
+        'corpID': this.corpId,
+        'userID': this.userId,
+        success () {
         }
+      })
       // this.t = window.setTimeout(
       //   () => {
       //     this.engine = false
