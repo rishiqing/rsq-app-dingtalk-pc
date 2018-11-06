@@ -592,6 +592,8 @@ rsqAdapterManager.register({
     })
   },
   openLink: function (params) {
+    window.location.href = rsqConfig.autoOpenServer + "task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID
+    return 
     // console.log('进来链接了')
     DingTalkPC.biz.util.openLink({
       url: rsqConfig.autoOpenServer + "task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID,//要打开链接的地址
