@@ -1,10 +1,7 @@
 <template>
   <div class="start" id="splash">
-    <div>
       <img src="../../assets/start.png" alt="" class="start-img">
-      <p class="start-text">欢迎使用日事清 即刻开始享受工作</p>
-      <div class="enter-rsq" @click="enterRsq">进入日事清</div>
-    </div>
+
   </div>
 </template>
 <style scoped>
@@ -20,7 +17,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #5EADFD;
     position: fixed;
     top: 0;
     left: 0;
