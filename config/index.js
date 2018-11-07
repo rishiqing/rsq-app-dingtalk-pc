@@ -25,10 +25,10 @@ module.exports = {
       extract: true
     },
     productionSourceMap: true,
-    index: path.resolve(__dirname, '../dist/release/pc/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist/release/pc/'),
+    index: path.resolve(__dirname, '../dist/workbei-pc/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/workbei-pc/'),
     assetsSubDirectory: './',
-    assetsPublicPath: '/dingtalk/release/pc/',
+    assetsPublicPath: '/dingtalk/workbei-pc/',
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
