@@ -1,6 +1,5 @@
 <template>
   <div class="start" id="splash">
-      <img src="../../assets/start.png" alt="" class="start-img">
 
   </div>
 </template>
