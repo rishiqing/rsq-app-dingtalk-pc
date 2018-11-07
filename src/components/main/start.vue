@@ -1,6 +1,5 @@
 <template>
   <div class="start" id="splash">
-
   </div>
 </template>
 <style scoped>
@@ -16,6 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #fff;
     position: fixed;
     top: 0;
     left: 0;
