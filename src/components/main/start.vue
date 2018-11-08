@@ -15,7 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
+    background-color: #d3d3d3;
     position: fixed;
     top: 0;
     left: 0;
