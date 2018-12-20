@@ -593,7 +593,13 @@ rsqAdapterManager.register({
   },
   openLink: function (params) {
     var arr = window.location.href.split("&")
-    window.location.href = rsqConfig.autoOpenServer + "task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID + '&' + arr[arr.length - 1]
+    var href = ''
+    if (arr[arr.length - 1].indexOf('href') === -1) {
+      href = ''
+    } else {
+      href = arr[arr.length - 1]
+    }
+    window.location.href = rsqConfig.autoOpenServer + "task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID + '&' + href
     return 
     // console.log('进来链接了')
     DingTalkPC.biz.util.openLink({
