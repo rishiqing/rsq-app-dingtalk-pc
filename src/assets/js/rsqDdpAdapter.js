@@ -592,8 +592,14 @@ rsqAdapterManager.register({
     })
   },
   openLink: function (params) {
-    // console.log('进来链接了')
-    window.location.href = rsqConfig.autoOpenServer + "task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID
+    var arr = window.location.href.split("&")
+    var href = ''
+    if (arr[arr.length - 1].indexOf('href') === -1) {
+      href = ''
+    } else {
+      href = arr[arr.length - 1]
+    }
+    window.location.href = rsqConfig.autoOpenServer + "task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID + '&' + href
     return 
     DingTalkPC.biz.util.openLink({
       url: rsqConfig.autoOpenServer + "task/dingtalkOauth/tokenDirectSignIn?token=" + params.corpID + '--' + params.userID,//要打开链接的地址
