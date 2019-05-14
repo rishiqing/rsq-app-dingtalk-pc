@@ -99,7 +99,7 @@ module.exports = {
     // 钉钉提醒服务器，用于发送钉钉内的通知提醒
     remindServer: 'http://beta.dd.rsq.etoutiao.cn/remind/',
     // PC端登录后，自动打开网页时的跳转root链接
-    autoOpenServer: 'http://beta.rishiqing.com/',
+    autoOpenServer: 'http://beta.workbei.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
