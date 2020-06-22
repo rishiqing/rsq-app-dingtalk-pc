@@ -86,10 +86,10 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
     // 日事清api的后台地址
-    apiServer: 'http://beta.dd.rsq.etoutiao.cn/',
+    apiServer: 'https://betading.rishiqing.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://beta.dd.rsq.etoutiao.cn/main/',
+    authServer: 'https://betading.rishiqing.com/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
     frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/',
@@ -97,7 +97,7 @@ module.exports = {
     stsServer: 'http://182.92.222.40:8300/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
     // 钉钉提醒服务器，用于发送钉钉内的通知提醒
-    remindServer: 'http://beta.dd.rsq.etoutiao.cn/remind/',
+    remindServer: 'https://betading.rishiqing.com/',
     // PC端登录后，自动打开网页时的跳转root链接
     autoOpenServer: 'http://beta.rishiqing.com/',
     aliOSS: {
